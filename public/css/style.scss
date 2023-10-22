@@ -736,9 +736,11 @@
             min-width: 276px;
             min-height: 300px;
             max-width: 300px;
-            object-fit: cover;
+            object-fit: contain;
             object-position: center;
             transition: var(--transition);
+            mix-blend-mode: darken;
+            filter: hue-rotate(150%);
           }
         }
 

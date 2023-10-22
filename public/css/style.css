@@ -654,11 +654,13 @@
   min-width: 276px;
   min-height: 300px;
   max-width: 300px;
-  -o-object-fit: cover;
-     object-fit: cover;
+  -o-object-fit: contain;
+     object-fit: contain;
   -o-object-position: center;
      object-position: center;
   transition: var(--transition);
+  mix-blend-mode: darken;
+  filter: hue-rotate(150%);
 }
 .product-area .main-product .product-item .thumb .lable-sale {
   position: absolute;
