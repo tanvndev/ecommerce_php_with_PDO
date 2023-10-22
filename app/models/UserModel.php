@@ -172,7 +172,7 @@ class UserModel extends DB
 
             $token = Format::generateRandomString(64);
             $subject = 'Đặt lại mật khẩu.';
-            $body = 'Click vào đây để xác nhận email của bạn: <a href="http://localhost/WEB2041_Ecommerce/account/finalForgotPasswordApi/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
+            $body = 'Click vào đây để xác nhận email của bạn: <a href="http://localhost/WEB2041_Ecommerce/account/finalForgotPassword/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
 
 
             $sendMail = Services::sendCode($email, $subject,  $body);
