@@ -28,7 +28,7 @@
                                 </div>
 
                                 <div class="content">
-                                    <h5 class="title"><a href="product/productDetail/<?php echo $itemdDataProdNft['id'] ?>"><?php echo $itemdDataProdNft['name'] ?></a></h5>
+                                    <h5 class="title"><a href="product/productDetail/<?php echo $itemdDataProdNft['id'] ?>"><?php echo $itemdDataProdNft['title'] ?></a></h5>
                                     <div class="product-price-variant">
                                         <span class="price"><?php echo Format::formatCurrency($itemdDataProdNft['price']) ?></span>
                                     </div>
