@@ -286,6 +286,7 @@ const getDataRatingProd = () => {
   const currentURL = window.location.href;
   const match = currentURL.match(/\/(\d+)$/);
   if (match) {
+    //lấy ra id
     const id = match[1];
     try {
       fetch('product/getAllRatingsProd/' + id)
@@ -464,8 +465,6 @@ const forgotPasswordUser = async () => {
     console.log(error);
   }
 };
-
-//
 
 // category
 

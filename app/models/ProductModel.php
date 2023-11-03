@@ -6,7 +6,7 @@ class ProductModel extends DB
     private $idUser;
     function getProdRecently()
     {
-        return $this->find('product', 'id', 'DESC', 8);
+        return $this->findByNameOrderBy('product', 1, 'status', 8, ' id DESC');
     }
     function getAttributeProd($name)
     {
@@ -21,7 +21,7 @@ class ProductModel extends DB
                         FROM product p
                         LEFT JOIN product_attribute pa ON p.id = pa.prod_id
                         LEFT JOIN attribute a ON pa.attribute_id = a.id
-                        WHERE 1 ";
+                        WHERE p.status = 1";
 
                 if (!empty($_POST['cate_id'])) {
                     $sql .= " AND p.cate_id = " . intval($_POST['cate_id']);
@@ -85,7 +85,7 @@ class ProductModel extends DB
 
         if (!empty($params) && $params != 'null' && $params) {
             try {
-                $sql = "SELECT * FROM product WHERE title LIKE '%$params%'";
+                $sql = "SELECT * FROM product WHERE title LIKE '%$params%' AND status = 1";
                 $stmt = $this->conn->query($sql);
                 $dataProd = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 Session::set('limitProd', 12);

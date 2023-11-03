@@ -114,6 +114,7 @@
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
                         <div class="card-title-top">
+
                             <h5>Thuộc tính sản phẩm</h5>
                         </div>
                         <div class="form-input">

@@ -29,6 +29,23 @@ trait CRUD
             return 'Find Failed';
         }
     }
+    //tạm thơi dùng để dùng status
+    function findOrderBy($table)
+    {
+        try {
+
+            $sql = "SELECT * FROM $table WHERE status = 1 ORDER BY id = DESC";
+
+
+            $stmt = $this->conn->query($sql);
+            $dataProd = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $dataProd;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return 'Find Failed';
+        }
+    }
     function findById($table, $id)
     {
         try {
@@ -51,6 +68,31 @@ trait CRUD
     {
         try {
             $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $name . ' = :variant';
+
+            if ($limit) {
+                $sql .= ' LIMIT ' . $limit;
+            }
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':variant', $variant);
+            $stmt->execute();
+            $dataProd = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $dataProd;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return 'Find Failed';
+        }
+    }
+
+    function findByNameOrderBy($table, $variant, $name, $limit = null, $orderBy)
+    {
+        try {
+            $sql = 'SELECT * FROM ' . $table . ' WHERE ' . $name . ' = :variant';
+
+            if ($orderBy) {
+                $sql .= ' ORDER BY ' . $orderBy;
+            }
 
             if ($limit) {
                 $sql .= ' LIMIT ' . $limit;
@@ -186,7 +228,7 @@ trait CRUD
             $sql = 'SELECT p.*, c.name
                 FROM product p
                 INNER JOIN category c ON p.cate_id = c.id
-                WHERE c.id = :categoryId';
+                WHERE c.id = :categoryId AND status = 1';
 
             if (!is_null($orderBy)) {
                 $sql .= ' ORDER BY ' . $orderBy;

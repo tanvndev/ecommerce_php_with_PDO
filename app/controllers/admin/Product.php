@@ -54,7 +54,6 @@ class Product extends Controller
 
     function upadateProductController($id)
     {
-        $product_AtrributeModel = $this->modelAdmin('Product_AtrributeModel');
 
         $prod = $this->productModel->getOneProduct($id) ?? [];
         $cateData = $this->categoryModel->getAllCategory() ??  [];
@@ -63,7 +62,7 @@ class Product extends Controller
         $sizeData = $this->attributeModel->getAttributeByName('Size') ?? [];
 
         //variant
-        $prod_attrData = $product_AtrributeModel->getAllProduct_Atrribute() ?? [];
+        $prod_attrData = $this->attributeModel->getAllProduct_Atrribute($id) ?? [];
         $selectedId = [];
         foreach ($prod_attrData as $item) {
             $selectedId[] = $item['attribute_id'];

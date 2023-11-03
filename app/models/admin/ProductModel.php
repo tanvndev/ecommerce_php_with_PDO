@@ -187,7 +187,7 @@ class ProductModel extends DB
 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->execute($params);
-
+                $isSuccess = true;
 
 
                 //upload variant 
@@ -267,7 +267,7 @@ class ProductModel extends DB
                     $isSuccess = true;
                 }
                 if ($isSuccess) {
-                    $this->Toast('success', 'Update product success.', 'admin/product', 1000);
+                    return $this->Toast('success', 'Update product success.', 'admin/product', 1000);
                 }
             } catch (PDOException $e) {
                 echo "Error: " . $e->getMessage();

@@ -18,6 +18,11 @@ class AttributeModel extends DB
         return $this->findByName('attribute', $variant, 'name');
     }
 
+    function getAllProduct_Atrribute($id)
+    {
+        return $this->findByName('product_attribute', $id, 'prod_id');
+    }
+
 
     function addNewAttribute()
     {
