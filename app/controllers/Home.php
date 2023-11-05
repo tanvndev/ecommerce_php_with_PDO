@@ -12,7 +12,6 @@ class Home extends Controller
 
     function Default()
     {
-        Session::unsetSession('limitProd');
         $dataCate = $this->categoryModel->getAllCategory() ?? [];
         $dataProdNft = $this->productModel->getProdByCateNft() ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
@@ -23,8 +22,8 @@ class Home extends Controller
             'currentPath' => 'home',
             'pages' => 'home',
             'dataCate' => $dataCate,
-            'dataProdRecent' => $dataProdRecent,
             'dataProdNft' => $dataProdNft,
+            'dataProdRecent' => $dataProdRecent,
             'dataProdMostSold' => $dataProdMostSold,
         ]);
     }

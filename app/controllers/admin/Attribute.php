@@ -5,13 +5,17 @@ class Attributes extends Controller
     private $attributeModel;
     function __construct()
     {
-        $this->attributeModel = $this->modelAdmin('AttributeModel');
+        $this->attributeModel = $this->model('AttributeModel');
+    }
+
+    function Default()
+    {
     }
 
     function attributeController()
     {
-        $delMassage = Session::get('deleteMessage');
-        $delType = Session::get('deleteType');
+        $delMassage = Session::get('toastMessage');
+        $delType = Session::get('toastType');
 
         $dataAttribute = $this->attributeModel->getAllAttribute() ?? [];
 

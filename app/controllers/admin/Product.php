@@ -7,21 +7,22 @@ class Product extends Controller
     private $brandModel;
     private $attributeModel;
 
+
+
     public function __construct()
     {
-        $this->productModel = $this->modelAdmin('ProductModel');
-        $this->categoryModel = $this->modelAdmin('CategoryModel');
-        $this->brandModel = $this->modelAdmin('BrandModel');
-        $this->attributeModel = $this->modelAdmin('AttributeModel');
+        $this->productModel = $this->model('ProductModel');
+        $this->categoryModel = $this->model('CategoryModel');
+        $this->brandModel = $this->model('BrandModel');
+        $this->attributeModel = $this->model('AttributeModel');
     }
-    function productController()
-    {
 
-        $delMassage = Session::get('deleteMessage');
-        $delType = Session::get('deleteType');
+    function Default()
+    {
+        $delMassage = Session::get('toastMessage');
+        $delType = Session::get('toastType');
         $prod = $this->productModel->getAllProduct() ?? [];
         $cateData = $this->categoryModel->getAllCategory() ?? [];
-
 
         $this->view('layoutServer', [
             'active' => 'product',
@@ -34,21 +35,22 @@ class Product extends Controller
         ]);
     }
 
-    function addProductController()
+
+    function addProduct()
     {
-        $cateData = $this->categoryModel->getAllCategory() ?? [];
-        $brandData = $this->brandModel->getAllBrand() ?? [];
-        $colorData = $this->attributeModel->getAttributeByName('Color') ?? [];
-        $sizeData = $this->attributeModel->getAttributeByName('Size') ?? [];
+        // $cateData = $this->categoryModel->getAllCategory() ?? [];
+        // $brandData = $this->brandModel->getAllBrand() ?? [];
+        // $colorData = $this->attributeModel->getAttributeByName('Color') ?? [];
+        // $sizeData = $this->attributeModel->getAttributeByName('Size') ?? [];
         $this->view('layoutServer', [
             'active' => 'product',
             'title' => 'Thêm sản phẩm mới',
 
             'pages' => 'product/addProduct',
-            'cateData' => $cateData,
-            'brandData' => $brandData,
-            'colorData' => $colorData,
-            'sizeData' => $sizeData,
+            // 'cateData' => $cateData,
+            // 'brandData' => $brandData,
+            // 'colorData' => $colorData,
+            // 'sizeData' => $sizeData,
         ]);
     }
 
@@ -87,8 +89,8 @@ class Product extends Controller
     }
     function ratingController()
     {
-        $delMessage = Session::get('deleteMessage');
-        $delType = Session::get('deleteType');
+        $delMessage = Session::get('toastMessage');
+        $delType = Session::get('toastType');
 
         $dataRatings = $this->productModel->getAllRatingsProd() ?? [];
 

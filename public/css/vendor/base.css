@@ -1209,7 +1209,7 @@ input[type='submit']:hover {
   background-color: var(--color-primary);
 }
 .btn-custom:hover {
-  color: white;
+  color: var(--color-white);
 }
 .btn-custom:hover::before {
   transform: scale(1.1);
@@ -1219,13 +1219,11 @@ input[type='submit']:hover {
 }
 
 .btn-custom.disabled {
-  background-color: var(--color-gray);
   pointer-events: none;
+  color: var(--color-white);
   cursor: not-allowed;
 }
-.btn-custom.disabled::before {
-  background-color: var(--color-gray);
-}
+
 .btn-custom.disabled:hover::before {
   transform: scale(1);
 }

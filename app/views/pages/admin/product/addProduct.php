@@ -1,6 +1,6 @@
 <section class="add-wrap-admin">
     <div class="container-fluid ">
-        <form action="admin/addProduct" method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
@@ -54,7 +54,7 @@
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Số lượng <span class="text-danger">*</span></label>
                                 <div class="col-sm-9">
-                                    <input class="form-control input-text" name="quantity" type="number" placeholder=">Số lượng">
+                                    <input class="form-control input-text" name="quantity" type="number" placeholder="Số lượng">
                                 </div>
                             </div>
 

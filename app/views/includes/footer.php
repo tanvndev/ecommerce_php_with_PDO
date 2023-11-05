@@ -80,7 +80,7 @@
                          <div class="inner">
                              <ul class="inner-ul">
                                  <li><a href="account">Tài khoản của bạn</a></li>
-                                 <li><a href="account/login">Đăng nhập / Đăng kí</a></li>
+                                 <li><a href="login">Đăng nhập / Đăng kí</a></li>
                                  <li><a href="cart">Giỏ hàng</a></li>
                                  <li><a href="wishlist">Yêu thích</a></li>
                                  <li><a href="product">Danh mục sản phẩm</a></li>

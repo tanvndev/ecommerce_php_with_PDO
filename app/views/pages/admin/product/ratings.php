@@ -20,8 +20,8 @@ if ($delMessage && $delType) {
         });
     })
     </script>';
-    Session::unsetSession('deleteMessage');
-    Session::unsetSession('deleteType');
+    Session::unsetSession('toastMessage');
+    Session::unsetSession('toastType');
     echo '<pre>';
     print_r($dataRatings);
     echo '</pre>';

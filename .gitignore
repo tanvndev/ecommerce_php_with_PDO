@@ -6,20 +6,28 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+
+# Configuration files
 .prettierrc
 .htaccess
+
+# Generated folders and files
 node_modules
 dist
 dist-ssr
-*.local
 
-# Editor directories and files
+# Editor-specific files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+
+# Visual Studio
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Composer
+/vendor/

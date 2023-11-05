@@ -1,6 +1,6 @@
 <?php
 // echo '<pre>';
-// print_r($dataProdNft);
+// print_r($dataProdRecent);
 // echo '</pre>';
 ?>
 
@@ -20,15 +20,17 @@
             </div>
             <div class="col-lg-6 col-xl-6 ">
                 <div class="slide-banner-thumb">
-                    <?php foreach ($dataProdNft as $itemdDataProdNft) { ?>
+                    <?php foreach ($dataProdNft as $itemdDataProdNft) {
+
+                    ?>
                         <div class="mian-banner-thumb">
                             <div class="banner-product">
                                 <div class="thumb">
-                                    <a href="product/productDetail/<?php echo $itemdDataProdNft['id'] ?>"><img src="public/images/product/thumb/<?php echo $itemdDataProdNft['thumb'] ?>" alt="<?php echo $itemdDataProdNft['name'] ?>"></a>
+                                    <a href="product/<?php echo $itemdDataProdNft['id'] ?>"><img src="public/images/product/thumb/<?php echo $itemdDataProdNft['thumb'] ?>" alt="<?php echo $itemdDataProdNft['title'] ?>"></a>
                                 </div>
 
                                 <div class="content">
-                                    <h5 class="title"><a href="product/productDetail/<?php echo $itemdDataProdNft['id'] ?>"><?php echo $itemdDataProdNft['title'] ?></a></h5>
+                                    <h5 class="title"><a href="product/<?php echo $itemdDataProdNft['id'] ?>"><?php echo $itemdDataProdNft['title'] ?></a></h5>
                                     <div class="product-price-variant">
                                         <span class="price"><?php echo Format::formatCurrency($itemdDataProdNft['price']) ?></span>
                                     </div>
@@ -61,14 +63,13 @@
 
         <div class="category">
             <?php
-            foreach ($dataCate as $item) {
-
+            foreach ($dataCate as $cateItem) {
             ?>
-                <a class="category-item" href="product/<?php echo $item['id'] ?>">
+                <a class="category-item" href="product/<?php echo $cateItem['id'] ?>">
                     <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
                         <div class="categorie-link">
-                            <img class="img-fluid" src="public/images/category/<?php echo $item['image'] ?>" alt="<?php echo $item['name'] ?>">
-                            <h6 class="cate-title "><?php echo $item['name'] ?></h6>
+                            <img class="img-fluid" src="public/images/category/<?php echo $cateItem['image'] ?>" alt="<?php echo $cateItem['name'] ?>">
+                            <h6 class="cate-title "><?php echo $cateItem['name'] ?></h6>
                         </div>
                     </div>
                 </a>
@@ -125,7 +126,7 @@
             <div class="row">
                 <?php foreach ($dataProdRecent as $itemDataProdRecent) : ?>
                     <?php
-                    $productLink = "product/productDetail/{$itemDataProdRecent['id']}";
+                    $productLink = "product/{$itemDataProdRecent['id']}";
                     $thumbSrc = "public/images/product/thumb/{$itemDataProdRecent['thumb']}";
                     $quantity = $itemDataProdRecent['quantity'];
                     $discount = $itemDataProdRecent['discount'];
@@ -224,7 +225,7 @@
                     foreach ($dataProdMostSold as $itemDataProdMostSold) {
                     ?>
                         <?php
-                        $productLink = "product/productDetail/{$itemDataProdMostSold['id']}";
+                        $productLink = "product/{$itemDataProdMostSold['id']}";
                         $thumbSrc = "public/images/product/thumb/{$itemDataProdMostSold['thumb']}";
                         $quantity = $itemDataProdMostSold['quantity'];
                         $discount = $itemDataProdMostSold['discount'];

@@ -1,6 +1,7 @@
 <?php
-$data = ViewShare::$dataShare;
-
+// echo '<pre>';
+// print_r($userData);
+// echo '</pre>';
 ?>
 <header>
     <div class="admin-header">
@@ -23,10 +24,10 @@ $data = ViewShare::$dataShare;
             <div class="nav-menus">
                 <div class="profile-media">
                     <div class="me-4 ">
-                        <img class="user-profile" src="public/images/users/<?php echo !empty($data) ? $data['dataUser']['payload']['avatar'] : 'userDefault.webp' ?>" alt="avatarUser">
+                        <img class="user-profile" src="public/images/users/<?php echo isset($userData) && !empty($userData) && isset($userData['avatar']) ? $userData['avatar'] : 'userDefault.webp' ?>" alt="avatarUser">
                     </div>
                     <div class="media-body">
-                        <span><?php echo !empty($data) ? $data['dataUser']['payload']['fullname'] : 'Admin' ?></span>
+                        <span><?php echo isset($userData) && !empty($userData) ? $userData['fullname'] : 'Admin' ?></span>
                         <p class="mb-0">Admin <i class="fas fa-chevron-down"></i></p>
                     </div>
                 </div>
@@ -53,7 +54,7 @@ $data = ViewShare::$dataShare;
                         </a>
                     </li>
                     <li>
-                        <a href="admin/logout">
+                        <a href="logout">
                             <i class="fas fa-sign-out-alt"></i>
                             <span>Đăng xuất</span>
                         </a>

@@ -10,7 +10,7 @@
         <div class="sidebar-menu">
             <ul class="sidebar-links">
                 <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'dashboard' ? 'active' : '' ?>" href="admin">
+                    <a class="sidebar-list-link <?php echo $active == 'dashboard' ? 'active' : '' ?>" href="admin/dashboard">
                         <i class="fas fa-home"></i>
                         <span>Bảng điều khiển</span>
                     </a>
@@ -35,7 +35,7 @@
 
                         <li>
                             <i class="fas fa-minus"></i>
-                            <a href="admin/addProduct">Thêm mới</a>
+                            <a href="admin/add-product">Thêm mới</a>
                         </li>
                     </ul>
                 </li>
@@ -58,32 +58,17 @@
 
                         <li>
                             <i class="fas fa-minus"></i>
-                            <a href="admin/addCategory">Thêm mới</a>
+                            <a href="admin/add-category">Thêm mới</a>
                         </li>
                     </ul>
                 </li>
 
 
                 <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'brand' ? 'active' : '' ?>" href="javascript:void(0)">
+                    <a class="sidebar-list-link <?php echo $active == 'brand' ? 'active' : '' ?>" href="admin/brand">
                         <i class="fas fa-copyright"></i>
                         <span>Thương hiệu</span>
-                        <div class="according-menu">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
                     </a>
-                    <!--  -->
-                    <ul class="sidebar-submenu">
-                        <li>
-                            <i class="fas fa-minus"></i>
-                            <a href="admin/brand">Danh sách thương hiệu</a>
-                        </li>
-
-                        <li>
-                            <i class="fas fa-minus"></i>
-                            <a data-bs-toggle="modal" data-bs-target="#addBrand" href="javascrip:void(0)">Thêm mới</a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="sidebar-list">
@@ -103,7 +88,7 @@
 
                         <li>
                             <i class="fas fa-minus"></i>
-                            <a href="admin/addAttribute">Thêm mới</a>
+                            <a href="admin/add-attribute">Thêm mới</a>
                         </li>
                     </ul>
                 </li>
@@ -125,7 +110,7 @@
 
                         <li>
                             <i class="fas fa-minus"></i>
-                            <a href="admin/addUser">Thêm mới</a>
+                            <a href="admin/add-user">Thêm mới</a>
                         </li>
                     </ul>
                 </li>

@@ -51,4 +51,35 @@ trait SweetAlert
     })
     </script>';
     }
+
+    function ToastSession($message, $type)
+    {
+        if (
+            isset($message) && isset($type) &&
+            !empty($message) && !empty($type)
+        ) {
+            echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
+            const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 1500, 
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+                }
+            });
+
+                Toast.fire({
+                    icon: "' . $type . '",
+                    title: "' . $message . '",
+                });
+            })
+            </script>';
+            Session::unsetSession('toastMessage');
+            Session::unsetSession('toastType');
+        }
+    }
 }

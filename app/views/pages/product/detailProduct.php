@@ -25,7 +25,6 @@
     </div>
 </section>
 
-
 <section class="detail-product-area">
     <div class="detail-product-main">
         <div class="container">
@@ -364,7 +363,7 @@
             <div class="row">
                 <?php foreach ($dataProdRecent as $itemDataProdRecent) : ?>
                     <?php
-                    $productLink = "product/productDetail/{$itemDataProdRecent['id']}";
+                    $productLink = "product/{$itemDataProdRecent['id']}";
                     $thumbSrc = "public/images/product/thumb/{$itemDataProdRecent['thumb']}";
                     $quantity = $itemDataProdRecent['quantity'];
                     $discount = $itemDataProdRecent['discount'];

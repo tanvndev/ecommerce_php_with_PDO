@@ -1,127 +1,45 @@
 <?php
-class UserModel extends DB
+class UserModel extends BaseModel
 {
-    use CRUD;
     use SweetAlert;
-    function checkEmailExisted()
+
+    function tableName()
     {
-        $email = $_POST['email'];
-        $isHasEmail = $this->findByName('user', $email, 'email');
+        return 'user';
+    }
+    function tableField()
+    {
+        return '*';
+    }
+    function primaryKey()
+    {
+        return 'id';
+    }
+
+
+
+    function checkEmailExisted($email)
+    {
+        $isHasEmail = $this->db->table($this->tableName())->select('id ,email, isBlock, password, role_id, avatar, fullname')->where('email', '=', $email)->getOne();
         if (!empty($isHasEmail)) {
-            return json_decode('0');
+            return $isHasEmail;
         }
-        return json_decode('1');
+        return [];
     }
 
-    function checkStrongPassword()
+    function checkEmailExistedApi($email)
     {
-        $password = $_POST['password'];
-        $isStrongPass = Format::isStrongPassword($password);
-        if (!$isStrongPass) {
-            return json_decode('0');
+        $isHasEmail = $this->db->table($this->tableName())->select('email')->where('email', '=', $email)->getOne();
+        if (!empty($isHasEmail)) {
+            return ['code' => '200'];
         }
-        return json_decode('1');
+        return ['code' => '400'];
     }
 
-    function loginUser()
+    function updateToken($id, $data)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            if (empty($email) || empty($password)) {
-                $this->Toast('error', 'Vui lòng không để trống.');
-                return false;
-            }
-
-            $checkEmail = $this->findByName('user', $email, 'email');
-
-            if ($checkEmail && password_verify($password, $checkEmail[0]['password'])) {
-                $data = $checkEmail[0];
-
-                if ($data['isBlock'] == 1) {
-                    $this->Alert('Tài khoản của bạn đang bị khoá.', 'error');
-                    return false;
-                }
-                $userData = [
-                    'user_id' => $data['id'],
-                    'role' => $data['role'],
-                    'fullname' => $data['fullname'],
-                    'isBlock' => $data['isBlock'],
-                ];
-                if (!empty($data['avatar'])) {
-                    $userData['avatar'] = $data['avatar'];
-                }
-
-
-                $accessToken = JWT::createJWT($userData);
-
-                $condition = 'id = ' . $data['id'];
-
-                $updateAccessToken = $this->findByNameAndUpdate('user', ['accessToken' => $accessToken], $condition);
-
-                if (!$updateAccessToken) {
-                    $this->Alert('Đăng nhập thất bại', 'error');
-                }
-
-                Session::set('userLogin', $accessToken);
-
-                $redirectUrl = ($data['role'] == 1) ? 'admin' : 'home';
-                $this->Alert('Đăng nhập thành công.', 'success', $redirectUrl, 1200);
-
-                return true;
-            }
-
-            $this->Alert('Email hoặc mật khẩu không chính xác.', 'error');
-            return false;
-        }
-    }
-
-
-    function registerUser()
-    {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-            $email = $_POST['email'] ?? '';
-            $fullname = $_POST['fullname'] ?? '';
-            $password = $_POST['password'] ?? '';
-
-            if (empty($email) || empty($password) || empty($fullname)) {
-                return json_encode(['error' => 'Vui lòng không để trống.']);
-            }
-
-            $checkEmail = $this->findByName('user', $email, 'email');
-
-            if (!empty($checkEmail)) {
-                return json_encode(['error' => 'Email đã được đăng ký vui lòng đăng nhập.']);
-            };
-
-            $isStrongPass = Format::isStrongPassword($password);
-
-            if (!$isStrongPass) {
-                return json_encode(['error' => 'Mật khẩu chưa đạt yêu cầu.']);
-            }
-            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
-            $token = Format::generateRandomString(64);
-            $subject = 'Xác nhận đăng ký.';
-            $body = 'Click vào đây để hoàn thành đăng ký của bạn: <a href="http://localhost/WEB2041_Ecommerce/account/finalRegisterUser/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
-
-            $tempUser = array(
-                'email' => $email,
-                'fullname' => $fullname,
-                'password' => $hashedPassword,
-                'token' => password_hash($token, PASSWORD_BCRYPT)
-            );
-            $sendMail = Services::sendCode($email, $subject,  $body);
-
-            if ($sendMail) {
-                Cookie::set('tempUser', json_encode($tempUser));
-                return json_encode(['success' => 'Vui lòng xác nhận email để hoàn tất đăng ký.']);
-            }
-
-            return json_encode(['error' => 'Đã có lỗi sảy ra vui lòng đăng ký lại.']);
-        }
+        $success = $this->db->findByIdAndUpdate($this->tableName(), $id, $data);
+        return $success ? true : false;
     }
 
     function finalRegisterUser($token)
@@ -157,85 +75,34 @@ class UserModel extends DB
         }
     }
 
-    function forgotPassword()
+    function updatePassword($email, $dataUpdate)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $email = $_POST['email'] ?? '';
-            if (empty($email)) {
-                return json_encode(['error' => 'Vui lòng không để trống.']);
-            }
 
-            $checkEmail = $this->findByName('user', $email, 'email');
-            if (empty($checkEmail)) {
-                return json_encode(['error' => 'Email chưa được đăng ký.']);
-            }
+        $updatePass = $this->db->findAndUpdate($this->tableName(), $dataUpdate, ['email' => $email]);
 
-            $token = Format::generateRandomString(64);
-            $subject = 'Đặt lại mật khẩu.';
-            $body = 'Click vào đây để xác nhận email của bạn: <a href="http://localhost/WEB2041_Ecommerce/account/finalForgotPassword/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
-
-
-            $sendMail = Services::sendCode($email, $subject,  $body);
-
-            $dataResetPassword = [
-                'email' => $email,
-                'token' => password_hash($token, PASSWORD_BCRYPT)
-            ];
-
-            if ($sendMail) {
-                Cookie::set('resetPassword', json_encode($dataResetPassword));
-                return json_encode(['success' => 'Vui lòng xác nhận email để đổi mật khẩu.']);
-            }
-        }
+        return $updatePass;
     }
 
-
-    function finalForgotUser($token)
+    function countUser()
     {
-        $resetPasswordToken = json_decode(Cookie::get('resetPassword'), true);
-
-        if (empty($resetPasswordToken) && !password_verify($token, $resetPasswordToken['token'])) {
-            Session::set('deleteMessage', 'Đường link xác nhận đã hết hạn vui lòng thực hiện lại.');
-            Session::set('deleteType', 'error');
-            Cookie::unsetCookie('resetPassword');
-            return header('location: /WEB2041_Ecommerce/account/login');
-        }
-        return header('location: /WEB2041_Ecommerce/account/resetPassword');
+        $data = $this->db->table($this->tableName())->select('COUNT(*) AS countUser')->where('role_id', '<>', 1)->getOne();
+        return $data;
     }
-    function resetPassword($dataReset)
+
+    function getAllUser()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $password = $_POST['password'];
-            $re_password = $_POST['re_password'];
-
-            if (empty($password) || empty($re_password)) {
-                return $this->Toast('error', 'Vui lòng không để trống.');
-            }
-
-            $isStrongPass = Format::isStrongPassword($password);
-            if (!$isStrongPass) {
-                return $this->Toast('error', 'Độ dài mật khẩu chưa đúng yêu cầu.');
-            }
-
-            if ($password !== $re_password) {
-                return $this->Toast('error', 'Mật khẩu không khớp.');
-            }
-
-            $hashPass = password_hash($password, PASSWORD_BCRYPT);
-
-            try {
-                $sql = "UPDATE user SET password = ? WHERE email = ?";
-                $stml = $this->conn->prepare($sql);
-                $stml->execute([
-                    $hashPass, $dataReset['email']
-                ]);
-
-                Cookie::unsetCookie('resetPassword');
-                return $this->Toast('success', 'Đặt lại mật khẩu thành công.', 'account/login', 1200);
-            } catch (PDOException $e) {
-                Cookie::unsetCookie('resetPassword');
-                return $this->Toast('error', 'Đặt lại mật khẩu thất bại.', 'account/login', 1200);
-            }
-        }
+        return $this->db->table($this->tableName())->select('id, fullname, email, password, avatar, phone, isBlock, role_id, create_At')->orderBy('id')->get();
+    }
+    function getOneUser($id)
+    {
+        return $this->db->table($this->tableName())->select('id, fullname, email, password, avatar, address, phone, isBlock, role_id')->where('id', '=', $id)->getOne();
+    }
+    function updateUser($id, $data)
+    {
+        return $this->db->findByIdAndUpdate($this->tableName(), $id, $data);
+    }
+    function deleteUser($id)
+    {
+        return $this->db->findIdAndDelete($this->tableName(), $id);
     }
 }

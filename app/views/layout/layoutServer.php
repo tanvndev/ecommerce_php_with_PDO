@@ -68,6 +68,10 @@
     <!-- Main JS -->
     <script src="public/js/admin/main.js"></script>
 
+    <!-- Api JS -->
+    <script src="services/base.js"></script>
+    <script src="services/userService.js"></script>
+
 </body>
 
 

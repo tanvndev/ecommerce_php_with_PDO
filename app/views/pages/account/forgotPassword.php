@@ -5,12 +5,12 @@
                 <a href="" class="site-logo"><img src="public/images/logo/logo.png" alt="logo"></a>
             </div>
             <div class="col-md-2 d-lg-block d-none">
-                <a href="account/login" class="back-btn"><i class="far fa-angle-left"></i></a>
+                <a href="login" class="back-btn"><i class="far fa-angle-left"></i></a>
             </div>
             <div class="col-xl-6 col-lg-4 col-sm-6">
                 <div class="singin-header-btn">
                     <p>Bạn đã có tài khoản?</p>
-                    <a href="sign-in.html" class="btn-custom">Đăng nhập</a>
+                    <a href="login" class="btn-custom">Đăng nhập</a>
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
 
                         <div class="form-group d-flex align-items-center justify-content-between">
                             <div>
-                                <button type="button" id="btn-register" onclick="forgotPasswordUser()" class="btn-custom text-capitalize ">Gửi ngay <span class="spin"><i class="fas fa-spinner"></i></span></button>
+                                <button type="button" id="btn_ele" onclick="forgotPasswordUser()" class="btn btn-custom text-capitalize ">Gửi ngay <span class="spin"><i class="fas fa-spinner"></i></span></button>
                             </div>
                         </div>
                     </form>

@@ -124,4 +124,34 @@ class Format
 
         return $randomString;
     }
+
+    static function uploadSingleImage($file, $url)
+    {
+
+        $name = $file['name'];
+        $tmp_name = $file['tmp_name'];
+        $type = $file['type'];
+        $size = $file['size'];
+        $maxFileSize = 8000000;
+
+        $allowTypes = array('image/jpg', 'image/png', 'image/jpeg', 'image/webp');
+
+        $target_dir = "public/images/$url/";
+        $target_file = $target_dir . basename($name);
+
+        if (file_exists($target_file)) {
+            return ['error' => 'File đã tồn tại.'];
+        } elseif ($size > $maxFileSize) {
+            return ['error' => 'File vượt quá 8M.'];
+        }
+        if (!in_array($type, $allowTypes)) {
+            return ['error' => 'Chọn đúng định dạng image/jpg | image/png | image/jpeg | image/webp.'];
+        }
+
+        if (!move_uploaded_file($tmp_name, $target_file)) {
+            return ['error' => 'Tải file thất bại.'];
+        }
+
+        return ['success' => $name];
+    }
 }

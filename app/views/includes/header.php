@@ -1,6 +1,6 @@
 <?php
 // echo '<pre>';
-// print_r($countCart);
+// print_r($userData);
 // echo '</pre>';
 $menu = array(
     [
@@ -29,11 +29,11 @@ $menu = array(
             <a href="Other/comingSoon">Trợ giúp</a>
             <a href="Other/comingSoon">Tham gia với chúng tôi</a>
             <?php
-            if (isset($dataUser) && !empty($dataUser) && $dataUser['valid']) {
+            if (isset($userData) && !empty($userData)) {
             ?>
-                <a href="Other/comingSoon">Welcome, <?php echo $dataUser['payload']['fullname'] ?? 'Customer' ?></a>
+                <a href="Other/comingSoon">Welcome, <?php echo $userData['fullname'] ?? 'Customer' ?></a>
             <?php } else { ?>
-                <a href="account/login">Đăng nhập</a>
+                <a href="login">Đăng nhập</a>
             <?php } ?>
         </div>
     </div>
@@ -75,7 +75,7 @@ $menu = array(
                         <button class="action-link shopping-cart-btn">
                             <i class="flaticon-shopping-cart"></i>
                         </button>
-                        <?php if (isset($dataUser) && !empty($dataUser) && $dataUser['valid']) : ?>
+                        <?php if (isset($userData) && !empty($userData)) : ?>
                             <span id="shopping-cart-quantity" class="shopping-cart-quantity">0</span>
                         <?php endif; ?>
 
@@ -102,12 +102,12 @@ $menu = array(
                                 </li>
                             </ul>
                             <div class="login-btn">
-                                <a href="account/<?php echo (isset($dataUser) && !empty($dataUser) && $dataUser['valid']) ? 'Logout' : 'Login' ?>" class="btn-custom">
-                                    <?php echo (isset($dataUser) && !empty($dataUser)) ? 'Đăng xuất' : 'Đăng nhập' ?>
+                                <a href="<?php echo (isset($userData) && !empty($userData)) ? 'Logout' : 'Login' ?>" class="btn-custom">
+                                    <?php echo (isset($userData) && !empty($userData)) ? 'Đăng xuất' : 'Đăng nhập' ?>
                                 </a>
                             </div>
-                            <div class="register-footer text-center <?php echo (isset($dataUser) && !empty($dataUser) && $dataUser['valid']) ? 'd-none ' : '' ?>">
-                                <?php echo (isset($dataUser) && !empty($dataUser) && $dataUser['valid']) ? '' : 'Bạn chưa có tài khoản? <a href="account/register" class="btn-link">Đăng ký ngay.</a>' ?>
+                            <div class="register-footer text-center <?php echo (isset($userData) && !empty($userData)) ? 'd-none ' : '' ?>">
+                                <?php echo (isset($userData) && !empty($userData)) ? '' : 'Bạn chưa có tài khoản? <a href="signup" class="btn-link">Đăng ký ngay.</a>' ?>
                             </div>
 
                         </div>

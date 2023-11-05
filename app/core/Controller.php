@@ -1,14 +1,10 @@
 <?php
 class Controller
 {
+    public $db;
     function model($model)
     {
         require_once './app/models/' . $model . '.php';
-        return new $model;
-    }
-    function modelAdmin($model)
-    {
-        require_once './app/models/admin/' . $model . '.php';
         return new $model;
     }
 

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .topbar {
   background-color: var(--color-heading);
   padding: 6px 0;
@@ -1828,6 +1829,7 @@
   animation: prevNavSlide 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 .signin-area .signin-banner {
+  display: none;
   min-height: 900px;
   height: 100vh;
   padding: 200px 50px 0 100px;
@@ -1940,8 +1942,9 @@
   width: 600px;
   height: 100%;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
 }
 .cart-dropdown-area .cart-content-wrap .cart-header {
   display: flex;
@@ -1968,8 +1971,13 @@
   color: var(--color-white);
 }
 .cart-dropdown-area .cart-content-wrap .cart-body {
+  overflow: auto;
   padding: 30px 0;
   flex: auto;
+}
+.cart-dropdown-area .cart-content-wrap .cart-body::-webkit-scrollbar {
+  width: 0; /* Chiều rộng thanh cuộn */
+  opacity: 0;
 }
 .cart-dropdown-area .cart-content-wrap .cart-body .cart-item {
   display: flex;

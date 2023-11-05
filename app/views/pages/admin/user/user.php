@@ -1,33 +1,8 @@
 <?php
-if ($delMessage && $delType) {
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500, 
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            }
-        });
 
-        Toast.fire({
-            icon: "' . $delType . '",
-            title: "' . $delMessage . '",
-        });
-    })
-    </script>';
-    Session::unsetSession('deleteMessage');
-    Session::unsetSession('deleteType');
-
-    // echo '<pre>';
-    // print_r($dataUser);
-    // echo '</pre>';
-
-}
+// echo '<pre>';
+// print_r($dataUser);
+// echo '</pre>';
 ?>
 
 <section class="product-wrap">
@@ -37,7 +12,7 @@ if ($delMessage && $delType) {
             <div class="right-options">
                 <ul>
                     <li>
-                        <a class="btn btn-custom" href="admin/addUser">Thêm người dùng</a>
+                        <a class="btn btn-custom" href="admin/add-user">Thêm người dùng</a>
                     </li>
                 </ul>
             </div>
@@ -47,11 +22,13 @@ if ($delMessage && $delType) {
             <table class="theme-table" id="table_id">
                 <thead class="rounded-3 overflow-hidden  ">
                     <tr>
+
                         <th>Ảnh</th>
                         <th>Họ và tên</th>
                         <th>Số điện thoại</th>
                         <th>Email</th>
                         <th>Quyền</th>
+                        <th>Chặn</th>
                         <th>Ngày tham gia</th>
                         <th>Thực thi</th>
                     </tr>
@@ -64,26 +41,35 @@ if ($delMessage && $delType) {
                         <tr>
                             <td>
                                 <div class="table-image">
-                                    <img src="public/images/users/<?php echo $userItem['avatar'] ?>" class="img-fluid" alt="<?php echo $userItem['fullname'] . $userItem['avatar'] ?>">
+                                    <img src="public/images/users/<?= $userItem['avatar'] ?>" class="img-fluid" alt="<?= $userItem['fullname'] . $userItem['avatar'] ?>">
                                 </div>
                             </td>
 
-                            <td class="fw-bold "><?php echo $userItem['fullname'] ?></td>
-                            <td><?php echo $userItem['phone'] ?></td>
-                            <td><?php echo $userItem['email'] ?></td>
-                            <td><?php echo $userItem['role'] == 1 ? 'ADMIN' : 'CUSTOMER' ?></td>
-                            <td><?php echo date('F j, Y, g:i a', strtotime($userItem['create_At'])) ?></td>
+                            <td class="fw-bold "><?= $userItem['fullname'] ?></td>
+                            <td><?= $userItem['phone'] ?></td>
+                            <td><?= $userItem['email'] ?></td>
+                            <td><?= $userItem['role_id'] == 1 ? 'ADMIN' : 'CUSTOMER' ?></td>
+                            <td>
+                                <div>
+                                    <label class="switch">
+                                        <input id="isBlock" onchange="changeIsBlock(<?= $userItem['id'] ?>)" <?= $userItem['isBlock'] == 1 ? 'checked' : '' ?> value="1" type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </td>
+
+                            <td><?= date('F j, Y, g:i a', strtotime($userItem['create_At'])) ?></td>
 
                             <td>
                                 <ul class="options">
                                     <li class="m-0 ">
-                                        <a href="admin/updateUser/<?php echo $userItem['id'] ?>">
+                                        <a href="admin/update-user/<?= $userItem['id'] ?>">
                                             <i class="edit fas fa-edit"></i>
                                         </a>
                                     </li>
 
                                     <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(<?php echo $userItem['id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                        <a onclick="setDataIdToInput(<?= $userItem['id'] ?>, <?= $userItem['role_id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
                                             <i class="delete fas fa-trash-alt"></i>
                                         </a>
                                     </li>
@@ -99,8 +85,9 @@ if ($delMessage && $delType) {
 </section>
 
 <script>
-    function setDataIdToInput(id) {
+    function setDataIdToInput(id, role_id) {
         $("#idUser").val(id);
+        $("#role_id").val(role_id)
     }
 </script>
 
@@ -115,16 +102,16 @@ if ($delMessage && $delType) {
                 </button>
             </div>
             <div class="modal-body">
-                <p class="mb-0 text-center">The permission for the use/group, preview is inherited from the object, object will create a
-                    new permission for this object</p>
+                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/deleteUser">
+                <form method="POST" action="admin/user/deleteUser">
                     <input type="hidden" id="idUser" name="id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Yes</button>
+                    <input type="hidden" id="role_id" name="role_id">
+                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>
                 <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
                 </div>
 
             </div>

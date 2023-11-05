@@ -7,7 +7,7 @@
             <div class="col-sm-8">
                 <div class="singin-header-btn">
                     <p class="mb-0 ">Bạn đã có tài khoản?</p>
-                    <a href="account/login" class="btn btn-custom">Đăng nhập</a>
+                    <a href="login" class="btn btn-custom">Đăng nhập</a>
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="form-group d-flex align-items-center justify-content-between">
                             <div>
-                                <button id="btn-register" onclick="registerUser()" type="button" class="btn-custom text-capitalize ">
+                                <button id="btn_ele" onclick="registerUser()" type="button" class="btn btn-custom text-capitalize ">
                                     Tạo tài khoản <span class="spin"><i class="fas fa-spinner"></i></span>
                                 </button>
                             </div>

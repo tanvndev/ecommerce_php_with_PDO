@@ -1,28 +1,5 @@
 <?php
-if ($delMessage && $delType) {
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500, 
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            }
-        });
 
-        Toast.fire({
-            icon: "' . $delType . '",
-            title: "' . $delMessage . '",
-        });
-    })
-    </script>';
-    Session::unsetSession('deleteMessage');
-    Session::unsetSession('deleteType');
-}
 ?>
 
 <section class="product-wrap">
@@ -100,16 +77,15 @@ if ($delMessage && $delType) {
                 </button>
             </div>
             <div class="modal-body">
-                <p class="mb-0 text-center">The permission for the use/group, preview is inherited from the object, object will create a
-                    new permission for this object</p>
+                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
                 <form method="POST" action="admin/deleteAttribute">
                     <input type="hidden" id="idAttribute" name="id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Yes</button>
+                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>
                 <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
                 </div>
 
             </div>

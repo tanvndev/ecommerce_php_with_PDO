@@ -2086,6 +2086,7 @@
   }
 
   .signin-banner {
+    display: none;
     min-height: 900px;
     height: 100vh;
     padding: 200px 50px 0 100px;
@@ -2209,8 +2210,9 @@
     width: 600px;
     height: 100%;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
-    overflow: auto;
+    overflow: hidden;
 
     .cart-header {
       display: flex;
@@ -2239,8 +2241,32 @@
       }
     }
     .cart-body {
+      overflow: auto;
       padding: 30px 0;
       flex: auto;
+
+      &::-webkit-scrollbar {
+        width: 0; /* Chiều rộng thanh cuộn */
+        opacity: 0;
+      }
+
+      // /* Thiết lập thanh cuộn ngang */
+      // &::-webkit-scrollbar-track {
+      //   background: #f1f1f1;
+      //   border-radius: 8px; /* Màu nền của thanh cuộn */
+      //   opacity: 0;
+      // }
+
+      // &::-webkit-scrollbar-thumb {
+      //   background: rgba(153, 153, 153, 0.5);
+      //   border-radius: 8px; /* Màu sắc của thanh cuộn */
+      //   opacity: 0;
+      // }
+
+      // /* Thiết lập thanh cuộn dọc */
+      // &::-webkit-scrollbar-thumb:hover {
+      //   background: #555; /* Màu sắc khi di chuột qua thanh cuộn */
+      // }
 
       .cart-item {
         display: flex;

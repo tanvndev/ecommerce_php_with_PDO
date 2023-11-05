@@ -106,7 +106,6 @@
 
                             <tbody>
                                 <?php foreach ($dataProdOrderBySold as $dataProdBestSell) {
-
                                 ?>
                                     <tr>
                                         <td>

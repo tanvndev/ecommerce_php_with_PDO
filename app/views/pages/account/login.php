@@ -1,31 +1,3 @@
-<?php
-if ($delMessage && $delType) {
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500, 
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            }
-        });
-
-        Toast.fire({
-            icon: "' . $delType . '",
-            title: "' . $delMessage . '",
-        });
-    })
-    </script>';
-    Session::unsetSession('deleteMessage');
-    Session::unsetSession('deleteType');
-}
-?>
-
-
 <section class="signin-area">
     <div class="signin-header">
         <div class="row align-items-center">
@@ -35,7 +7,7 @@ if ($delMessage && $delType) {
             <div class="col-sm-8">
                 <div class="singin-header-btn">
                     <p class="mb-0 ">Chưa có tài khoản?</p>
-                    <a href="account/register" class="btn btn-custom">Đăng ký ngay</a>
+                    <a href="signup" class="btn btn-custom">Đăng ký ngay</a>
                 </div>
             </div>
         </div>
@@ -53,20 +25,20 @@ if ($delMessage && $delType) {
                     <h3 class="title">Đăng nhập</h3>
                     <p class="desc mb--55">Nhập chi tiết của bạn bên dưới</p>
 
-                    <form class="singin-form" method="POST" action="account/login">
+                    <form class="singin-form" method="POST">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" name="email" placeholder="Email">
+                            <input type="email" value="<?= $dataValueOld['email'] ?? '' ?>" class="form-control" name="email" placeholder="Email">
                         </div>
                         <div class="form-group">
                             <label>Mật khẩu</label>
-                            <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                            <input type="password" value="<?= $dataValueOld['password'] ?? '' ?>" class="form-control" name="password" placeholder="Mật khẩu">
                         </div>
                         <div class="form-group d-flex align-items-center justify-content-between">
                             <div>
-                                <button type="submit" class="btn-custom">Đăng nhập</button>
+                                <button id="btn_ele" type="submit" class="btn btn-custom">Đăng nhập <span class="spin"><i class="fas fa-spinner"></i></span></button>
                             </div>
-                            <a href="account/forgotPassword" class="forgot-btn">Quên mật khẩu?</a>
+                            <a href="reset" class="forgot-btn">Quên mật khẩu?</a>
                         </div>
                     </form>
                 </div>

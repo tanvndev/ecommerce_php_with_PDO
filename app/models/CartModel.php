@@ -1,38 +1,28 @@
 <?php
-class CartModel extends DB
+class CartModel extends BaseModel
 {
-    use CRUD;
-    private $idUser;
 
 
-    function getAllCart()
+    public function tableName()
     {
-        $rs = ViewShare::$dataShare;
-        if (empty($rs)) {
-            return json_encode([]);
-        }
+        return 'cart';
+    }
+    public function tableField()
+    {
+        return '*';
+    }
+    public function primaryKey()
+    {
+        return 'id';
+    }
 
-        $this->idUser = $rs['dataUser']['payload']['user_id'];
-        if (empty($this->idUser)) {
-            return json_encode([]);
-        }
 
-        try {
-            $sql = "SELECT c.*, p.title, p.price, p.thumb, p.totalRatings, p.totalUserRatings
-            FROM cart c
-            JOIN product p ON c.prod_id = p.id
-            WHERE c.user_id = :id";
+    function getAllCart($idUser)
+    {
 
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindParam(':id', $this->idUser, PDO::PARAM_INT);
-            $stmt->execute();
-            $cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $dataCart = $this->db->table('cart c')->select('c.id, c.prod_id, c.totalPrice, c.quantity, c.color, c.size, p.title, p.price, p.thumb, p.totalRatings, p.totalUserRatings')->join('product p', 'c.prod_id = p.id')->where('c.user_id', '=', $idUser)->get();
 
-            return json_encode($cart);
-        } catch (PDOException $e) {
-            echo $e;
-            return [];
-        }
+        return $dataCart;
     }
 
     function addNewProductCart($prodId)

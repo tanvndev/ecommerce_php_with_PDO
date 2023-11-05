@@ -1,28 +1,8 @@
 <?php
-if ($delMessage && $delType) {
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500, 
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            }
-        });
 
-        Toast.fire({
-            icon: "' . $delType . '",
-            title: "' . $delMessage . '",
-        });
-    })
-    </script>';
-    Session::unsetSession('deleteMessage');
-    Session::unsetSession('deleteType');
-}
+// echo '<pre>';
+// print_r($dataBrand);
+// echo '</pre>';
 ?>
 
 <section class="product-wrap">
@@ -85,7 +65,7 @@ if ($delMessage && $delType) {
     }
 
     function updateBrand(id) {
-        $.get(`admin/getOneBrand/${id}`, (data) => {
+        $.get(`admin/brand/getOneBrandApi/${id}`, (data) => {
             const dataBrand = JSON.parse(data)
             $('#brandName').val(dataBrand.name);
             $('#idBrandVal').val(dataBrand.id);
@@ -107,12 +87,12 @@ if ($delMessage && $delType) {
                 <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/deleteBrand">
+                <form method="POST" action="admin/brand/deleteBrand">
                     <input type="hidden" id="idBrand" name="id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Yes</button>
+                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>
                 <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
                 </div>
 
             </div>
@@ -130,13 +110,13 @@ if ($delMessage && $delType) {
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="admin/addBrand" method="POST">
+            <form action="admin/brand/addBrand" method="POST">
                 <div class="modal-body add-wrap-admin">
                     <div class="form-input">
                         <div class="mb-5 row align-items-center">
                             <label class="form-label-title col-sm-3 mb-0">Tên thương hiệu</label>
                             <div class="col-sm-9">
-                                <input required name="name" class="form-control input-text" type="text" placeholder="Product Name">
+                                <input name="name" class="form-control input-text" type="text" placeholder="Tên thương hiệu " required>
                             </div>
                         </div>
                     </div>
@@ -164,14 +144,14 @@ if ($delMessage && $delType) {
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form action="admin/updateBrand" method="POST">
+            <form action="admin/brand/updateBrand" method="POST">
                 <div class="modal-body add-wrap-admin">
                     <div class="form-input">
                         <div class="mb-5 row align-items-center">
                             <label class="form-label-title col-sm-3 mb-0">Tên thương hiệu</label>
                             <div class="col-sm-9">
                                 <input type="hidden" name="id" id="idBrandVal">
-                                <input required name="name" id="brandName" class="form-control input-text" type="text" placeholder="Product Name">
+                                <input name="name" id="brandName" class="form-control input-text" type="text" placeholder="Tên thương hiệu" required>
                             </div>
                         </div>
                     </div>

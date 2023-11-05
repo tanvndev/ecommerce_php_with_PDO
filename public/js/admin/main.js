@@ -17,6 +17,7 @@
 
     methods: function (e) {
       initial.w();
+      initial.loaderAjax();
 
       initial.scrollSmoth();
       initial.addAllLazyLoading();
@@ -30,6 +31,13 @@
 
     w: function (e) {
       this._window.on('load', initial.l).on('scroll', initial.res);
+    },
+    loaderAjax: function () {
+      $('#btn_ele').on('click', function () {
+        const button = $(this);
+        button.addClass('disabled');
+        $('.spin').show();
+      });
     },
 
     //tan

@@ -11,14 +11,14 @@
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Họ và tên <span class="text-danger ">*</span></label>
                                 <div class="col-sm-9">
-                                    <input name="fullname" class="form-control input-text" type="text" placeholder="Họ và tên">
+                                    <input name="fullname" value="<?= $dataValueOld['fullname'] ?? '' ?>" class="form-control input-text" type="text" placeholder="Họ và tên">
                                 </div>
                             </div>
                             <!--  -->
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Email <span class="text-danger ">*</span></label>
                                 <div class="col-sm-9">
-                                    <input name="email" class="form-control input-text" type="email" placeholder="Email ">
+                                    <input name="email" value="<?= $dataValueOld['email'] ?? '' ?>" class="form-control input-text" type="email" placeholder="Email ">
                                 </div>
                             </div>
 
@@ -26,7 +26,7 @@
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Mật khẩu <span class="text-danger ">*</span></label>
                                 <div class="col-sm-9">
-                                    <input name="password" class="form-control input-text" type="password" placeholder="Mật khẩu">
+                                    <input name="password" value="<?= $dataValueOld['password'] ?? '' ?>" class="form-control input-text" type="password" placeholder="Mật khẩu">
                                 </div>
                             </div>
 
@@ -34,7 +34,7 @@
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Xác nhận mật khẩu <span class="text-danger ">*</span></label>
                                 <div class="col-sm-9">
-                                    <input name="re_password" class="form-control input-text" type="password" placeholder="Xác nhận mật khẩu">
+                                    <input name="re_password" value="<?= $dataValueOld['re_password'] ?? '' ?>" class="form-control input-text" type="password" placeholder="Xác nhận mật khẩu">
                                 </div>
                             </div>
 
@@ -46,14 +46,14 @@
                                 <div class="col-sm-9">
                                     <div class="d-flex flex-wrap gap-4">
                                         <div class="form-check">
-                                            <input class="form-check-input" value="1" type="radio" name="role" id="admin">
+                                            <input class="form-check-input" value="1" type="radio" name="role_id" id="admin">
                                             <label class="form-check-label" for="admin">
                                                 Người quản trị
                                             </label>
                                         </div>
 
                                         <div class="form-check">
-                                            <input class="form-check-input" checked value="2" type="radio" name="role" id="customer">
+                                            <input class="form-check-input" checked value="2" type="radio" name="role_id" id="customer">
                                             <label class="form-check-label" for="customer">
                                                 Người dùng
                                             </label>

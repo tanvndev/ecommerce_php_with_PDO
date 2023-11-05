@@ -70,7 +70,11 @@
 
     <!-- Main JS -->
     <script src="public/js/main.js"></script>
-    <script src="public/js/api.js"></script>
+
+    <!-- Api JS -->
+    <script src="services/base.js"></script>
+    <script src="services/cartService.js"></script>
+
 
 
 </body>
