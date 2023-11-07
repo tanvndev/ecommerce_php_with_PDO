@@ -9,8 +9,8 @@
     <nav class="sidebar-main">
         <div class="sidebar-menu">
             <ul class="sidebar-links">
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'dashboard' ? 'active' : '' ?>" href="admin/dashboard">
+                <li class="sidebar-list <?php echo $active == 'dashboard' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="admin/dashboard">
                         <i class="fas fa-home"></i>
                         <span>Bảng điều khiển</span>
                     </a>
@@ -18,8 +18,8 @@
 
 
 
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'product' ? 'active' : '' ?>" href="javascript:void(0)">
+                <li class="sidebar-list <?php echo $active == 'product' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="javascript:void(0)">
                         <i class="fas fa-store"></i>
                         <span>Sản phẩm</span>
                         <div class="according-menu">
@@ -41,8 +41,8 @@
                 </li>
 
 
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'category' ? 'active' : '' ?>" href="javascript:void(0)">
+                <li class="sidebar-list <?php echo $active == 'category' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="javascript:void(0)">
                         <i class="fas fa-th-list"></i>
                         <span>Danh mục</span>
                         <div class="according-menu">
@@ -64,15 +64,15 @@
                 </li>
 
 
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'brand' ? 'active' : '' ?>" href="admin/brand">
+                <li class="sidebar-list <?php echo $active == 'brand' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="admin/brand">
                         <i class="fas fa-copyright"></i>
                         <span>Thương hiệu</span>
                     </a>
                 </li>
 
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'attributes' ? 'active' : '' ?>" href="javascript:void(0)">
+                <li class="sidebar-list <?php echo $active == 'attributes' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="javascript:void(0)">
                         <i class="fas fa-sliders-h"></i>
                         <span>Thuộc tính</span>
                         <div class="according-menu">
@@ -93,8 +93,8 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'user' ? 'active' : '' ?>" href="javascript:void(0)">
+                <li class="sidebar-list <?php echo $active == 'user' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="javascript:void(0)">
                         <i class="fas fa-users"></i>
                         <span>Người dùng</span>
                         <div class="according-menu">
@@ -116,8 +116,8 @@
                 </li>
 
                 <!--  -->
-                <li class="sidebar-list">
-                    <a class="sidebar-list-link <?php echo $active == 'ratings' ? 'active' : '' ?>" href="admin/ratingProduct">
+                <li class="sidebar-list <?php echo $active == 'ratings' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="admin/ratingProduct">
                         <i class="far fa-star"></i>
                         <span>Đánh giá sản phẩm</span>
                     </a>

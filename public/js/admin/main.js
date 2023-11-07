@@ -54,6 +54,11 @@
 
         $(this).addClass('active');
       });
+
+      $('.sidebar-list').click(function () {
+        $('.sidebar-list').removeClass('active');
+        $(this).addClass('active');
+      });
     },
 
     priceWithDiscount: function () {
