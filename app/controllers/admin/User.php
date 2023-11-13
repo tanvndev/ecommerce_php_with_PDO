@@ -4,11 +4,13 @@ class User extends Controller
     use SweetAlert;
     private $userModel;
     private $req = null;
+    private $res = null;
 
     function __construct()
     {
         $this->userModel = $this->model('UserModel');
         $this->req = new Request;
+        $this->res = new Response;
     }
     function Default()
     {
@@ -32,10 +34,11 @@ class User extends Controller
 
     function addUser()
     {
+        $dataRole = $this->db->table('role')->get();
         $dataValueOld = [];
         $type = 'error';
         if (!$this->req->isPost()) {
-            return $this->renderAddPage($dataValueOld);
+            return $this->renderAddPage($dataRole, $dataValueOld);
         }
         //Get data post
         $dataPost = $this->req->getFields();
@@ -64,7 +67,7 @@ class User extends Controller
         // Neu co loi validate se hien loi
         if (!empty($dataError)) {
             $this->Toast($type, reset($dataError));
-            return $this->renderAddPage($dataValueOld);
+            return $this->renderAddPage($dataRole, $dataValueOld);
         }
 
         //Kiem tra email co ton tai
@@ -72,7 +75,7 @@ class User extends Controller
 
         if (!empty($isEmailExisted)) {
             $this->Toast($type, 'Email đã tồn tại.');
-            return $this->renderAddPage($dataValueOld);
+            return $this->renderAddPage($dataRole, $dataValueOld);
         }
 
         //Bam mat khau
@@ -88,22 +91,21 @@ class User extends Controller
 
         $success = $this->db->create('user', $dataInsert);
         if ($success) {
-            Session::set('toastMessage', 'Thêm mới thành công.');
-            Session::set('toastType', 'success');
-            header('location: /WEB2041_Ecommerce/admin/user');
-            return;
+
+            return $this->res->setToastSession('success', 'Thêm mới thành công.', 'admin/user');;
         } else {
             $this->Toast($type, 'Thêm mới thất bại vui lòng thử lại.');
-            return $this->renderAddPage($dataValueOld);
+            return $this->renderAddPage($dataRole, $dataValueOld);
         }
     }
 
-    private function renderAddPage($dataValueOld = [])
+    private function renderAddPage($dataRole, $dataValueOld = [])
     {
         $this->view('layoutServer', [
             'title' => 'Thêm người dùng',
             'active' => 'user',
             'pages' => 'user/addUser',
+            'dataRole' => $dataRole,
             'dataValueOld' => $dataValueOld,
         ]);
     }
@@ -191,10 +193,7 @@ class User extends Controller
 
         $success = $this->userModel->updateUser($id, $dataUpdate);
         if ($success) {
-            Session::set('toastMessage', 'Cập nhập thành công.');
-            Session::set('toastType', 'success');
-            header('location: /WEB2041_Ecommerce/admin/user');
-            return;
+            return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/user');;
         } else {
             $this->Toast($type, 'Cập nhập thất bại vui lòng thử lại.');
             return $this->renderUpdatePage($dataUserUp);
@@ -242,22 +241,14 @@ class User extends Controller
             $dataPost = $this->req->getFields();
 
             if ($dataPost['role_id'] == 1) {
-                Session::set('error', 'Bạn không có quyền xoá ADMIN.');
-                Session::set('toastType', 'error');
-                header('location: /WEB2041_Ecommerce/admin/user');
-                return;
+                return $this->res->setToastSession('error', 'Bạn không có quyền xoá ADMIN.', 'admin/user');;
             }
             $success =  $this->userModel->deleteUser($dataPost['id']);
             if ($success) {
                 Session::set('toastMessage', 'Xoá thành công.');
-                Session::set('toastType', 'success');
-                header('location: /WEB2041_Ecommerce/admin/user');
-                return;
+                return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/user');;
             }
-            Session::set('toastMessage', 'Xoá thất bại.');
-            Session::set('toastType', 'error');
-            header('location: /WEB2041_Ecommerce/admin/user');
-            return;
+            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/user');;
         }
     }
 }

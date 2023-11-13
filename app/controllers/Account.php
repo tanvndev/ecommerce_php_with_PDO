@@ -4,11 +4,13 @@ class Account extends Controller
     use SweetAlert;
 
     private $req = null;
+    private $res = null;
     private $userModel;
 
     public function __construct()
     {
         $this->req = new Request;
+        $this->res = new Response;
         $this->userModel = $this->model('UserModel');
     }
 
@@ -337,9 +339,9 @@ class Account extends Controller
             Session::set('toastMessage', 'Đường link xác nhận đã hết hạn vui lòng thực hiện lại.');
             Session::set('toastType', 'error');
             Cookie::unsetCookie('resetPassword');
-            return header('location: /WEB2041_Ecommerce/login');
+            return $this->res->redirect('login');
         }
-        return header('location: /WEB2041_Ecommerce/reset-password');
+        return $this->res->redirect('reset-password');
     }
 
 
@@ -351,7 +353,7 @@ class Account extends Controller
             Session::set('toastMessage', 'Đường link xác nhận đã hết hạn vui lòng thực hiện lại.');
             Session::set('toastType', 'error');
             Cookie::unsetCookie('resetPassword');
-            header('location: /WEB2041_Ecommerce/login');
+            return $this->res->redirect('login');
         }
 
         $type = 'error';
@@ -401,7 +403,7 @@ class Account extends Controller
             Session::set('toastMessage', 'Đặt lại mật khẩu thất bại vui lòng thực hiện lại.');
             Session::set('toastType', 'error');
             Cookie::unsetCookie('resetPassword');
-            return header('location: /WEB2041_Ecommerce/login');
+            return $this->res->redirect('login');
         }
     }
 

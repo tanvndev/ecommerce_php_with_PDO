@@ -13,11 +13,11 @@ $menu = array(
     ],
     [
         'name' => 'Giới thiệu',
-        'path' => 'Other/comingSoon'
+        'path' => 'coming-soon'
     ],
     [
         'name' => 'Liên hệ',
-        'path' => 'Other/comingSoon'
+        'path' => 'coming-soon'
     ],
 );
 
@@ -26,12 +26,12 @@ $menu = array(
 <header>
     <div class="topbar">
         <div class="container d-flex justify-content-end ">
-            <a href="Other/comingSoon">Trợ giúp</a>
-            <a href="Other/comingSoon">Tham gia với chúng tôi</a>
+            <a href="coming-soon">Trợ giúp</a>
+            <a href="coming-soon">Tham gia với chúng tôi</a>
             <?php
             if (isset($userData) && !empty($userData)) {
             ?>
-                <a href="Other/comingSoon">Welcome, <?php echo $userData['fullname'] ?? 'Customer' ?></a>
+                <a href="coming-soon">Welcome, <?php echo $userData['fullname'] ?? 'Customer' ?></a>
             <?php } else { ?>
                 <a href="login">Đăng nhập</a>
             <?php } ?>
@@ -66,7 +66,7 @@ $menu = array(
                         </form>
                     </li>
                     <li class="wishlist">
-                        <a class="action-link" href="Other/comingSoon">
+                        <a class="action-link" href="coming-soon">
                             <i class="flaticon-heart"></i>
                         </a>
                     </li>
@@ -89,16 +89,16 @@ $menu = array(
                             <span class="title">Đường dẫn nhanh</span>
                             <ul>
                                 <li>
-                                    <a href="Other/comingSoon">Tài khoản</a>
+                                    <a href="coming-soon">Tài khoản</a>
                                 </li>
                                 <li>
-                                    <a href="Other/comingSoon">Bắt đầu trả hàng</a>
+                                    <a href="coming-soon">Bắt đầu trả hàng</a>
                                 </li>
                                 <li>
-                                    <a href="Other/comingSoon">Hỗ trợ</a>
+                                    <a href="coming-soon">Hỗ trợ</a>
                                 </li>
                                 <li>
-                                    <a href="Other/comingSoon">Ngôn ngữ</a>
+                                    <a href="coming-soon">Ngôn ngữ</a>
                                 </li>
                             </ul>
                             <div class="login-btn">

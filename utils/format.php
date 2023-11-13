@@ -8,7 +8,7 @@ class Format
 
     static function formatCurrency($amount)
     {
-        $formattedAmount = number_format($amount, 0, ',', ',') . 'đ';
+        $formattedAmount = number_format($amount, 0, '.', '.') . ' ₫';
         return $formattedAmount;
     }
 
@@ -31,7 +31,7 @@ class Format
             return $originalPrice = 0;
         }
         $originalPrice = $Price / (1 - ($discount / 100));
-        $originalPrice = number_format($originalPrice, 0, ',', ',') . 'đ';
+        $originalPrice = number_format($originalPrice, 0, '.', '.') . ' ₫';
 
         return $originalPrice;
     }
@@ -83,16 +83,16 @@ class Format
         return isset($special_titles[$title]) ? ucfirst($special_titles[$title]) : ucfirst($title);
     }
 
-    static function createSlug($string)
+    function createSlug($string)
     {
+        $string = preg_replace('/[^a-z0-9-\s]/i', '', $string);
+        $string = preg_replace('/\s+/', ' ', $string);
+        $string = trim($string);
         $string = str_replace(' ', '-', $string);
         $string = strtolower($string);
-        $string = preg_replace('/[^a-z0-9-]/', '', $string);
-        $string = preg_replace('/-+/', '-', $string);
-        $string = trim($string, '-');
-        $random = rand(1, 10000);
+        $random = rand(1, 100000000);
 
-        return $string . $random;
+        return "$string-$random";
     }
 
     static function isStrongPassword($password)
@@ -123,6 +123,24 @@ class Format
         }
 
         return $randomString;
+    }
+
+    static function validateUoloadImage($file)
+    {
+        $type = $file['type'];
+        $size = $file['size'];
+        $maxFileSize = 5000000;  //5MB
+
+        $allowTypes = array('image/jpg', 'image/png', 'image/jpeg', 'image/webp');
+
+        if ($size > $maxFileSize) {
+            return false;
+        }
+        if (!in_array($type, $allowTypes)) {
+            return false;
+        }
+
+        return true;
     }
 
     static function uploadSingleImage($file, $url)

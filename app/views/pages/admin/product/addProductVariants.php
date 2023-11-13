@@ -1,11 +1,11 @@
 <?php
 // echo '<pre>';
-// print_r($attributeData);
+// print_r($dataProdVariants);
 // echo '</pre>';
 ?>
 <section class="add-wrap-admin">
     <div class="container-fluid ">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST">
             <div class="row">
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
@@ -16,79 +16,9 @@
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Tên sản phẩm<span class="text-danger">*</span></label>
                                 <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataValueOld['title'] ?? '' ?>" name="title" type="text" placeholder="Tên sản phẩm" required>
+                                    <input class="form-control input-text" value="<?= $dataProd['title'] ?? '' ?>" type="text" placeholder="Tên sản phẩm" disabled>
                                 </div>
                             </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Danh mục <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <select class="select-custom" name="cate_id" id="select-custom" required>
-                                        <?php
-                                        foreach ($cateData as $cateItem) {
-                                            $dataOldCate = $dataValueOld['cate_id'] ?? '';
-                                            $selectedCate = $cateItem['id'] == $dataOldCate ?? '' ? 'selected' : '';
-                                        ?>
-                                            <option <?= $selectedCate  ?> value="<?= $cateItem['id'] ?>"><?= $cateItem['name'] ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Thương hiệu <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <select class="select-custom" name="brand_id" id="select-custom2" required>
-
-                                        <?php
-                                        foreach ($brandData as $brandItem) {
-                                            $dataOldBrand = $dataValueOld['brand_id'] ?? '';
-                                            $selectedBrand = $cateItem['id'] == $dataOldBrand ? 'selected' : '';
-                                        ?>
-                                            <option <?= $selectedBrand  ?> value="<?= $brandItem['id'] ?>"><?= $brandItem['name'] ?></option>
-                                        <?php } ?>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Số lượng <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataValueOld['quantity'] ?? '' ?>" name=" quantity" type="number" placeholder="Số lượng" required>
-                                </div>
-                            </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Giá <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataValueOld['price'] ?? '' ?>" name=" price" type="number" placeholder="Giá sản phẩm" required>
-                                </div>
-                            </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Giá sale</label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataValueOld['price_sale'] ?? '' ?>" name=" sale_price" type="number" placeholder="Giá sale">
-                                </div>
-                            </div>
-
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Hiển thị</label>
-                                <div class="col-sm-9">
-                                    <label class="switch">
-                                        <?php
-                                        $status = $dataValueOld['status'] ?? '';
-                                        $checkedStatus = $status == 1 ? 'checked' : '';
-                                        ?>
-                                        <input name="status" <?= $checkedStatus ?> value="1" type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-
 
                         </div>
                     </div>
@@ -98,7 +28,6 @@
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
                         <div class="card-title-top">
-
                             <h5>Thuộc tính sản phẩm</h5>
                         </div>
                         <div class="form-input">
@@ -136,6 +65,7 @@
                     </div>
                 </div>
 
+
                 <!-- Variant -->
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
@@ -152,69 +82,14 @@
                     </div>
                 </div>
 
-
-                <!-- description -->
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Mô tả </h5>
-                        </div>
-                        <div class="form-input">
-                            <div class="mb-5 row ">
-                                <label class="form-label-title col-sm-3 mb-0">Mô tả ngắn </label>
-                                <div class="col-sm-9">
-                                    <textarea name="short_description" class="ckEditor"><?= $dataValueOld['short_description'] ?? '' ?></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-input">
-                            <div class="mb-5 row ">
-                                <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>
-                                <div class="col-sm-9">
-                                    <textarea name="description" class="ckEditor"><?= $dataValueOld['description'] ?? '' ?></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Images -->
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Ảnh sản phẩm (extend file .jpg | .png | .jpeg | .webp & file < 5MB)</h5>
-                        </div>
-                        <div class="form-input">
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Thumbnail (1 ảnh) <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="thumb" class="form-control input-file" type="file" required>
-                                </div>
-                            </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Ảnh (N ảnh) <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-file" name="images[]" type="file" multiple required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product Price -->
-
-
-                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto">Thêm sản phẩm mới <span class="spin"><i class="fas fa-spinner"></i></span></button>
+                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto">Thêm biến thể <span class="spin"><i class="fas fa-spinner"></i></span></button>
             </div>
 
 
         </form>
     </div>
-
 </section>
+
 
 <script>
     let itemCounter = 1;

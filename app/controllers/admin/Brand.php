@@ -3,12 +3,14 @@
 class Brand extends Controller
 {
     use SweetAlert;
-    private $brandModel;
     private $req = null;
+    private $res = null;
+    private $brandModel;
     function __construct()
     {
         $this->brandModel = $this->model('BrandModel');
         $this->req = new Request;
+        $this->res = new Response;
     }
 
     function Default()
@@ -22,6 +24,7 @@ class Brand extends Controller
         $dataBrand = $this->brandModel->getAllBrand();
 
         $this->view('layoutServer', [
+            'active' => 'brand',
             'pages' => 'brand/brand',
             'title' => 'Danh sách thương hiệu',
             'dataBrand' => $dataBrand,
@@ -35,14 +38,15 @@ class Brand extends Controller
 
     function addBrand()
     {
+        if (!$this->req->isPost()) {
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
+        }
         $type = 'error';
 
         $dataPost = $this->req->getFields();
 
         if (empty($dataPost['name'])) {
-            Session::set('toastMessage', 'Vui lòng không để trống.');
-            Session::set('toastType', $type);
-            return header('location: /WEB2041_Ecommerce/admin/brand');
+            return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
         }
 
         $dataInsert = [
@@ -51,26 +55,23 @@ class Brand extends Controller
 
         $success = $this->brandModel->addNewBrand($dataInsert);
         if (!$success) {
-            Session::set('toastMessage', 'Tạo mới thất bại.');
-            Session::set('toastType', $type);
-            return header('location: /WEB2041_Ecommerce/admin/brand');
+            return $this->res->setToastSession($type, 'Tạo mới thất bại.', 'admin/brand');
         }
-
-        Session::set('toastMessage', 'Tạo mới thành công.');
-        Session::set('toastType', 'success');
-        return header('location: /WEB2041_Ecommerce/admin/brand');
+        return $this->res->setToastSession('success', 'Tạo mới thành công.', 'admin/brand');
     }
 
     function updateBrand()
     {
+        if (!$this->req->isPost()) {
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
+        }
         $type = 'error';
 
         $dataPost = $this->req->getFields();
 
         if (empty($dataPost['name'])) {
-            Session::set('toastMessage', 'Vui lòng không để trống.');
-            Session::set('toastType', $type);
-            return header('location: /WEB2041_Ecommerce/admin/brand');
+
+            return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
         }
 
         $dataUpdate = [
@@ -79,30 +80,25 @@ class Brand extends Controller
 
         $success = $this->brandModel->updateBrand($dataPost['id'], $dataUpdate);
         if (!$success) {
-            Session::set('toastMessage', 'Cập nhập thất bại.');
-            Session::set('toastType', $type);
-            return header('location: /WEB2041_Ecommerce/admin/brand');
+            return $this->res->setToastSession($type, 'Cập nhập thất bại.', 'admin/brand');
         }
 
-        Session::set('toastMessage', 'Cập nhập thành công.');
-        Session::set('toastType', 'success');
-        return header('location: /WEB2041_Ecommerce/admin/brand');
+        return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/brand');
     }
 
     function deleteBrand()
     {
+        if (!$this->req->isPost()) {
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
+        }
         $dataPost = $this->req->getFields();
 
         $success = $this->brandModel->deleteBrand($dataPost['id']);
 
         if (!$success) {
-            Session::set('toastMessage', 'Xoá thất bại.');
-            Session::set('toastType', 'error');
-            return header('location: /WEB2041_Ecommerce/admin/brand');
+            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/brand');
         }
 
-        Session::set('toastMessage', 'Xoá thành công.');
-        Session::set('toastType', 'success');
-        return header('location: /WEB2041_Ecommerce/admin/brand');
+        return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/brand');
     }
 }

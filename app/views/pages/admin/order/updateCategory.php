@@ -1,11 +1,6 @@
-<?php
-// echo '<pre>';
-// print_r($dataValueOld);
-// echo '</pre>';
-?>
 <section class="add-wrap-admin">
     <div class="container-fluid ">
-        <form method="POST" action="admin/add-category" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
@@ -13,24 +8,30 @@
                             <h5>Thông tin danh mục</h5>
                         </div>
                         <div class="form-input">
+                            <input type="hidden" value="<?php echo $dataCate['id'] ?>">
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Tên danh mục</label>
                                 <div class="col-sm-9">
-                                    <input name="name" class="form-control input-text" value="<?= $dataValueOld['name'] ?? '' ?>" type="text" placeholder="Tên danh mục" required>
+                                    <input name="name" value="<?php echo $dataCate['name'] ?>" class="form-control input-text" type="text" placeholder="Tên danh mục">
                                 </div>
                             </div>
                             <!--  -->
 
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Ảnh danh mục</label>
-                                <div class="col-sm-9">
-                                    <input name="image" class="form-control input-file" type="file" required>
+                                <div class="col-sm-6">
+                                    <input name="image" class="form-control input-file" type="file">
+
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <img class="img-review" src="public/images/category/<?php echo $dataCate['image'] ?>" alt="<?php echo 'image ' . $dataCate['name'] ?>">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto ">Thêm danh mục mới <span class="spin"><i class="fas fa-spinner"></i></span></button>
+                <button class="btn btn-custom col-sm-8 m-auto ">Cập nhập danh mục</button>
             </div>
         </form>
     </div>

@@ -5,13 +5,13 @@
 <section class="product-wrap">
     <div class="card">
         <div class="title-header">
-            <h5 class="title">Danh sách thuộc tính</h5>
+            <h5 class="title">Danh sách đơn hàng</h5>
             <div class="right-options">
-                <ul>
+                <!-- <ul>
                     <li>
-                        <a class="btn btn-custom" href="admin/add-attribute">Thêm thuộc tính</a>
+                        <a class="btn btn-custom" href="admin/add-category"> Thêm đơn hàng</a>
                     </li>
-                </ul>
+                </ul> -->
             </div>
         </div>
 
@@ -19,42 +19,42 @@
             <table class="theme-table" id="table_id">
                 <thead class="rounded-3 overflow-hidden  ">
                     <tr>
-                        <th>Tên thuộc tính</th>
-                        <th>Tên hiển thị</th>
-                        <th>Giá trị</th>
+                        <th>Mã đơn hàng</th>
+                        <th>Ngày tạo đơn</th>
+                        <th>Người đặt hàng</th>
+                        <th>Phương thức</th>
+                        <th>Thành tiền</th>
+                        <th>Trạng thái</th>
                         <th>Thực thi</th>
                     </tr>
                 </thead>
 
                 <tbody>
 
-                    <?php foreach ($dataAttribute as $attributeItem) {
+                    <?php foreach ($dataCate as $cateItem) {
                     ?>
                         <tr>
-
-                            <td class="text-capitalize"><?= $attributeItem['name'] ?></td>
-                            <td class="text-capitalize fw-bold "><?= $attributeItem['display_name'] ?></td>
                             <td>
-                                <div class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/attribute-value/<?= $attributeItem['id'] ?>">
-                                            <i class="view fas fa-eye"></i>
-                                        </a>
-                                    </li>
-                                </div>
+                                1233
                             </td>
+
+                            <td><?php echo $cateItem['name'] ?></td>
+                            <td><?php echo $cateItem['name'] ?></td>
+                            <td><?php echo $cateItem['name'] ?></td>
+                            <td><?php echo $cateItem['name'] ?></td>
+                            <td><?php echo $cateItem['name'] ?></td>
 
                             <td>
                                 <ul class="options">
                                     <li class="m-0 ">
-                                        <a href="admin/update-attribute/<?= $attributeItem['id'] ?>">
+                                        <a href="admin/update-category/<?php echo $cateItem['id'] ?>">
                                             <i class="edit fas fa-edit"></i>
                                         </a>
                                     </li>
 
                                     <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(this)" href="javascript:void(0)" data-id="<?= $attributeItem['id'] ?>" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
+                                        <a href="admin/update-category/<?php echo $cateItem['id'] ?>">
+                                            <i class="view fas fa-eye"></i>
                                         </a>
                                     </li>
                                 </ul>
@@ -72,7 +72,7 @@
 <script>
     function setDataIdToInput(link) {
         const dataId = link.getAttribute("data-id");
-        document.getElementById("idAttribute").value = dataId;
+        document.getElementById("idCate").value = dataId;
     }
 </script>
 
@@ -90,8 +90,8 @@
                 <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/attributes/deleteAttribute">
-                    <input type="hidden" id="idAttribute" name="id">
+                <form method="POST" action="admin/category/deleteCategory">
+                    <input type="hidden" id="idCate" name="id">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>
                 <div class="ms-3 ">

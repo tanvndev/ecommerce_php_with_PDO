@@ -29,7 +29,7 @@
     <div class="main ">
 
         <main>
-            <?php require_once 'app/views/pages/' . $pages . '.php' ?>
+            <?php require_once 'app/views/pages/client/' . $pages . '.php' ?>
         </main>
 
     </div>

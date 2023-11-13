@@ -1,7 +1,7 @@
 <?php
-// echo '<pre>';
-// print_r($dataVariant);
-// echo '</pre>';
+echo '<pre>';
+print_r($dataProd);
+echo '</pre>';
 ?>
 
 <section class="header-top-campaign">
@@ -29,14 +29,14 @@
     <div class="detail-product-main">
         <div class="container">
             <div class="row">
-                <div class="col-lg-7">
+                <div class="col-lg-6">
                     <div class="row">
                         <div class="col-lg-2">
                             <div class="product-thumb-small">
                                 <?php foreach ($dataImageProd as $thumbItem) {
                                 ?>
                                     <div class="small-thumb-img">
-                                        <img src="public/images/product/<?php echo $thumbItem['image'] ?>" alt="image <?php echo $dataProd['title'] ?>">
+                                        <img src="<?= $thumbItem['image'] ?>" alt="image <?= $dataProd['title'] ?>">
                                     </div>
                                 <?php } ?>
                             </div>
@@ -47,10 +47,10 @@
                                     <?php foreach ($dataImageProd as $imageItem) {
                                     ?>
                                         <div class="thumbnail">
-                                            <img src="public/images/product/<?php echo $imageItem['image'] ?>" alt="image <?php echo $dataProd['title'] ?>">
+                                            <img src="<?= $imageItem['image'] ?>" alt="image <?= $dataProd['title'] ?>">
 
                                             <div class="product-quick-view">
-                                                <a href="public/images/product/<?php echo $imageItem['image'] ?>" class="popup-zoom">
+                                                <a href="<?= $imageItem['image'] ?>" class="popup-zoom">
                                                     <i class="far fa-search-plus"></i>
                                                 </a>
                                             </div>
@@ -62,24 +62,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <div class="detail-product-content">
                         <div class="inner">
-                            <h2 class="product-title"><?php echo $dataProd['title'] ?></h2>
-                            <div class="price">
-                                <span class="price-amount"><?php echo Format::formatCurrency($dataProd['price']) ?></span>
+                            <h2 class="product-title"><?= $dataProd['title'] ?></h2>
+                            <div class="product-stock">Số lượng:
+                                <span id="product-stock"><?= $dataProd['quantity'] ?></span>
+                            </div>
+                            <div id="product-price" class="price">
+                                <span class="price-amount"><?= Format::formatCurrency($dataProd['price']) ?></span>
 
                                 <?php if ($dataProd['discount'] != 0) : ?>
-                                    <span class="price-amount-old"><?php echo Format::calculateOriginalPrice($dataProd['price'], $dataProd['discount']) ?></span>
-                                    <span class="text-danger "><?php echo ($dataProd['discount'] . '%') ?> </span>
+                                    <span class="price-amount-old"><?= Format::calculateOriginalPrice($dataProd['price'], $dataProd['discount']) ?></span>
+                                    <span class="text-danger "><?= ($dataProd['discount'] . '%') ?> </span>
                                 <?php endif ?>
                             </div>
                             <div class="product-rating">
                                 <div class="star-rating">
-                                    <?php echo Format::renderStars($dataProd['totalRatings']) ?>
+                                    <?= Format::renderStars($dataProd['totalRatings']) ?>
                                 </div>
                                 <div class="review-link">
-                                    (<span><?php echo $dataProd['totalUserRatings'] ?></span> Đánh giá)
+                                    (<span><?= $dataProd['totalUserRatings'] ?></span> Đánh giá)
                                 </div>
                             </div>
                             <ul class="product-meta">
@@ -89,61 +92,26 @@
                                 <li><i class="fal fa-check"></i>Miễn phí giao hàng</li>
                                 <li><i class="fal fa-check"></i>Khuyến mãi giảm giá 30% Sử dụng mã: MOTIVE30</li>
                             </ul>
-                            <!-- <p class="description">In ornare lorem ut est dapibus, ut tincidunt nisi pretium. Integer ante est, elementum eget magna. Pellentesque sagittis dictum libero, eu dignissim tellus.</p> -->
+                            <p class="description"><?= $dataProd['short_description'] ?></p>
 
-                            <form action="cart/addCart/<?php echo $dataProd['id'] ?>" id="formProduct" method="post">
-                                <div class="product-variations-wrapper mt-5 ">
-                                    <div class="product-variation">
-                                        <?php if (!empty($dataVariant)) : ?>
-                                            <h6 class="title">Color:</h6>
-                                        <?php endif ?>
-                                        <div class="color-variant-wrapper">
-                                            <ul class="color-variant">
-                                                <input id="colorProduct" type="hidden" name="color">
-                                                <?php
-                                                $activeSet = false;
-                                                foreach ($dataVariant as $colorItem) :
-                                                    if ($colorItem['name'] == 'Color') :
-                                                ?>
-                                                        <li <?php if (!$activeSet) {
-                                                                echo 'class="active"';
-                                                                $activeSet = true;
-                                                            } ?>>
-                                                            <?php echo $colorItem['value'] ?>
-                                                        </li>
-                                                <?php
-                                                    endif;
-                                                endforeach;
-                                                ?>
-                                            </ul>
+                            <form action="cart/addCart/<?= $dataProd['id'] ?>" id="formProduct" method="post">
+                                <?php if (!empty($dataVariant)) : ?>
+                                    <div class="product-variations-wrapper mt-5 ">
+
+                                        <div class="product-variation">
+                                            <h6 class="title">Phân loại:</h6>
+                                            <div class="color-variant-wrapper">
+                                                <ul class="product-variant">
+                                                    <?php
+                                                    foreach ($dataVariant as $dataVariantItem) {
+                                                    ?>
+                                                        <li id="<?= $dataVariantItem['id'] ?>" onclick="getVariant(<?= $dataVariantItem['id'] ?>)"><?= $dataVariantItem['attribute_values'] ?></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="product-variation">
-                                        <?php if (!empty($dataVariant)) : ?>
-                                            <h6 class="title">Size:</h6>
-                                        <?php endif ?>
-                                        <ul class="size-variant">
-                                            <input id="sizeProduct" type="hidden" name="size">
-                                            <?php
-                                            $activeSet = false;
-                                            foreach ($dataVariant as $sizeItem) :
-                                                if ($sizeItem['name'] == 'Size') :
-                                            ?>
-                                                    <li <?php if (!$activeSet) {
-                                                            echo 'class="active"';
-                                                            $activeSet = true;
-                                                        } ?>>
-                                                        <?php echo $sizeItem['value'] ?>
-                                                    </li>
-                                            <?php
-                                                endif;
-                                            endforeach;
-                                            ?>
-
-                                        </ul>
-                                    </div>
-                                </div>
+                                <?php endif ?>
 
                                 <div class="product-action-wrapper d-flex-center">
                                     <div class="pro-quantity">
@@ -161,11 +129,11 @@
                                             $buttonClass = $isProductAvailable ? 'btn-custom btn-bg-primary' : 'btn-custom btn-bg-primary disabled';
                                             ?>
 
-                                            <button onclick="addCart(<?php echo $dataProd['id'] ?>)" type="button" class="<?php echo $buttonClass; ?>"><?php echo $buttonText; ?></button>
+                                            <button onclick="addCart(<?= $dataProd['id'] ?>)" type="button" class="<?= $buttonClass; ?>"><?= $buttonText; ?></button>
 
                                         </li>
                                         <li class="wishlist">
-                                            <a href="#" class=" wishlist-btn">
+                                            <a href="javascrip:void(0)" class=" wishlist-btn">
                                                 <i class="far fa-heart"></i>
                                             </a>
                                         </li>
@@ -204,7 +172,7 @@
                     <div class="row">
                         <div class="col-lg-12 mb-30">
                             <div class="single-desc">
-                                <?php echo $dataProd['description'] ?>
+                                <?= $dataProd['description'] ?>
                             </div>
                         </div>
 
@@ -234,9 +202,9 @@
                                 ?>
                                     <li class="li-features">
                                         <div class="icon">
-                                            <img src="public/images/others/<?php echo $iconsFeature['icon'] ?>" alt="icon">
+                                            <img src="public/images/others/<?= $iconsFeature['icon'] ?>" alt="icon">
                                         </div>
-                                        <?php echo $iconsFeature['title'] ?>
+                                        <?= $iconsFeature['title'] ?>
                                     </li>
                                 <?php  } ?>
                             </ul>
@@ -320,7 +288,7 @@
                                         Số sao <span class="require">*</span>
                                         <div class="reating-inner ml--20">
                                             <input type="hidden" name="star" id="currentRating">
-                                            <input type="hidden" name="id" value="<?php echo $dataProd['id'] ?>">
+                                            <input type="hidden" name="id" value="<?= $dataProd['id'] ?>">
                                             <span data-rating="1" class="star"><i class="fas fa-star"></i></span>
                                             <span data-rating="2" class="star"><i class="fas fa-star"></i></span>
                                             <span data-rating="3" class="star"><i class="fas fa-star"></i></span>
@@ -357,41 +325,43 @@
         <div class="title">
             <span class="title-highlighter highlighter-secondary"> <i class="far fa-shopping-basket"></i>Các mục đã xem gần đây</span>
             <h2 class="title">Sản phẩm từng xem</h2>
+            <?php
+            echo '<pre>';
+            print_r($dataProdRecent);
+            echo '</pre>';
+            ?>
         </div>
 
         <div class="main-product">
             <div class="row">
                 <?php foreach ($dataProdRecent as $itemDataProdRecent) : ?>
                     <?php
-                    $productLink = "product/{$itemDataProdRecent['id']}";
-                    $thumbSrc = "public/images/product/thumb/{$itemDataProdRecent['thumb']}";
+                    $productLink = "product/{$itemDataProdRecent['slug']}-{$itemDataProdRecent['id']}";
+                    $thumbSrc = "{$itemDataProdRecent['thumb']}";
                     $quantity = $itemDataProdRecent['quantity'];
                     $discount = $itemDataProdRecent['discount'];
                     $price = $itemDataProdRecent['price'];
                     $totalRatings = $itemDataProdRecent['totalRatings'];
                     $prodTitle = $itemDataProdRecent['title'];
                     $prodTotalUserRatings = $itemDataProdRecent['totalUserRatings'];
-
-
                     ?>
-
                     <div class="col-xl-3 mb-5 col-lg-4 col-sm-6 col-12">
                         <div class="product-item px-3">
                             <div class="thumb">
                                 <div class="thumb-img">
-                                    <a class="thumb-link" href="<?php echo $productLink ?>">
-                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" src="<?php echo $thumbSrc ?>" alt="<?php echo $itemDataProdRecent['title'] ?>">
+                                    <a class="thumb-link" href="<?= $productLink ?>">
+                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" src="<?= $thumbSrc ?>" alt="<?= $itemDataProdRecent['title'] ?>">
                                     </a>
 
                                     <div class="actions-hover">
                                         <ul class="action-list mb-0 ">
                                             <li class="quickview">
-                                                <a class="btn-action" href="<?php echo $productLink ?>"><i class="far fa-eye"></i></a>
+                                                <a class="btn-action" href="<?= $productLink ?>"><i class="far fa-eye"></i></a>
                                             </li>
 
                                             <li class="select-option">
                                                 <?php if ($quantity > 0) : ?>
-                                                    <button type="button" onclick="addCart(<?php echo $itemDataProdRecent['id'] ?>)" class="btn-action-lagre">
+                                                    <button type="button" onclick="addCart(<?= $itemDataProdRecent['id'] ?>)" class="btn-action-lagre">
                                                         Thêm vào giỏ hàng
                                                     </button>
                                                 <?php else : ?>
@@ -410,7 +380,7 @@
 
                                 <div class="lable-sale">
                                     <?php if ($discount != 0) { ?>
-                                        <div class="product-badget">Giảm <?php echo $discount . ' %' ?> </div>
+                                        <div class="product-badget">Giảm <?= $discount . ' %' ?> </div>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -418,17 +388,17 @@
                                 <div class="inner">
                                     <div class="product-rating">
                                         <span class="icon">
-                                            <?php echo Format::renderStars($totalRatings) ?>
+                                            <?= Format::renderStars($totalRatings) ?>
                                         </span>
-                                        <span class="rating-number">(<?php echo $prodTotalUserRatings ?>)</span>
+                                        <span class="rating-number">(<?= $prodTotalUserRatings ?>)</span>
                                     </div>
                                     <h5 class="title">
-                                        <a href="<?php echo $productLink ?>"><?php echo $itemDataProdRecent['title'] ?></a>
+                                        <a href="<?= $productLink ?>"><?= $itemDataProdRecent['title'] ?></a>
                                     </h5>
                                     <div class="product-price-variant">
-                                        <span class="price current-price"><?php echo Format::formatCurrency($price) ?></span>
+                                        <span class="price current-price"><?= Format::formatCurrency($price) ?></span>
                                         <?php if ($discount) : ?>
-                                            <span class="price old-price"><?php echo Format::calculateOriginalPrice($price, $discount) ?></span>
+                                            <span class="price old-price"><?= Format::calculateOriginalPrice($price, $discount) ?></span>
                                         <?php endif; ?>
 
                                     </div>

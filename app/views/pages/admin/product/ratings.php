@@ -1,44 +1,14 @@
 <?php
-if ($delMessage && $delType) {
-    echo '<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 1500, 
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener("mouseenter", Swal.stopTimer);
-                toast.addEventListener("mouseleave", Swal.resumeTimer);
-            }
-        });
-
-        Toast.fire({
-            icon: "' . $delType . '",
-            title: "' . $delMessage . '",
-        });
-    })
-    </script>';
-    Session::unsetSession('toastMessage');
-    Session::unsetSession('toastType');
-    echo '<pre>';
-    print_r($dataRatings);
-    echo '</pre>';
-}
+// echo '<pre>';
+// print_r($dataRatings);
+// echo '</pre>';
 ?>
 
 <section class="product-wrap">
     <div class="card">
         <div class="title-header">
             <h5 class="title">Danh sách đánh giá</h5>
-            <div class="right-options">
-                <ul>
-                    <!-- <li>
-                        <button data-bs-toggle="modal" data-bs-target="#addBrand" class="btn btn-custom"> Add Brand</button>
-                    </li> -->
-                </ul>
-            </div>
+
         </div>
 
         <div class="table-custom">
@@ -61,24 +31,19 @@ if ($delMessage && $delType) {
                         extract($dataRatingsItem);
                     ?>
                         <tr>
-                            <td><?php echo $i++ ?></td>
-                            <td><?php echo $fullname ?></td>
-                            <td><?php echo $title ?></td>
-                            <td style="color: var(--star);"><?php echo Format::renderStars($star) ?></td>
+                            <td><?= $i++ ?></td>
+                            <td><?= $fullname ?></td>
+                            <td><?= $title ?></td>
+                            <td style="color: var(--star);"><?= Format::renderStars($star) ?></td>
                             <td>
-                                <div style="max-width: 400px;" class="text-truncate "><?php echo $comment ?></div>
+                                <div style="max-width: 400px;" class="text-truncate "><?= $comment ?></div>
                             </td>
 
                             <td>
                                 <ul class="options">
-                                    <!-- <li class="m-0 ">
-                                        <a onclick="updateBrand()" data-bs-toggle="modal" data-bs-target="#updateBrand" href="javascript:void(0)">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li> -->
 
                                     <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(<?php echo $id ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                        <a onclick="setDataIdToInput(<?= $id ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
                                             <i class="delete fas fa-trash-alt"></i>
                                         </a>
                                     </li>
@@ -114,7 +79,7 @@ if ($delMessage && $delType) {
                 <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/">
+                <form method="POST" action="admin/delete-rating-product">
                     <input type="hidden" id="idRatings" name="id">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>

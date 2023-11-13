@@ -29,8 +29,7 @@
       initial.stickyHeaderMenu();
       initial.salActivation();
       initial.magnificPopupActivation();
-      initial.colorVariantActive();
-      initial.sizeVariantActive();
+      initial.productVariantActive();
       initial.counterUpActivation();
       initial.scrollSmoth();
       initial.selectedStarComment();
@@ -310,35 +309,11 @@
       }
     },
 
-    colorVariantActive: function () {
-      const colorVariant = $('.color-variant');
-
-      function updateColorValue() {
-        const value = colorVariant.find('.active').text();
-        $('#colorProduct').val(value);
-      }
-
-      colorVariant.on('click', 'li', function () {
+    productVariantActive: function () {
+      const productVariant = $('.product-variant');
+      productVariant.on('click', 'li', function () {
         $(this).addClass('active').siblings().removeClass('active');
-        updateColorValue();
       });
-
-      updateColorValue();
-    },
-    sizeVariantActive: function () {
-      const sizeVariant = $('.size-variant');
-
-      function updateSizeValue() {
-        const value = sizeVariant.find('.active').text();
-        $('#sizeProduct').val(value);
-      }
-
-      sizeVariant.on('click', 'li', function () {
-        $(this).addClass('active').siblings().removeClass('active');
-        updateSizeValue();
-      });
-
-      updateSizeValue();
     },
   };
   initial.i();

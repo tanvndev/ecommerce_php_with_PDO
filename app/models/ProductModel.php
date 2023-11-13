@@ -20,7 +20,7 @@ class ProductModel extends BaseModel
 
     function getProdRecently()
     {
-        return $this->db->table($this->tableName())->select('id, title, thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('id')->limit(12)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('id')->limit(12)->get();
     }
 
     function getProdByCateNft()
@@ -30,12 +30,16 @@ class ProductModel extends BaseModel
 
     function getProdMostSold()
     {
-        return $this->db->table($this->tableName())->select('id, title, thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('sold')->limit(10)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('sold')->limit(10)->get();
     }
 
     function getOneProd($id)
     {
         return $this->db->findById($this->tableName(), $this->tableField(),  $id);
+    }
+    function getAllProdImages($id)
+    {
+        return $this->db->table('images_product')->where('prod_id', '=', $id)->get();
     }
 
     function getImageProd($id)
@@ -71,123 +75,90 @@ class ProductModel extends BaseModel
         return $data;
     }
 
-    // function getAttributeProd($name)
-    // {
-    //     return $this->findByName('attribute', $name, 'name');
-    // }
+    function addNewProduct($data)
+    {
+        $success = $this->db->create($this->tableName(), $data);
+        if ($success) {
+            return $this->db->lastInsertId();
+        }
+        return null;
+    }
 
-    // function getAllProduct($params)
-    // {
-    //     if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-    //         try {
-    //             $sql = "SELECT p.*
-    //                     FROM product p
-    //                     LEFT JOIN product_attribute pa ON p.id = pa.prod_id
-    //                     LEFT JOIN attribute a ON pa.attribute_id = a.id
-    //                     WHERE p.status = 1";
+    function updateProduct($id, $data)
+    {
+        return $this->db->findByIdAndUpdate($this->tableName(), $id, $data);
+    }
 
-    //             if (!empty($_POST['cate_id'])) {
-    //                 $sql .= " AND p.cate_id = " . intval($_POST['cate_id']);
-    //             }
+    function deleteImageProduct($id)
+    {
+        return $this->db->findIdAndDelete('images_product', $id);
+    }
+    function deleteProductVariant($id)
+    {
+        $delProductVariant = $this->db->findIdAndDelete('product_variants', $id);
+        $delProductVariantValue = $this->db->findAndDelete('variants_value', ['product_variant_id' => $id]);
 
-    //             if (!empty($_POST['color'])) {
-    //                 $colors = $_POST['color'];
-    //                 $sql .= " AND (a.name = 'color' AND a.value IN ('$colors')) ";
-    //             }
+        if ($delProductVariant && $delProductVariantValue) {
+            return true;
+        }
+        return false;
+    }
 
-    //             if (!empty($_POST['size'])) {
-    //                 $condition = 'AND';
-    //                 if (!empty($_POST['color'])) {
-    //                     $condition = 'OR';
-    //                 }
-    //                 $sql .= " $condition (a.name = 'size' AND a.value = '" . $_POST['size'] . "') ";
-    //             }
+    function getAllProdVariants($id)
+    {
+        $sql = "SELECT pv.id, pv.price, pv.quantity, pv.discount, p.title, a.id AS attribute_id, a.display_name, av.value_name AS attribute_value
+        FROM product_variants pv
+        JOIN variants_value vv ON pv.id = vv.product_variant_id
+        JOIN attribute a ON vv.attribute_id = a.id
+        JOIN attribute_value av ON vv.attribute_value_id = av.id
+        JOIN product p ON pv.prod_id = p.id
+        WHERE pv.prod_id = $id ORDER BY pv.id ASC
+        ";
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
 
-    //             if (!empty($_POST['price'])) {
-    //                 $price = explode(" - ", $_POST['price']);
-    //                 if (count($price) == 2) {
-    //                     $priceStart = intval($price[0]);
-    //                     $priceEnd = intval($price[1]);
-    //                     $sql .= " AND (p.price BETWEEN $priceStart AND $priceEnd) ";
-    //                 }
-    //             }
+    function getOneProdVariant($variantId)
+    {
+        return $this->db->findById('product_variants', '*', $variantId);
+    }
 
-    //             $sql .= " GROUP BY p.id";
+    function deleteProduct($id)
+    {
+        $deleteProd = $this->db->findIdAndDelete($this->tableName(), $id);
+        $dataProdVariants = $this->db->table('product_variants')->select('id')->where('prod_id', '=', $id)->get();
 
-    //             if (!empty($_POST['order'])) {
-    //                 $orderBy = explode(" - ", $_POST['order']);
-    //                 if (count($orderBy) == 2) {
-    //                     $name = $orderBy[0];
-    //                     $order = $orderBy[1];
-    //                     $sql .= " ORDER BY $name $order ";
-    //                 }
-    //             }
+        $deleteProdVariant = $this->db->findAndDelete('product_variants', ['prod_id' => $id]);
+        $deleteProdImages = $this->db->findAndDelete('images_product', ['prod_id' => $id]);
 
-    //             if (!empty($_POST['limit'])) {
-    //                 $limitCurrent = Session::get('limitProd');
-    //                 $limitPage =  $limitCurrent + $_POST['limit'];
-    //                 $sql .= " LIMIT " . $limitPage;
-    //                 Session::set('limitProd', $limitPage);
-    //             } else {
-    //                 $sql .= " LIMIT 12";
-    //                 Session::set('limitProd', 12);
-    //             }
-    //             // var_dump($sql);
-    //             $stmt = $this->conn->query($sql);
-    //             $dataProd = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //             return json_encode($dataProd);
-    //         } catch (PDOException $e) {
-    //             echo $e->getMessage();
-    //         }
-    //     }
+        if (!empty($dataProdVariants)) {
+            foreach ($dataProdVariants as $item) {
+                $deleteProdVariantValue = $this->db->findAndDelete('variants_value', ['product_variant_id' => $item['id']]);
+                if (!$deleteProdVariantValue) {
+                    return false;
+                }
+            }
+        }
 
-    //     if (!empty($params) && $params != 'null' && intval($params) != 0) {
-    //         Session::set('limitProd', 12);
-    //         return json_encode($this->findByName('product', $params, 'cate_id', 12));
-    //     }
+        if (!$deleteProd || !$deleteProdVariant || !$deleteProdImages) {
+            return false;
+        }
 
-    //     if (!empty($params) && $params != 'null' && $params) {
-    //         try {
-    //             $sql = "SELECT * FROM product WHERE title LIKE '%$params%' AND status = 1";
-    //             $stmt = $this->conn->query($sql);
-    //             $dataProd = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //             Session::set('limitProd', 12);
-    //             return json_encode($dataProd);
-    //         } catch (\Throwable $th) {
-    //             return json_encode([]);
-    //         }
-    //     }
-
-    //     Session::set('limitProd', 12);
-    //     return json_encode($this->find('product'));
-    // }
+        return true;
+    }
 
 
 
 
+    function getAllRatingsProd()
+    {
+        return $this->db->table('ratings r')->select('r.id, r.star, r.comment, u.fullname, p.title ')->join('user u', 'r.user_id = u.id')->join('product p', 'r.prod_id = p.id')->get();
+    }
 
-
-
-    // function getAllRatings($id)
-    // {
-    //     try {
-    //         $sql = "SELECT r.star, r.comment, r.create_at , u.avatar, u.fullname
-    //         FROM ratings r
-    //         JOIN user u ON r.user_id = u.id
-    //         WHERE r.prod_id = :id";
-
-    //         $stmt = $this->conn->prepare($sql);
-    //         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         $dataRatings = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         return json_encode($dataRatings);
-    //     } catch (PDOException $e) {
-    //         echo '<pre>';
-    //         print_r($e);
-    //         echo '</pre>';
-    //         return json_encode([]);
-    //     }
-    // }
+    function deleteRatingsProd($id)
+    {
+        return $this->db->findIdAndDelete('ratings', $id);
+    }
 
     // function addRatingProd()
     // {

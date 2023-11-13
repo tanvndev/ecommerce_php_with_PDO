@@ -1,3 +1,8 @@
+<?php
+// echo '<pre>';
+// print_r($dataRole);
+// echo '</pre>';
+?>
 <section class="add-wrap-admin">
     <div class="container-fluid ">
         <form method="POST" enctype="multipart/form-data">
@@ -45,19 +50,17 @@
 
                                 <div class="col-sm-9">
                                     <div class="d-flex flex-wrap gap-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" value="1" type="radio" name="role_id" id="admin">
-                                            <label class="form-check-label" for="admin">
-                                                Người quản trị
-                                            </label>
-                                        </div>
+                                        <?php
+                                        foreach ($dataRole as $value) :
+                                        ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" value="<?= $value['id'] ?>" type="radio" name="role_id" id="<?= $value['name'] ?>">
+                                                <label class="form-check-label text-capitalize " for="<?= $value['name'] ?>">
+                                                    <?= $value['description'] ?>
+                                                </label>
+                                            </div>
+                                        <?php endforeach ?>
 
-                                        <div class="form-check">
-                                            <input class="form-check-input" checked value="2" type="radio" name="role_id" id="customer">
-                                            <label class="form-check-label" for="customer">
-                                                Người dùng
-                                            </label>
-                                        </div>
 
 
                                     </div>
@@ -68,7 +71,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-custom col-sm-8 m-auto ">Thêm người dùng mới</button>
+                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto ">Thêm người dùng mới <span class="spin"><i class="fas fa-spinner"></i></span></button>
             </div>
         </form>
     </div>

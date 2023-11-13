@@ -4,11 +4,16 @@ class Product extends Controller
 {
     private $productModel;
     private $categoryModel;
+    private $req = null;
+    private $res = null;
     public function __construct()
     {
+        $this->req = new Request;
+        $this->res = new Response;
         $this->productModel = $this->model('ProductModel');
         $this->categoryModel = $this->model('CategoryModel');
     }
+
 
     function Default()
     {
@@ -34,10 +39,42 @@ class Product extends Controller
 
     function productDetail($id)
     {
+        //Lay ra id tu chuoi slug
+        $id = explode("-", $id);
+        $id = end($id);
+
         $dataProd = $this->productModel->getOneProd($id) ?? [];
         $dataImageProd = $this->productModel->getImageProd($id) ?? [];
-        $dataVariant = $this->productModel->getVariantProd($id) ?? [];
+        // $dataVariant = $this->productModel->getVariantProd($id) ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
+        $dataVariant = $this->productModel->getAllProdVariants($id);
+
+        if (!empty($dataVariant)) {
+            $dataProdVariantsNew = [];
+            foreach ($dataVariant as $item) {
+                $idVariant = $item['id'];
+                if (!isset($dataProdVariantsNew[$idVariant])) {
+                    $dataProdVariantsNew[$idVariant] = [
+                        'id' => $idVariant,
+                        'title' => $item['title'],
+                        'price' => $item['price'],
+                        'quantity' => $item['quantity'],
+                        'discount' => $item['discount'],
+                        'attribute_id' => $item['attribute_id'],
+                        'display_name' => $item['display_name'],
+                        'attribute_values' => [$item['attribute_value']],
+                    ];
+                } else {
+                    $dataProdVariantsNew[$idVariant]['attribute_values'][] = $item['attribute_value'];
+                }
+            }
+
+            foreach ($dataProdVariantsNew as &$item) {
+                $item['attribute_values'] = implode(' - ', $item['attribute_values']);
+            }
+
+            $dataProdVariantsNew = array_values($dataProdVariantsNew);
+        }
 
 
         $this->view('layoutClient', [
@@ -47,9 +84,16 @@ class Product extends Controller
             'pages' => 'product/detailProduct',
             'dataProd' => $dataProd,
             'dataImageProd' => $dataImageProd,
-            'dataVariant' => $dataVariant,
+            'dataVariant' => $dataProdVariantsNew,
             'dataProdRecent' => $dataProdRecent,
         ]);
+    }
+
+    function getVariantProdApi($variantId)
+    {
+        $data = $this->productModel->getOneProdVariant($variantId);
+        $code = $data ? '200' : '400';
+        echo $this->res->dataApi($code, '', $data);
     }
 
     function addRatingProd()

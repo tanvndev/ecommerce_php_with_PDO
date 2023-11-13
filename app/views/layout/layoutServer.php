@@ -23,8 +23,9 @@
     <link rel="stylesheet" type="text/css" href="public/css/vendor/select2.min.css">
     <link rel="stylesheet" type="text/css" href="public/css/vendor/base.css">
     <link rel="stylesheet" type="text/css" href="public/css/admin/style.css">
-    <script src="public/js/vendor/sweetalert2.all.min.js"></script>
 
+    <script src="public/js/vendor/jquery.js"></script>
+    <script src="public/js/vendor/sweetalert2.all.min.js"></script>
 
 
 </head>
@@ -51,7 +52,6 @@
 
 
     <!-- JS Vendor-->
-    <script src="public/js/vendor/jquery.js"></script>
     <script src="public/js/vendor/bootstrap.min.js"></script>
     <script src="public/js/vendor/jquery.dataTables.js"></script>
     <script src="public/js/vendor/select2.min.js"></script>
@@ -59,11 +59,11 @@
 
 
     <!-- Apexchar js -->
-    <script src="public/js/vendor/apex-chart/apex-chart1.js"></script>
+    <!-- <script src="public/js/vendor/apex-chart/apex-chart1.js"></script>
     <script src="public/js/vendor/apex-chart/moment.min.js"></script>
     <script src="public/js/vendor/apex-chart/apex-chart.js"></script>
-    <script src="public/js/vendor/apex-chart/stock-prices.js"></script>
-    <script src="public/js/vendor/apex-chart/chart-custom.js"></script>
+    <script src="public/js/vendor/apex-chart/stock-prices.js"></script> -->
+    <!-- <script src="public/js/vendor/apex-chart/chart-custom.js"></script> -->
 
     <!-- Main JS -->
     <script src="public/js/admin/main.js"></script>
@@ -71,6 +71,7 @@
     <!-- Api JS -->
     <script src="services/base.js"></script>
     <script src="services/userService.js"></script>
+    <script src="services/productService.js"></script>
 
 </body>
 

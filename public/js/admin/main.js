@@ -26,7 +26,7 @@
       initial.activeDataTable();
       initial.selectOptionCustomActive();
       initial.CKEditerActive();
-      initial.priceWithDiscount();
+      initial.addNewAttribute();
     },
 
     w: function (e) {
@@ -37,6 +37,19 @@
         const button = $(this);
         button.addClass('disabled');
         $('.spin').show();
+      });
+    },
+    addNewAttribute: function () {
+      $('#add-attribute').click(() => {
+        const newAttribute = `
+           <div class="mb-5 row align-items-center">
+            <label class="form-label-title col-sm-3 mb-0">Biến thể</label>
+            <div class="col-sm-9">
+                <input name="value" class="form-control input-text" type="text" placeholder="Màu đen, 512GB, ...">
+            </div>
+           </div>
+        `;
+        $('#form-attribute').append(newAttribute);
       });
     },
 
@@ -61,27 +74,12 @@
       });
     },
 
-    priceWithDiscount: function () {
-      // Giá cũ(G) - (Giá cũ(G) * Số phần trăm giảm giá / 100)
-      $('#price, #discount').on('input', function () {
-        let discountValue = parseFloat($('#discount').val());
-        if (discountValue >= 100) {
-          discountValue = 99;
-          $('#discount').val(discountValue);
-        }
-
-        let price = parseFloat($('#price').val());
-        let newPrice = price - (price * discountValue) / 100;
-        $('#price_new').val(newPrice);
-      });
-    },
-
     selectOptionCustomActive: function () {
       if (typeof $.fn.select2 === 'function') {
-        const selectIds = ['#select-custom', '#select-custom2'];
+        const selectElements = document.querySelectorAll('.select-custom');
 
-        selectIds.forEach(function (id) {
-          $(id).select2({
+        selectElements.forEach(function (element) {
+          $(element).select2({
             width: '100%',
           });
         });
@@ -90,11 +88,11 @@
 
     CKEditerActive: function () {
       if (typeof ClassicEditor === 'function') {
-        ClassicEditor.create(document.querySelector('#editor')).catch(
-          (error) => {
+        document.querySelectorAll('.ckEditor').forEach((item) => {
+          ClassicEditor.create(item).catch((error) => {
             // console.error(error);
-          },
-        );
+          });
+        });
       }
     },
 

@@ -26,17 +26,17 @@
                         <div class="mian-banner-thumb">
                             <div class="banner-product">
                                 <div class="thumb">
-                                    <a href="product/<?php echo $itemdDataProdNft['id'] ?>"><img src="public/images/product/thumb/<?php echo $itemdDataProdNft['thumb'] ?>" alt="<?php echo $itemdDataProdNft['title'] ?>"></a>
+                                    <a href="product/<?= $itemdDataProdNft['id'] ?>"><img src="<?= $itemdDataProdNft['thumb'] ?>" alt="<?= $itemdDataProdNft['title'] ?>"></a>
                                 </div>
 
                                 <div class="content">
-                                    <h5 class="title"><a href="product/<?php echo $itemdDataProdNft['id'] ?>"><?php echo $itemdDataProdNft['title'] ?></a></h5>
+                                    <h5 class="title"><a href="product/<?= $itemdDataProdNft['id'] ?>"><?= $itemdDataProdNft['title'] ?></a></h5>
                                     <div class="product-price-variant">
-                                        <span class="price"><?php echo Format::formatCurrency($itemdDataProdNft['price']) ?></span>
+                                        <span class="price"><?= Format::formatCurrency($itemdDataProdNft['price']) ?></span>
                                     </div>
                                     <ul class="cart-action">
                                         <li class="select-option">
-                                            <button class="btn-custom" type="button" onclick="addCart(<?php echo $itemdDataProdNft['id'] ?>)" href="">Mua sản phẩm</button>
+                                            <button class="btn-custom" type="button" onclick="addCart(<?= $itemdDataProdNft['id'] ?>)" href="">Mua sản phẩm</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -65,11 +65,11 @@
             <?php
             foreach ($dataCate as $cateItem) {
             ?>
-                <a class="category-item" href="product/<?php echo $cateItem['id'] ?>">
+                <a class="category-item" href="product/<?= $cateItem['id'] ?>">
                     <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
                         <div class="categorie-link">
-                            <img class="img-fluid" src="public/images/category/<?php echo $cateItem['image'] ?>" alt="<?php echo $cateItem['name'] ?>">
-                            <h6 class="cate-title "><?php echo $cateItem['name'] ?></h6>
+                            <img class="img-fluid" src="public/images/category/<?= $cateItem['image'] ?>" alt="<?= $cateItem['name'] ?>">
+                            <h6 class="cate-title "><?= $cateItem['name'] ?></h6>
                         </div>
                     </div>
                 </a>
@@ -126,8 +126,8 @@
             <div class="row">
                 <?php foreach ($dataProdRecent as $itemDataProdRecent) : ?>
                     <?php
-                    $productLink = "product/{$itemDataProdRecent['id']}";
-                    $thumbSrc = "public/images/product/thumb/{$itemDataProdRecent['thumb']}";
+                    $productLink = "product/{$itemDataProdRecent['slug']}-{$itemDataProdRecent['id']}";
+                    $thumbSrc = "{$itemDataProdRecent['thumb']}";
                     $quantity = $itemDataProdRecent['quantity'];
                     $discount = $itemDataProdRecent['discount'];
                     $price = $itemDataProdRecent['price'];
@@ -140,19 +140,19 @@
                         <div class="product-item px-3">
                             <div class="thumb">
                                 <div class="thumb-img">
-                                    <a class="thumb-link" href="<?php echo $productLink ?>">
-                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" src="<?php echo $thumbSrc ?>" alt="<?php echo $itemDataProdRecent['title'] ?>">
+                                    <a class="thumb-link" href="<?= $productLink ?>">
+                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" src="<?= $thumbSrc ?>" alt="<?= $itemDataProdRecent['title'] ?>">
                                     </a>
 
                                     <div class="actions-hover">
                                         <ul class="action-list mb-0 ">
                                             <li class="quickview">
-                                                <a class="btn-action" href="<?php echo $productLink ?>"><i class="far fa-eye"></i></a>
+                                                <a class="btn-action" href="<?= $productLink ?>"><i class="far fa-eye"></i></a>
                                             </li>
 
                                             <li class="select-option">
                                                 <?php if ($quantity > 0) : ?>
-                                                    <button type="button" onclick="addCart(<?php echo $itemDataProdRecent['id'] ?>)" class="btn-action-lagre">
+                                                    <button type="button" onclick="addCart(<?= $itemDataProdRecent['id'] ?>)" class="btn-action-lagre">
                                                         Thêm vào giỏ hàng
                                                     </button>
                                                 <?php else : ?>
@@ -171,7 +171,7 @@
 
                                 <div class="lable-sale">
                                     <?php if ($discount != 0) { ?>
-                                        <div class="product-badget">Giảm <?php echo $discount . ' %' ?> </div>
+                                        <div class="product-badget">Giảm <?= $discount . ' %' ?> </div>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -179,17 +179,17 @@
                                 <div class="inner">
                                     <div class="product-rating">
                                         <span class="icon">
-                                            <?php echo Format::renderStars($totalRatings) ?>
+                                            <?= Format::renderStars($totalRatings) ?>
                                         </span>
-                                        <span class="rating-number">(<?php echo $prodTotalUserRatings ?>)</span>
+                                        <span class="rating-number">(<?= $prodTotalUserRatings ?>)</span>
                                     </div>
                                     <h5 class="title">
-                                        <a href="<?php echo $productLink ?>"><?php echo $itemDataProdRecent['title']  ?></a>
+                                        <a href="<?= $productLink ?>"><?= $itemDataProdRecent['title']  ?></a>
                                     </h5>
                                     <div class="product-price-variant">
-                                        <span class="price current-price"><?php echo Format::formatCurrency($price) ?></span>
+                                        <span class="price current-price"><?= Format::formatCurrency($price) ?></span>
                                         <?php if ($discount) : ?>
-                                            <span class="price old-price"><?php echo Format::calculateOriginalPrice($price, $discount) ?></span>
+                                            <span class="price old-price"><?= Format::calculateOriginalPrice($price, $discount) ?></span>
                                         <?php endif; ?>
 
                                     </div>
@@ -225,8 +225,8 @@
                     foreach ($dataProdMostSold as $itemDataProdMostSold) {
                     ?>
                         <?php
-                        $productLink = "product/{$itemDataProdMostSold['id']}";
-                        $thumbSrc = "public/images/product/thumb/{$itemDataProdMostSold['thumb']}";
+                        $productLink = "product/{$itemDataProdMostSold['slug']}-{$itemDataProdMostSold['id']}";
+                        $thumbSrc = "{$itemDataProdMostSold['thumb']}";
                         $quantity = $itemDataProdMostSold['quantity'];
                         $discount = $itemDataProdMostSold['discount'];
                         $price = $itemDataProdMostSold['price'];
@@ -237,30 +237,30 @@
                         <div class="col">
                             <div class="product-list">
                                 <div class="thumbnail">
-                                    <a href="<?php echo $productLink  ?>">
-                                        <img data-sal="zoom-in" data-sal-delay="100" data-sal-duration="1500" src="<?php echo $thumbSrc ?>" alt="<?php echo $prodTitle ?>">
+                                    <a href="<?= $productLink  ?>">
+                                        <img data-sal="zoom-in" data-sal-delay="100" data-sal-duration="1500" src="<?= $thumbSrc ?>" alt="<?= $prodTitle ?>">
                                     </a>
                                 </div>
                                 <div class="product-content">
                                     <div class="product-rating">
                                         <span class="rating-icon">
-                                            <?php echo Format::renderStars($totalRatings) ?>
+                                            <?= Format::renderStars($totalRatings) ?>
                                         </span>
                                         <span class="rating-number">
-                                            <span><?php echo $prodTotalUserRatings ?></span> Đánh giá
+                                            <span><?= $prodTotalUserRatings ?></span> Đánh giá
                                         </span>
                                     </div>
                                     <h6 class="product-title text-truncate ">
-                                        <a href="<?php echo $productLink ?>"><?php echo $prodTitle  ?> </a>
+                                        <a href="<?= $productLink ?>"><?= $prodTitle  ?> </a>
                                     </h6>
                                     <div class="product-price-variant">
-                                        <span class="price current-price"><?php echo Format::formatCurrency($price) ?></span>
+                                        <span class="price current-price"><?= Format::formatCurrency($price) ?></span>
                                         <?php if ($discount != 0) : ?>
-                                            <span class="price old-price"><?php echo Format::calculateOriginalPrice($price, $discount) ?></span>
+                                            <span class="price old-price"><?= Format::calculateOriginalPrice($price, $discount) ?></span>
                                         <?php endif; ?>
                                     </div>
                                     <div class="product-cart">
-                                        <button onclick="addCart(<?php echo $itemDataProdMostSold['id'] ?>)" href="cart" class="cart-btn">
+                                        <button onclick="addCart(<?= $itemDataProdMostSold['id'] ?>)" href="cart" class="cart-btn">
                                             <i class="fal fa-shopping-cart"></i>
                                         </button>
                                         <a href="wishlist" class="cart-btn">

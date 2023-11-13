@@ -17,96 +17,56 @@ class AttributeModel extends BaseModel
     }
     function getAllAttribute()
     {
-        return $this->find('attribute');
+        return $this->db->table($this->tableName())->get();
     }
+
+    function getAllAttributeValue()
+    {
+        return $this->db->table('attribute_value')->get();
+    }
+
+
 
     function getOneAttribute($id)
     {
-        return $this->findById('attribute', $id);
-    }
-
-    function getAttributeByName($variant)
-    {
-        return $this->findByName('attribute', $variant, 'name');
-    }
-
-    function getAllProduct_Atrribute($id)
-    {
-        return $this->findByName('product_attribute', $id, 'prod_id');
+        return $this->db->findById($this->tableName(), $this->tableField(), $id);
     }
 
 
-    function addNewAttribute()
+    function addNameAttribute($data)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $name = $_POST['name'] ?? '';
-            $value = $_POST['value'] ?? '';
-
-            if (empty($name) || empty($value)) {
-                $this->Toast('error', 'Vui lòng không để trống.');
-                return;
-            }
-
-            try {
-                $sql = 'INSERT INTO attribute (name, value) VALUES (?,?)';
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute([
-                    $name,
-                    $value
-                ]);
-
-                Session::set('toastMessage', 'Thêm thành công.');
-                Session::set('toastType', 'success');
-            } catch (PDOException $e) {
-                Session::set('toastMessage', 'Thêm thất bại.');
-                Session::set('toastType', 'error');
-                echo "Error: " . $e->getMessage();
-            }
-            header('Location: /WEB2041_Ecommerce/admin/attribute');
-        }
+        return $this->db->create($this->tableName(), $data);
     }
 
 
-    function updateAttribute($id)
+
+    function updateNameAttribute($id, $data)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $name = $_POST['name'] ?? '';
-            $value = $_POST['value'] ?? '';
-
-
-            if (empty($name) || empty($value)) {
-                $this->Toast('error', 'Vui lòng không để trống.');
-                return;
-            }
-
-            try {
-                $sql = 'UPDATE attribute SET name=?, value=? WHERE id=?';
-                $stmt = $this->conn->prepare($sql);
-                $stmt->execute([$name, $value, $id]);
-                Session::set('toastMessage', 'Cập nhập thành công.');
-                Session::set('toastType', 'success');
-                header('Location: /WEB2041_Ecommerce/admin/attribute');
-            } catch (PDOException $e) {
-                Session::set('toastMessage', 'Cập nhập thất bại.');
-                Session::set('toastType', 'error');
-                echo "Error: " . $e->getMessage();
-            }
-        }
+        return $this->db->findAndUpdate($this->tableName(), $data, ['id' => $id]);
     }
 
-    function deleteAttribute($id)
+    function deleteNameAttribute($id)
     {
-        $success = $this->deleteById('attribute', $id);
+        $deleName = $this->db->findIdAndDelete($this->tableName(), $id);
+        $deleValue = $this->db->findAndDelete('attribute_value', ['attribute_id' => $id]);
 
-        if ($success) {
-            Session::set('toastMessage', 'Xoá thành công.');
-            Session::set('toastType', 'success');
-            header('Location: /WEB2041_Ecommerce/admin/attribute');
+        if ($deleName && $deleValue) {
             return true;
         }
-
-        Session::set('toastMessage', 'Xoá thất bại.');
-        Session::set('toastType', 'error');
         return false;
+    }
+
+    function getAttributeValue($id)
+    {
+        return $this->db->table('attribute_value av')->select('av.id , attribute_id , a.name, av.value_name')->join('attribute a', 'av.attribute_id = a.id')->where('attribute_id', '=', $id)->orderBy('av.id')->get();
+    }
+
+    function getOneAttributeValue($id)
+    {
+        return $this->db->findById('attribute_value', 'id, value_name, attribute_id', $id);
+    }
+    function deleteAttributeValue($id)
+    {
+        return $this->db->findIdAndDelete('attribute_value', $id);
     }
 }

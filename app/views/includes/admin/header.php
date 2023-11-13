@@ -41,14 +41,14 @@
                         </a>
                     </li>
                     <li>
-                        <a href="Other/comingsoon">
+                        <a href="coming-soon">
                             <i class="fas fa-archive"></i>
                             <span>Orders</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="Other/comingsoon">
+                        <a href="coming-soon">
                             <i class="fas fa-cog"></i>
                             <span>Cài đặt</span>
                         </a>

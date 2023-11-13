@@ -5,10 +5,12 @@ class Category extends Controller
     use SweetAlert;
     private $categoryModel;
     private $req = null;
+    private $res = null;
     function __construct()
     {
         $this->categoryModel = $this->model('CategoryModel');
         $this->req = new Request;
+        $this->res = new Response;
     }
     function Default()
     {
@@ -22,7 +24,7 @@ class Category extends Controller
         $dataCate = $this->categoryModel->getAllCategory();
 
         $this->view('layoutServer', [
-            'active' => 'category',
+            'active' => 'product',
             'title' => 'Danh sách danh mục',
             'pages' => 'category/category',
             'dataCate' => $dataCate ?? [],
@@ -64,10 +66,8 @@ class Category extends Controller
         $createCategory = $this->categoryModel->addNewCategory($dataInsert);
 
         if ($createCategory) {
-            Session::set('toastMessage', 'Thêm mới thành công.');
-            Session::set('toastType', 'success');
-            header('location: /WEB2041_Ecommerce/admin/category');
-            return;
+
+            return $this->res->setToastSession('success', 'Thêm mới thành công.', 'admin/category');;
         } else {
             $this->Toast('error', 'Thêm thất bại vui lòng thử lại.');
             return $this->renderAddPage($dataValueOld);
@@ -76,7 +76,7 @@ class Category extends Controller
     private function renderAddPage($dataValueOld = [])
     {
         $this->view('layoutServer', [
-            'active' => 'category',
+            'active' => 'product',
             'title' => 'Thêm danh mục',
             'pages' => 'category/addCategory',
             'dataValueOld' => $dataValueOld ?? [],
@@ -119,10 +119,7 @@ class Category extends Controller
         $updateCategory = $this->categoryModel->updateCategory($id, $dataUpdate);
 
         if ($updateCategory) {
-            Session::set('toastMessage', 'Cập nhập thành công.');
-            Session::set('toastType', 'success');
-            header('location: /WEB2041_Ecommerce/admin/category');
-            return;
+            return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/category');;
         } else {
             $this->Toast('error', 'Cập nhập thất bại vui lòng thử lại.');
             return $this->renderUpdatePage($dataCate);
@@ -132,7 +129,7 @@ class Category extends Controller
     private function renderUpdatePage($dataCate = [])
     {
         $this->view('layoutServer', [
-            'active' => 'category',
+            'active' => 'product',
             'title' => 'Cập nhập danh mục',
             'pages' => 'category/updateCategory',
             'dataCate' => $dataCate
@@ -148,13 +145,10 @@ class Category extends Controller
         $success = $this->categoryModel->deleteCategory($dataPost['id']);
 
         if (!$success) {
-            Session::set('toastMessage', 'Xoá thất bại.');
-            Session::set('toastType', 'error');
-            return header('location: /WEB2041_Ecommerce/admin/category');
+
+            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/category');;
         }
 
-        Session::set('toastMessage', 'Xoá thành công.');
-        Session::set('toastType', 'success');
-        return header('location: /WEB2041_Ecommerce/admin/category');
+        return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/category');;
     }
 }

@@ -43,4 +43,13 @@ class DashBoard extends Controller
             'dataRatingsProd' => $dataRatingsProd ?? [],
         ]);
     }
+
+    function storeCustom()
+    {
+        $this->view('layoutServer', [
+            'title' => 'Bảng điều khiển',
+            'active' => 'storeCustom',
+            'pages' => 'storeCustom/storeCustom',
+        ]);
+    }
 }

@@ -104,7 +104,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-custom col-sm-8 m-auto ">Cập nhập người dùng</button>
+                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto ">Cập nhập người dùng <span class="spin"><i class="fas fa-spinner"></i></span></button>
             </div>
         </form>
     </div>

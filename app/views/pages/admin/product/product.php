@@ -1,8 +1,3 @@
-<?php
-
-
-?>
-
 <section class="product-wrap">
     <div class="card">
         <div class="title-header">
@@ -20,12 +15,13 @@
             <table class="theme-table table-responsive" id="table_id">
                 <thead class="rounded-3 overflow-hidden  ">
                     <tr>
-                        <th>Ảnh</th>
-                        <th>Tên</th>
+                        <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
                         <th>Tồn kho</th>
                         <th>Giá</th>
                         <th>Trạng thái</th>
+                        <th>Hiển thị</th>
+                        <th>Biến thể</th>
                         <th>Thực thi</th>
                     </tr>
                 </thead>
@@ -36,13 +32,12 @@
                     ?>
                         <tr>
                             <td>
-                                <div class="table-image">
-                                    <img src="public/images/product/thumb/<?php echo $product['thumb'] ?>" class="img-fluid" alt="<?php echo $product['title'] ?>">
+                                <div class=" product-title-name">
+                                    <div class="table-image table-image--product">
+                                        <img src="<?php echo $product['thumb'] ?>" class="img-fluid" alt="<?php echo $product['title'] ?>">
+                                    </div>
+                                    <div class="text-truncate text-title"><?php echo $product['title'] ?></div>
                                 </div>
-                            </td>
-
-                            <td>
-                                <div style="max-width: 250px;" class="text-truncate "><?php echo $product['title'] ?></div>
                             </td>
 
                             <?php
@@ -58,14 +53,30 @@
                             <td class="td-price"><?php echo Format::formatCurrency($product['price']) ?></td>
 
 
-                            <td class=" <?php echo $product['status'] == 1 ? 'status-success' : 'status-danger' ?>">
-                                <span class="fw-medium"><?php echo $product['status'] == 1 ? 'Show' : 'Hide' ?></span>
+                            <td class=" <?php echo $product['quantity'] >= 1 && $product['status'] ? 'status-success' : 'status-danger' ?>">
+                                <span class="fw-medium"><?php echo $product['quantity'] >= 1 && $product['status'] ? 'Đang bán' : 'Dừng bán' ?></span>
+                            </td>
+                            <td>
+                                <label class="switch">
+                                    <input onchange="toggleStatusProd(<?= $product['id'] ?>)" name="status" <?= $product['status'] == 1 ? 'checked' : ''  ?> type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </td>
+
+                            <td>
+                                <div class="options">
+                                    <li class="m-0 ">
+                                        <a href="admin/product-variants/<?= $product['id'] ?>">
+                                            <i class="view fas fa-eye"></i>
+                                        </a>
+                                    </li>
+                                </div>
                             </td>
 
                             <td>
                                 <ul class="options">
                                     <li class="m-0 ">
-                                        <a href="admin/updateProduct/<?php echo $product['id'] ?>">
+                                        <a href="admin/update-product/<?php echo $product['id'] ?>">
                                             <i class="edit fas fa-edit"></i>
                                         </a>
                                     </li>
@@ -107,7 +118,7 @@
                 <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form action="admin/deleteProduct" method="post">
+                <form action="admin/delete-product" method="post">
                     <input id="productDel" name="id" type="hidden">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>

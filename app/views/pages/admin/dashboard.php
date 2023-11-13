@@ -111,7 +111,7 @@
                                         <td>
                                             <div class="best-product-box">
                                                 <div class="product-image">
-                                                    <img src="public/images/product/thumb/<?php echo $dataProdBestSell['thumb'] ?>" class="img-fluid" alt="<?php echo $dataProdBestSell['title'] ?>">
+                                                    <img src="<?php echo $dataProdBestSell['thumb'] ?>" class="img-fluid" alt="<?php echo $dataProdBestSell['title'] ?>">
                                                 </div>
                                                 <div class="product-name ms-4">
                                                     <h5 style="max-width: 150px;" class="mb-2 text-truncate "><?php echo $dataProdBestSell['title']  ?></h5>

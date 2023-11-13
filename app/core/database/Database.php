@@ -133,7 +133,6 @@ class Database
     public function create($tableName, $dataToInsert)
     {
         try {
-            $this->conn->beginTransaction();
             $sql = "INSERT INTO $tableName (";
             $columns = implode(", ", array_keys($dataToInsert));
             $sql .= $columns . ") VALUES (";
@@ -147,12 +146,9 @@ class Database
             }
             $status = $stmt->execute();
 
-
             if ($status) {
-                $this->conn->commit();
                 return true;
             } else {
-                $this->conn->rollBack();
                 return false;
             }
         } catch (PDOException $e) {
@@ -167,7 +163,6 @@ class Database
 
     public function findAndDelete($tableName, $conditions = [])
     {
-
         if (empty($tableName)) {
             return false;
         }
@@ -178,15 +173,20 @@ class Database
 
         if (!empty($conditions)) {
             $whereConditions = [];
-            foreach ($conditions as $condition) {
-                $whereConditions[] = $condition;
+            foreach ($conditions as $key => $value) {
+                $whereConditions[] = "$key = :$key";
             }
             $sql .= " WHERE " . implode(" AND ", $whereConditions);
         }
 
-        $stmt = $this->query($sql);
+        $stmt = $this->conn->prepare($sql);
+        foreach ($conditions as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
 
-        if ($stmt) {
+        $success = $stmt->execute();
+
+        if ($success) {
             $this->conn->commit();
             return true;
         } else {
@@ -213,6 +213,7 @@ class Database
 
     public function lastInsertId()
     {
+
         return $this->conn->lastInsertId();
     }
 }

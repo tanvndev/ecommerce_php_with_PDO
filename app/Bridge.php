@@ -61,6 +61,7 @@ require_once './app/core/App.php'; //Load App
 require_once './app/core/database/BaseModel.php'; // Load basemodel
 require_once './app/core/Controller.php'; // Load controller
 require_once './app/core/Request.php'; // Load Request
+require_once './app/core/Response.php'; // Load Response
 
 
 
