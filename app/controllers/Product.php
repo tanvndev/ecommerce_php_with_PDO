@@ -45,10 +45,12 @@ class Product extends Controller
 
         $dataProd = $this->productModel->getOneProd($id) ?? [];
         $dataImageProd = $this->productModel->getImageProd($id) ?? [];
-        // $dataVariant = $this->productModel->getVariantProd($id) ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
         $dataVariant = $this->productModel->getAllProdVariants($id);
-
+        // update View
+        $newView = $dataProd['view'] + 1;
+        $this->db->findByIdAndUpdate('product', $id, ['view' => $newView]);
+        //Lay ra variant
         if (!empty($dataVariant)) {
             $dataProdVariantsNew = [];
             foreach ($dataVariant as $item) {

@@ -6,17 +6,29 @@ class Account extends Controller
     private $req = null;
     private $res = null;
     private $userModel;
+    private $orderModel;
+    private $user_id = null;
+
+
 
     public function __construct()
     {
         $this->req = new Request;
         $this->res = new Response;
         $this->userModel = $this->model('UserModel');
+        $this->orderModel = $this->model('OrderModel');
+        $this->user_id = ViewShare::$dataShare['userData']['user_id'] ?? '';
     }
 
     function Default()
     {
-        header('location: /WEB2041_Ecommerce/account/login');
+        $dataOrder = $this->orderModel->getAllOrderByUser($this->user_id);
+        $this->view('layoutClient', [
+            'title' => 'Quản lý tài khoản',
+            'currentPath' => '',
+            'pages' => 'account/myAccount',
+            'dataOrder' => $dataOrder ?? [],
+        ]);
     }
 
 
@@ -126,6 +138,9 @@ class Account extends Controller
                 $this->Toast('error', 'Có lỗi vui lòng đăng nhập lại.');
                 return $this->renderLoginPage($dataValueOld);
             }
+        } else {
+            $this->Toast('error', 'Tài khoản hoặc mật khẩu không chính xác.');
+            return $this->renderLoginPage($dataValueOld);
         }
     }
     private function renderLoginPage($dataValueOld = [])

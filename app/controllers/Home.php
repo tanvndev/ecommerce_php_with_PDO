@@ -12,7 +12,6 @@ class Home extends Controller
 
     function Default()
     {
-
         $dataCate = $this->categoryModel->getAllCategory() ?? [];
         $dataProdNft = $this->productModel->getProdByCateNft() ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];

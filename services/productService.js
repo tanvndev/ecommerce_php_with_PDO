@@ -50,6 +50,7 @@ const getVariant = (id) => {
 
       if (data.code == 200) {
         $('#product-stock').text(dataProd.quantity);
+        $('#product_variant_id').val(id);
         productPrice.empty();
         productPrice.append(priceHtml(dataProd));
       }

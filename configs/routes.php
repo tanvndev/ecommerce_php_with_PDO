@@ -15,8 +15,10 @@ $routes['reset-password'] = 'account/resetPassword';
 $routes['signup-comfirm/(.+)'] = 'account/finalRegisterUser/$1';
 $routes['strongPassword'] = 'account/checkStrongPasswordApi';
 $routes['isIdenti'] = 'account/checkIdentificateExistedApi';
-$routes['coming-soon'] = 'Other/comingSoon';
 
+$routes['coming-soon'] = 'Other/comingSoon';
+$routes['checkout-final'] = 'checkout/checkoutFinal';
+$routes['payment-final'] = 'checkout/paymentFinal';
 
 // Server
 $routes['admin/dashBoard'] = 'admin/dashBoard/default';
@@ -42,9 +44,17 @@ $routes['admin/delete-product-variant'] = 'admin/product/deleteProductVariant';
 $routes['admin/add-category'] = 'admin/category/addCategory';
 $routes['admin/update-category/(.+)'] = 'admin/category/updateCategory/$1';
 
+//Coupon
+$routes['admin/add-coupon'] = 'admin/coupon/addCoupon';
+$routes['admin/update-coupon/(.+)'] = 'admin/coupon/updateCoupon/$1';
+
 //User
 $routes['admin/add-user'] = 'admin/user/addUser';
 $routes['admin/update-user/(.+)'] = 'admin/user/updateUser/$1';
+
+//News
+$routes['admin/add-news'] = 'admin/news/addNews';
+$routes['admin/update-news/(.+)'] = 'admin/news/updateNews/$1';
 
 //Attribute
 $routes['admin/add-attribute'] = 'admin/attributes/addAttribute';

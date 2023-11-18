@@ -10,30 +10,29 @@ const itemCartHtml = (item) => {
   return `
         <li class="cart-item">
             <div class="item-img">
-                <a href="product/${item.prod_id}">
-                  <img src="public/images/product/thumb/${item.thumb}" alt="${
-    item.title
-  }">
+                <a href="product/${item.slug}-${item.product_id}">
+                  <img src="${item.thumb}" alt="${item.title}">
                 </a>
                 <button onclick="deleteCart(${
-                  item.id
+                  item.cart_item_id
                 })" class="close-btn"><i class="fas fa-times"></i></button>
             </div>
             <div class="item-content">
               
-                <h3 class="item-title"><a href="product/${item.prod_id}">${
-    item.title
-  }</a></h3>
+                <h3 class="item-title"><a href="product-${item.slug}-${
+    item.product_id
+  }">${item.title}</a></h3>
 
                 <aside class="variants">
                     
-                ${
-                  item.color &&
-                  `<label>
-                        <span class="title-variant">Màu: </span>
-                        <span class="sub-variant">${item.color}</span>
-                    </label>`
-                }
+             
+                  <label>
+                        <span class="title-variant fw-bold ">Phân loại: </span>
+                        <span class="sub-variant">${
+                          item.attribute_values
+                        }</span>
+                  </label>
+                
                     <div class="sub-variants">
                     </div>
 
@@ -43,18 +42,71 @@ const itemCartHtml = (item) => {
                 </div>
                 <div class="pro-qty item-quantity">
                     <button type="button" onclick="updateQuantityCart(${
-                      item.id
+                      item.cart_item_id
                     }, 'minus')" class="dec qtybtn">-</button>
                     <input type="text" class="quantity-input" value="${
                       item.quantity
                     }">
                     <button type="button" onclick="updateQuantityCart(${
-                      item.id
+                      item.cart_item_id
                     }, 'plus') "class="inc qtybtn">+</button>
                 </div>
             </div>
         </li>
     `;
+};
+
+const cartHtmlMain = (item) => {
+  return `
+    <tr>
+                                <td class="product-remove">
+                                    <button onclick="deleteCart(${
+                                      item.cart_item_id
+                                    })" class="remove-wishlist"><i class="fal fa-times"></i>
+                                    </button>
+                                </td>
+                                <td class="product-thumbnail">
+                                    <a href="product/${item.slug}-${
+    item.product_id
+  }">
+                                        <img src="${item.thumb}" alt="${
+    item.title
+  }">
+                                    </a>
+                                </td>
+                                <td class="product-title">
+                                    <a href="product/${item.slug}-${
+    item.product_id
+  }">${item.title}</a>
+                                    <div class="product-variant">
+                                        <span class="title-variant">Phân loại: </span>
+                                        <span class="sub-variant">${
+                                          item.attribute_values
+                                        }</span>
+                                    </div>
+                                </td>
+                                <td class="product-price">
+                                     ${formatCurrency(item.price)}
+                                <td class="product-quantity">
+                                    <div class="pro-qty item-quantity">
+                                        <button onclick="updateQuantityCart(${
+                                          item.cart_item_id
+                                        }, 'minus')" class="dec qtybtn">-</button>
+                                        <input type="text" class="quantity-input" value="${
+                                          item.quantity
+                                        }">
+                                        <button onclick="updateQuantityCart(${
+                                          item.cart_item_id
+                                        }, 'plus')" class="inc qtybtn">+</button>
+                                    </div>
+                                </td>
+                                <td class="product-subtotal">
+                                    ${formatCurrency(
+                                      item.price * item.quantity,
+                                    )}
+                                </td>
+                            </tr>
+  `;
 };
 
 // fetch
@@ -64,7 +116,9 @@ const getData = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      updateHtmlCart(data);
+      if (data.code == 200) {
+        updateHtmlCart(data.data);
+      }
     } else {
       throw new Error('Request failed');
     }
@@ -74,78 +128,113 @@ const getData = async () => {
 };
 getData();
 
-const addCart = async (id) => {
+const addCart = async () => {
   try {
     let data = [];
+    //kiem tra da chon bien the chua
+    if (!$('#product_variant_id').val()) {
+      return showToast('error', 'Vui lòng lựa chọn phân loại.');
+    }
+
     const formData = new FormData($('#formProduct').get(0));
-    const response = fetch(`cart/addCartApi/${id}`, {
+    const response = await fetch(`cart/addCartApi`, {
       method: 'POST',
       body: formData,
     });
     if (response.ok) {
       data = await response.json();
     }
-
-    if (data == 'Failed') {
-      return (window.location = 'login');
+    //Neu chua co tai khoan phai login
+    if (data.code == 300) {
+      window.location.href = 'login';
+      return;
     }
-
-    showToast('success', data.success);
+    if (data.code == 200) {
+      showToast('success', data.message);
+    }
+    if (data.code == 400) {
+      showToast('error', data.message);
+    }
     getData();
   } catch (error) {
     console.log(error);
   }
 };
 
-const updateQuantityCart = (id, action) => {
+const updateQuantityCart = async (id, action) => {
   try {
-    fetch(`cart/updateQuantity/${id}/${action}`, {
+    const response = await fetch(`cart/updateQuantityApi/${id}/${action}`, {
       method: 'GET',
-    })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
+    });
+    if (response.ok) {
+      const data = await response.json();
+
+      if (data.code == 200) {
         getData();
-      });
+      }
+
+      if (data.code == 400) {
+        showToast('error', data.message);
+      }
+    }
   } catch (error) {
     console.log(error);
   }
 };
 
-const deleteCart = (id) => {
+const deleteCart = async (id) => {
+  console.log(id);
   try {
-    fetch(`cart/deleteCart/${id}`, {
+    const response = await fetch(`cart/deleteCartApi/${id}`, {
       method: 'DELETE',
-    })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (data) {
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.code == 200) {
         getData();
-      });
+      }
+
+      if (data.code == 400) {
+        showToast('error', data.message);
+      }
+    } else {
+      console.log('Error deleting cart:', response.status);
+    }
   } catch (error) {
-    console.log(error);
+    console.error('An error occurred:', error);
   }
 };
 
 const updateHtmlCart = (data) => {
   let cartList = $('#cartList');
+  let cartMain = $('#cart_main');
 
   cartList.empty();
+  cartMain.empty();
+
   if (data.length > 0) {
     let totalAmout = 0;
 
     data.forEach(function (item) {
-      var cartItemHTML = itemCartHtml(item);
-      cartList.append(cartItemHTML);
-      totalAmout += item.totalPrice;
+      //cart modal
+      cartList.append(itemCartHtml(item));
+      //cart main
+      cartMain.append(cartHtmlMain(item));
+      totalAmout = item.totalPrice;
     });
 
     $('#subtotal-amount').html(formatCurrency(totalAmout));
     $('#shopping-cart-quantity').html(data.length);
+
+    //Cart Mian
+    $('#order-subtotal').html(formatCurrency(totalAmout));
   } else {
     cartList.append(notCartHtml());
     $('#subtotal-amount').html(formatCurrency(0));
+    $('#not-cart-main').append(notCartHtml());
+
+    //Cart main
+    $('#order-subtotal').html(formatCurrency(0));
   }
 };

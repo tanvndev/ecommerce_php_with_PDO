@@ -1,7 +1,7 @@
 <?php
-echo '<pre>';
-print_r($dataProd);
-echo '</pre>';
+// echo '<pre>';
+// print_r($dataProd);
+// echo '</pre>';
 ?>
 
 <section class="header-top-campaign">
@@ -94,13 +94,14 @@ echo '</pre>';
                             </ul>
                             <p class="description"><?= $dataProd['short_description'] ?></p>
 
-                            <form action="cart/addCart/<?= $dataProd['id'] ?>" id="formProduct" method="post">
+                            <form id="formProduct" action="cart/addCartApi" method="post">
                                 <?php if (!empty($dataVariant)) : ?>
                                     <div class="product-variations-wrapper mt-5 ">
 
                                         <div class="product-variation">
                                             <h6 class="title">Phân loại:</h6>
                                             <div class="color-variant-wrapper">
+                                                <input id="product_variant_id" type="hidden" name="product_variant_id">
                                                 <ul class="product-variant">
                                                     <?php
                                                     foreach ($dataVariant as $dataVariantItem) {
@@ -129,7 +130,7 @@ echo '</pre>';
                                             $buttonClass = $isProductAvailable ? 'btn-custom btn-bg-primary' : 'btn-custom btn-bg-primary disabled';
                                             ?>
 
-                                            <button onclick="addCart(<?= $dataProd['id'] ?>)" type="button" class="<?= $buttonClass; ?>"><?= $buttonText; ?></button>
+                                            <button onclick="addCart()" type="button" class="<?= $buttonClass; ?>"><?= $buttonText; ?></button>
 
                                         </li>
                                         <li class="wishlist">
@@ -325,11 +326,6 @@ echo '</pre>';
         <div class="title">
             <span class="title-highlighter highlighter-secondary"> <i class="far fa-shopping-basket"></i>Các mục đã xem gần đây</span>
             <h2 class="title">Sản phẩm từng xem</h2>
-            <?php
-            echo '<pre>';
-            print_r($dataProdRecent);
-            echo '</pre>';
-            ?>
         </div>
 
         <div class="main-product">

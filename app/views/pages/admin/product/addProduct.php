@@ -157,7 +157,7 @@
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
                         <div class="card-title-top">
-                            <h5>Mô tả </h5>
+                            <h5>Mô tả sản phẩm </h5>
                         </div>
                         <div class="form-input">
                             <div class="mb-5 row ">
@@ -166,9 +166,7 @@
                                     <textarea name="short_description" class="ckEditor"><?= $dataValueOld['short_description'] ?? '' ?></textarea>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-input">
+                            <!--  -->
                             <div class="mb-5 row ">
                                 <label class="form-label-title col-sm-3 mb-0">Mô tả sản phẩm</label>
                                 <div class="col-sm-9">
@@ -176,6 +174,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 

@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="public/css/vendor/slick.css">
     <link rel="stylesheet" type="text/css" href="public/css/vendor/slick-theme.css">
     <!-- <link rel="stylesheet" type="text/css" href="public/css/vendor/jquery-ui.min.css"> -->
+    <link rel="stylesheet" type="text/css" href="public/css/vendor/datatables.css">
     <link rel="stylesheet" type="text/css" href="public/css/vendor/sal.css">
     <link rel="stylesheet" type="text/css" href="public/css/vendor/magnific-popup.css">
     <link rel="stylesheet" type="text/css" href="public/css/vendor/base.css">
@@ -39,7 +40,7 @@
         <?php
         require_once 'app/views/includes/header.php';
         //hide breadcumb
-        if ($pages != 'product/detailProduct' && $pages != 'home') {
+        if ($pages != 'product/detailProduct' && $pages != 'home' && $pages != 'checkout/checkout') {
             require_once 'app/views/includes/breadcumb.php';
         }
         ?>
@@ -63,6 +64,8 @@
     <script src="public/js/vendor/slick.min.js"></script>
     <!-- <script src="public/js/vendor/jquery-ui.min.js"></script>
     <script src="public/js/vendor/jquery.ui.touch-punch.min.js"></script> -->
+    <script src="public/js/vendor/jquery.dataTables.js"></script>
+
     <script src="public/js/vendor/sal.js"></script>
     <script src="public/js/vendor/jquery.magnific-popup.min.js"></script>
     <script src="public/js/vendor/counterup.js"></script>

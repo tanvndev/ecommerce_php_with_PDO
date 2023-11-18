@@ -140,6 +140,10 @@ class Category extends Controller
 
     function deleteCategory()
     {
+        if (!$this->req->isPost()) {
+            return $this->res->setToastSession('success', 'Có lõi xảy ra vui lòng thử lại.', 'admin/news');;
+        }
+
         $dataPost = $this->req->getFields();
 
         $success = $this->categoryModel->deleteCategory($dataPost['id']);

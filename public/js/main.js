@@ -28,6 +28,7 @@
       );
       initial.stickyHeaderMenu();
       initial.salActivation();
+      initial.activeDataTable();
       initial.magnificPopupActivation();
       initial.productVariantActive();
       initial.counterUpActivation();
@@ -36,10 +37,27 @@
       initial.addAllLazyLoading();
       initial.showMyAccountDropdown();
       initial.niceSelectActive();
+      initial.copyCouponCode();
     },
 
     w: function (e) {
       this._window.on('load', initial.l).on('scroll', initial.res);
+    },
+
+    activeDataTable: function () {
+      if (typeof $.fn.DataTable === 'function') {
+        $('.table_id').each(function () {
+          if ($.fn.DataTable.isDataTable(this)) {
+            return;
+          }
+          $(this).DataTable({
+            paging: true,
+            ordering: true,
+            info: false,
+            responsive: true,
+          });
+        });
+      }
     },
 
     loaderAjax: function () {
@@ -47,6 +65,23 @@
         const button = $(this);
         button.addClass('disabled');
         $('.spin').show();
+      });
+    },
+    copyCouponCode: function () {
+      const couponEle = $('.code-coupon');
+
+      couponEle.on('click', function () {
+        const $this = $(this);
+        const couponCode = $this.text().trim();
+
+        navigator.clipboard
+          .writeText(couponCode)
+          .then(function () {
+            $this.text('Copied!');
+          })
+          .catch(function (err) {
+            console.error('Không thể sao chép mã: ', err);
+          });
       });
     },
 

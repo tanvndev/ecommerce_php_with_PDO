@@ -632,6 +632,10 @@ ol li a:hover {
 ol ul {
   padding-left: 30px;
 }
+ul li a,
+ol li a {
+  transition: var(--transition);
+}
 .form-message {
   margin-bottom: 0;
   text-align: center;
@@ -794,11 +798,13 @@ select {
   line-height: var(--line-height-b1);
   font-family: var(--font-secondary);
 }
+
 input[type='text'],
 input[type='password'],
 input[type='email'],
 input[type='number'],
 input[type='tel'],
+input[type='datetime-local'],
 textarea {
   font-size: var(--font-size-b2);
   font-weight: 400;
@@ -817,6 +823,7 @@ input[type='password']::placeholder,
 input[type='email']::placeholder,
 input[type='number']::placeholder,
 input[type='tel']::placeholder,
+input[type='datetime-local']::placeholder,
 textarea::placeholder {
   color: var(--color-body);
   opacity: 1;
@@ -1156,11 +1163,27 @@ input[type='submit']:hover {
 .pr--80 {
   padding-right: 80px;
 }
+.mb--10 {
+  margin-bottom: 10px;
+}
+.mb--20 {
+  margin-bottom: 20px;
+}
 .mb--30 {
   margin-bottom: 30px;
 }
+
 .mb--40 {
   margin-bottom: 40px;
+}
+.mt--40 {
+  margin-top: 40px;
+}
+.mt--10 {
+  margin-top: 10px;
+}
+.mt--80 {
+  margin-top: 80px;
 }
 .mb--55 {
   margin-bottom: 55px;
@@ -1184,6 +1207,7 @@ input[type='submit']:hover {
 
 .btn-custom {
   border-radius: 6px;
+  /* text-align: center; */
   font-size: var(--font-size-b1);
   line-height: var(--line-height-b1);
   font-weight: 700;

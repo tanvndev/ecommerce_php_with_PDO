@@ -53,8 +53,8 @@
                             <td class="td-price"><?php echo Format::formatCurrency($product['price']) ?></td>
 
 
-                            <td class=" <?php echo $product['quantity'] >= 1 && $product['status'] ? 'status-success' : 'status-danger' ?>">
-                                <span class="fw-medium"><?php echo $product['quantity'] >= 1 && $product['status'] ? 'Đang bán' : 'Dừng bán' ?></span>
+                            <td class=" <?php echo $product['quantity'] >= 1 && $product['status'] == 1 ? 'status-success' : 'status-danger' ?>">
+                                <span class="fw-medium"><?php echo $product['quantity'] >= 1 && $product['status'] == 1 ? 'Đang bán' : 'Dừng bán' ?></span>
                             </td>
                             <td>
                                 <label class="switch">

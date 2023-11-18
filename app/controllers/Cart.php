@@ -2,48 +2,223 @@
 
 class Cart extends Controller
 {
+    use SweetAlert;
     private $cartModel;
+    private $productModel;
     private $user_id = null;
+    private $req = null;
+    private $res = null;
     public function __construct()
     {
+        $this->req = new Request;
+        $this->res = new Response;
         $this->cartModel = $this->model('CartModel');
+        $this->productModel = $this->model('ProductModel');
         $this->user_id = ViewShare::$dataShare['userData']['user_id'] ?? '';
-        // ViewShare::share($this->cartModel->getAllCart());
     }
 
     function Default()
     {
+        if (!$this->req->isPost()) {
+            $toastMessage = Session::get('toastMessage');
+            $toastType = Session::get('toastType');
+            $this->ToastSession($toastMessage, $toastType);
+        }
+
+        $this->view('layoutClient', [
+            'title' => 'Giỏ hàng',
+            'currentPath' => 'product/',
+            'pages' => 'cart/cart',
+        ]);
     }
+
+
 
     function getAllCartApi()
     {
         if (empty($this->user_id)) {
-            echo json_encode([]);
+            echo $this->res->dataApi(200, '', []);
             return;
         }
 
         $dataCart = $this->cartModel->getAllCart($this->user_id);
 
+
+        // handle khi co datacart
+        if (!empty($dataCart)) {
+            $dataCartNew = [];
+            foreach ($dataCart as $item) {
+                $idVariant = $item['product_variant_id'];
+                if (!isset($dataCartNew[$idVariant])) {
+                    $dataCartNew[$idVariant] = [
+                        'product_variant_id' => $idVariant,
+                        'cart_item_id' => $item['cart_item_id'],
+                        'product_id' => $item['product_id'],
+                        'cart_id' => $item['cart_id'],
+                        'totalPrice' => $item['totalPrice'],
+                        'title' => $item['title'],
+                        'slug' => $item['slug'],
+                        'thumb' => $item['thumb'],
+                        'price' => $item['price'],
+                        'quantity' => $item['quantity'],
+                        'attribute_values' => [$item['attribute_value']],
+                    ];
+                } else {
+                    $dataCartNew[$idVariant]['attribute_values'][] = $item['attribute_value'];
+                }
+            }
+
+            foreach ($dataCartNew as &$item) {
+                $item['attribute_values'] = implode('-', $item['attribute_values']);
+            }
+
+            $dataCartNew = array_values($dataCartNew);
+        }
+
         if (empty($dataCart)) {
-            echo json_encode([]);
+            echo $this->res->dataApi(200, '', []);
             return;
         }
 
-        echo json_encode($dataCart);
+        echo $this->res->dataApi(200, '', $dataCartNew);
         return;
     }
 
-    function addCartApi($idProd)
+    function addCartApi()
     {
-        echo $this->cartModel->addNewProductCart($idProd);
+        if (!$this->req->isPost()) {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', []);
+            return;
+        }
+
+        $dataPost = $this->req->getFields();
+
+        // Phải đăng nhập mới được thêm vào giỏ hàng
+        if (empty($this->user_id)) {
+            echo $this->res->dataApi(300, '', []);
+            return;
+        }
+
+        if (empty($dataPost['product_variant_id']) || empty($dataPost['quantity'])) {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', []);
+            return;
+        }
+
+        $dataCart = $this->cartModel->getCartId($this->user_id);
+        $dataProductVariant = $this->productModel->getOneProdVariant($dataPost['product_variant_id']);
+
+        $quantityToAdd = $dataPost['quantity'];
+
+        $dataCartItem = $this->cartModel->getOneCartItemProdVariant($dataPost['product_variant_id']);
+
+        if (!empty($dataCartItem)) {
+            // Nếu đã có sản phẩm rồi thì cộng thêm số lượng
+            $quantityToAdd += $dataCartItem['quantity'];
+
+            $updateCartItem = $this->cartModel->updateCartItem($dataCartItem['id'], [
+                'quantity' => $quantityToAdd,
+            ]);
+
+            $updateCart = $this->cartModel->updateCart($dataCart['id'], [
+                'totalPrice' => $dataCart['totalPrice'] + ($dataProductVariant['price'] * $dataPost['quantity']),
+                'update_at' => date('Y-m-d H:i:s'),
+            ]);
+        } else {
+            // Nếu chưa có sản phẩm trong giỏ hàng thì thêm mới
+            $createCartItem = $this->cartModel->addNewCartItem([
+                'product_variant_id' => $dataPost['product_variant_id'],
+                'quantity' => $dataPost['quantity'],
+                'cart_id' => $dataCart['id'],
+            ]);
+
+            $updateCart = $this->cartModel->updateCart($dataCart['id'], [
+                'totalPrice' => $dataCart['totalPrice'] + ($dataProductVariant['price'] * $dataPost['quantity']),
+                'update_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            $updateCartItem = $createCartItem;
+        }
+
+        if ($updateCartItem && $updateCart) {
+            echo $this->res->dataApi(200, 'Thêm sản phẩm vào giỏ hàng thành công.', []);
+        } else {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', []);
+        }
+    }
+
+    function updateQuantityApi($id, $action)
+    {
+
+        $dataCartItem = $this->cartModel->getOneCartItem($id);
+
+        if (empty($dataCartItem)) {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', [$dataCartItem]);
+            return;
+        }
+
+        if ($action == 'plus') {
+            $newQuantity = $dataCartItem['quantity'] + 1;
+            $newTotalPrice =   $dataCartItem['totalPrice'] + $dataCartItem['price'];
+        } elseif ($action == 'minus' && $dataCartItem['quantity'] > 1) {
+            $newQuantity = $dataCartItem['quantity'] - 1;
+            $newTotalPrice =  $dataCartItem['totalPrice'] - $dataCartItem['price'];
+        } else {
+            echo $this->res->dataApi(400, 'Vui lòng kiểm tra lại số lượng.', []);
+            return;
+        }
+
+        $updateCart = $this->cartModel->updateCart($dataCartItem['cart_id'], [
+            'totalPrice' => $newTotalPrice,
+            'update_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $updateCartItem = $this->cartModel->updateCartItem($dataCartItem['id'], [
+            'quantity' => $newQuantity,
+        ]);
+
+        if ($updateCartItem && $updateCart) {
+            echo $this->res->dataApi(200, 'Cập nhập số lượng thành công.', []);
+        } else {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', []);
+        }
     }
 
     function deleteCartApi($id)
     {
-        echo $this->cartModel->deleteCart($id);
+
+        $dataCartItem = $this->cartModel->getOneCartItem($id);
+        $deleteCartItem = $this->cartModel->deleteCartItem($id);
+
+        $newTotalPrice = $dataCartItem['totalPrice'] - ($dataCartItem['price'] * $dataCartItem['quantity']);
+
+        $updateCart = $this->cartModel->updateCart($dataCartItem['cart_id'], [
+            'totalPrice' => $newTotalPrice,
+            'update_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if ($deleteCartItem && $updateCart) {
+            echo $this->res->dataApi(200, '', []);
+        } else {
+            echo $this->res->dataApi(400, 'Có lỗi vui lòng thử lại.', []);
+        }
     }
-    function updateQuantityApi($id, $action)
+
+    function deleteAllCart()
     {
-        echo $this->cartModel->updateQuantity($id, $action);
+        if (empty($this->user_id)) {
+            return  $this->res->setToastSession('error', 'Vui long dang nhap', 'cart');
+        }
+
+        $dataCart = $this->cartModel->getCartId($this->user_id);
+
+        $deleteCartItem = $this->cartModel->deleteAllCartItem($dataCart['id']);
+
+        $deleteCart = $this->cartModel->deleteAllCart($dataCart['id']);
+
+        if ($deleteCart && $deleteCartItem) {
+            return  $this->res->setToastSession('success', 'Xoa thanh cong.', 'cart');
+        } else {
+            return  $this->res->setToastSession('error', 'Xoa that bai vui long thu lai.', 'cart');
+        }
     }
 }

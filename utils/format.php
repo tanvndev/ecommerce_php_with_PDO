@@ -125,7 +125,7 @@ class Format
         return $randomString;
     }
 
-    static function validateUoloadImage($file)
+    static function validateUploadImage($file)
     {
         $type = $file['type'];
         $size = $file['size'];

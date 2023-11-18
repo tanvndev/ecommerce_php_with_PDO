@@ -8,6 +8,23 @@ class Test extends Controller
     }
     function Default()
     {
+        $orderData = array(
+            'order_id' => 123456,
+            'order_desc' => 'Hoá đơn mua hàng',
+            'amount' => 200000,
+            'bank_code' => 'NCB',
+        );
+        $check = Services::generateVnPayUrl($orderData);
+
+        header('location: ' . $check);
+    }
+
+    function getDataGet()
+    {
+        $dataGet = $this->req->getFields();
+        echo '<pre>';
+        print_r($dataGet);
+        echo '</pre>';
     }
 
     function detail($i)

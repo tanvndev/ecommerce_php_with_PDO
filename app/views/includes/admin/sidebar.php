@@ -11,7 +11,7 @@
             <ul class="sidebar-links">
                 <li class="sidebar-list <?php echo $active == 'dashboard' ? 'active' : '' ?>">
                     <a class="sidebar-list-link " href="admin/dashboard">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-th-large"></i>
                         <span>Bảng điều khiển</span>
                     </a>
                 </li>
@@ -48,10 +48,6 @@
                     </ul>
                 </li>
 
-
-
-
-
                 <li class="sidebar-list <?php echo $active == 'brand' ? 'active' : '' ?>">
                     <a class="sidebar-list-link " href="admin/brand">
                         <i class="fas fa-copyright"></i>
@@ -72,6 +68,13 @@
                     <a class="sidebar-list-link " href="admin/user">
                         <i class="fas fa-user-friends"></i>
                         <span>Người dùng</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-list <?php echo $active == 'news' ? 'active' : '' ?>">
+                    <a class="sidebar-list-link " href="admin/news">
+                        <i class="fas fa-newspaper"></i>
+                        <span>Tin tức</span>
                     </a>
                 </li>
 

@@ -127,7 +127,7 @@ class Product extends Controller
 
 
         //  validate Upload image thumb
-        if (!Format::validateUoloadImage($thumb)) {
+        if (!Format::validateUploadImage($thumb)) {
             $this->Toast('error', 'Kiểm tra lại file upload.');
             return $this->renderAddPage($cateData, $brandData, $attributeData, $attributeValueData, $dataValueOld);
         }
@@ -152,7 +152,6 @@ class Product extends Controller
 
         //Kiem tra co bien the hay khong
         if (isset($dataPost['attribute']) && !empty($dataPost['attribute'][0])) {
-
 
             //Check bat buoc phai nhap cac truong 
             if (empty($dataPost['quantity_variant'][0]) || empty($dataPost['price_variant'][0])) {
@@ -414,7 +413,7 @@ class Product extends Controller
         //  validate Upload image thumb
         if (!empty($thumb['name'])) {
 
-            if (!Format::validateUoloadImage($thumb)) {
+            if (!Format::validateUploadImage($thumb)) {
                 $this->Toast('error', 'Kiểm tra lại file upload.');
                 return $this->renderUpdatePage($cateData, $brandData, $prodImages, $dataProd);
             }

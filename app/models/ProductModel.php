@@ -37,6 +37,7 @@ class ProductModel extends BaseModel
     {
         return $this->db->findById($this->tableName(), $this->tableField(),  $id);
     }
+
     function getAllProdImages($id)
     {
         return $this->db->table('images_product')->where('prod_id', '=', $id)->get();

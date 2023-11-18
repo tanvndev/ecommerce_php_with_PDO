@@ -16,7 +16,10 @@ class UserModel extends BaseModel
         return 'id';
     }
 
-
+    function getAddress($user_id)
+    {
+        return $this->db->findById($this->tableName(), 'fullname, address, phone', $user_id);
+    }
 
     function checkEmailExisted($email)
     {
@@ -27,6 +30,16 @@ class UserModel extends BaseModel
         return [];
     }
 
+    function checkPhoneExisted($phone)
+    {
+        $isHasPhone = $this->db->table($this->tableName())->select('id ,phone, isBlock, password, role_id, avatar, fullname')->where('phone', '=', $phone)->getOne();
+        if (!empty($isHasPhone)) {
+            return $isHasPhone;
+        }
+        return [];
+    }
+
+
     function checkEmailExistedApi($email)
     {
         $isHasEmail = $this->db->table($this->tableName())->select('email')->where('email', '=', $email)->getOne();
@@ -36,11 +49,13 @@ class UserModel extends BaseModel
         return ['code' => '400'];
     }
 
+
     function updateToken($id, $data)
     {
         $success = $this->db->findByIdAndUpdate($this->tableName(), $id, $data);
         return $success ? true : false;
     }
+
 
     function finalRegisterUser($token)
     {

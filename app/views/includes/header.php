@@ -12,12 +12,16 @@ $menu = array(
         'path' => 'product/'
     ],
     [
-        'name' => 'Giới thiệu',
-        'path' => 'coming-soon'
+        'name' => 'Tin Tức',
+        'path' => 'news'
     ],
     [
         'name' => 'Liên hệ',
-        'path' => 'coming-soon'
+        'path' => 'contact'
+    ],
+    [
+        'name' => 'Ưu đãi',
+        'path' => 'coupon'
     ],
 );
 
@@ -89,7 +93,7 @@ $menu = array(
                             <span class="title">Đường dẫn nhanh</span>
                             <ul>
                                 <li>
-                                    <a href="coming-soon">Tài khoản</a>
+                                    <a href="account">Tài khoản</a>
                                 </li>
                                 <li>
                                     <a href="coming-soon">Bắt đầu trả hàng</a>

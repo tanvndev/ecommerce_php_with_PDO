@@ -151,12 +151,15 @@ class User extends Controller
 
 
         // Neu nguoi email khac voi input nguoi dung vua nhap thi se kiem tra ton tai hay khong? neu khong thi se kh kiem tra
-        if ($dataUserUp['email'] != $dataPost['email'] &&  $dataUserUp['email'] == $dataPost['email']) {
+
+        $checkEmail = $this->userModel->checkPhoneExisted($dataPost['email']);
+        if ($dataUserUp['email'] != $dataPost['email'] && !empty($checkEmail)) {
             $this->Toast($type, 'Email đã tồn tại.');
             return $this->renderUpdatePage($dataUserUp);
         }
 
-        if ($dataUserUp['phone'] != $dataPost['phone'] && $dataUserUp['phone'] == $dataPost['phone']) {
+        $checkPhone = $this->userModel->checkPhoneExisted($dataPost['phone']);
+        if ($dataUserUp['phone'] != $dataPost['phone'] && !empty($checkPhone)) {
             $this->Toast($type, 'Số điện thoại đã tồn tại.');
             return $this->renderUpdatePage($dataUserUp);
         }
