@@ -86,7 +86,7 @@ class Product extends Controller
             'pages' => 'product/detailProduct',
             'dataProd' => $dataProd,
             'dataImageProd' => $dataImageProd,
-            'dataVariant' => $dataProdVariantsNew,
+            'dataVariant' => $dataProdVariantsNew ?? [],
             'dataProdRecent' => $dataProdRecent,
         ]);
     }

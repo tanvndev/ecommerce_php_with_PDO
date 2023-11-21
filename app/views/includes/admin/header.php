@@ -24,7 +24,7 @@
             <div class="nav-menus">
                 <div class="profile-media">
                     <div class="me-4 ">
-                        <img class="user-profile" src="public/images/users/<?php echo isset($userData) && !empty($userData) && isset($userData['avatar']) ? $userData['avatar'] : 'userDefault.webp' ?>" alt="avatarUser">
+                        <img class="user-profile" src="<?php echo isset($userData) && !empty($userData) && isset($userData['avatar']) ? $userData['avatar'] : 'https://t4.ftcdn.net/jpg/05/49/98/39/360_F_549983970_bRCkYfk0P6PP5fKbMhZMIb07mCJ6esXL.jpg' ?>" alt="avatarUser">
                     </div>
                     <div class="media-body">
                         <span><?php echo isset($userData) && !empty($userData) ? $userData['fullname'] : 'Admin' ?></span>
@@ -41,9 +41,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="coming-soon">
+                        <a href="admin/order">
                             <i class="fas fa-archive"></i>
-                            <span>Orders</span>
+                            <span>Đơn hàng</span>
                         </a>
                     </li>
 

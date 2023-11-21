@@ -9,8 +9,6 @@ class Account extends Controller
     private $orderModel;
     private $user_id = null;
 
-
-
     public function __construct()
     {
         $this->req = new Request;
@@ -22,12 +20,86 @@ class Account extends Controller
 
     function Default()
     {
+        if (!$this->req->isPost()) {
+            $toastMessage = Session::get('toastMessage');
+            $toastType = Session::get('toastType');
+            $this->ToastSession($toastMessage, $toastType);
+        }
+
         $dataOrder = $this->orderModel->getAllOrderByUser($this->user_id);
+        $dataUserCurrent = $this->userModel->getOneUser($this->user_id);
+
+
         $this->view('layoutClient', [
             'title' => 'Quản lý tài khoản',
             'currentPath' => '',
             'pages' => 'account/myAccount',
             'dataOrder' => $dataOrder ?? [],
+            'dataUserCurrent' => $dataUserCurrent ?? [],
+        ]);
+    }
+
+
+    function orderDetail($order_id)
+    {
+        if (!$this->req->isPost()) {
+            $toastMessage = Session::get('toastMessage');
+            $toastType = Session::get('toastType');
+            $this->ToastSession($toastMessage, $toastType);
+        }
+
+        $orderIdArr = explode('-', $order_id);
+        // [0] => 10 // order_id
+        // [1] => zFicq1700390884 // order_code
+        $order_id = reset($orderIdArr);
+
+        $dataOrder = $this->orderModel->getAllOrderItemByUser($this->user_id, $order_id);
+
+        if (!empty($dataOrder)) {
+            $dataOrderNew = [];
+            foreach ($dataOrder as $item) {
+                $idVariant = $item['product_variant_id'];
+                if (!isset($dataOrderNew[$idVariant])) {
+                    $dataOrderNew[$idVariant] = [
+                        'product_variant_id' => $idVariant,
+                        'title' => $item['title'],
+                        'thumb' => $item['thumb'],
+                        'price' => $item['price'],
+                        'quantity' => $item['quantity'],
+                        'order_id' => $item['order_id'],
+                        'order_date' => $item['order_date'],
+                        'order_code' => $item['order_code'],
+                        'fullname' => $item['fullname'],
+                        'phone' => $item['phone'],
+                        'address' => $item['address'],
+                        'order_status_id' => $item['order_status_id'],
+                        'total_money' => $item['total_money'],
+                        'prod_id' => $item['prod_id'],
+                        'slug' => $item['slug'],
+                        'coupon_id' => $item['coupon_id'],
+                        'sub_total' => $item['price'] * $item['quantity'],
+                        'payment_method_name' => $item['payment_method_name'],
+                        'attribute_values' => [$item['attribute_value']],
+
+                    ];
+                } else {
+                    $dataOrderNew[$idVariant]['attribute_values'][] = $item['attribute_value'];
+                }
+            }
+
+            foreach ($dataOrderNew as &$item) {
+                $item['attribute_values'] = implode('-', $item['attribute_values']);
+            }
+
+            $dataOrderNew = array_values($dataOrderNew);
+        }
+
+
+        $this->view('layoutClient', [
+            'title' => 'Chi tiết đơn hàng',
+            'currentPath' => '',
+            'pages' => 'account/orderDetail',
+            'dataOrder' => $dataOrderNew ?? [],
         ]);
     }
 
@@ -98,7 +170,7 @@ class Account extends Controller
         }
 
         // Neu tai khoan bi khoa se hien thi loi
-        if ($isEmailExisted['isBlock'] !== 0) {
+        if ($isEmailExisted['isBlock'] != 0) {
             $this->Toast($type, 'Tài khoản của bạn đã bị khoá.');
             return $this->renderLoginPage($dataValueOld);
         }
@@ -109,6 +181,7 @@ class Account extends Controller
                 'user_id' => $isEmailExisted['id'],
                 'role_id' => $isEmailExisted['role_id'],
                 'fullname' => $isEmailExisted['fullname'],
+                'avatar' => $isEmailExisted['avatar'],
                 'isBlock' => $isEmailExisted['isBlock'],
             ];
 
@@ -131,7 +204,7 @@ class Account extends Controller
                 Session::set('userLogin', $accessToken);
                 Cookie::set('keepLogin', $refreshToken, 7 * 24 * 3600);
 
-                $redirectUrl = ($isEmailExisted['role_id'] == 1) ? 'admin' : 'home';
+                $redirectUrl = ($isEmailExisted['role_id'] == 1) ? 'admin/DashBoard' : 'home';
                 $this->Alert('Đăng nhập thành công.', 'success', $redirectUrl, 1200);
                 return $this->renderLoginPage($dataValueOld);
             } else {
@@ -436,5 +509,102 @@ class Account extends Controller
         Session::destroy();
         Cookie::unsetCookie('keepLogin');
         header('location: /WEB2041_Ecommerce/');
+    }
+
+    function updateUserCurrent()
+    {
+        $dataUserUp = $this->userModel->getOneUser($this->user_id) ?? [];
+        $type = 'error';
+        if (!$this->req->isPost()) {
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'account');
+        }
+        //Get data post
+        $dataPost = $this->req->getFields();
+
+        $avatar = $_FILES['avatar'];
+        //Set rule
+        $this->req->rules([
+            'fullname' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|phone',
+            'old_password' => 'required',
+            'new_password' => 'required|strong',
+            're_new_password' => 'match:new_password',
+        ]);
+
+        // Set message
+        $this->req->message([
+            'fullname.required' => 'Vui lòng không để trống họ tên.',
+            'email.required' => 'Vui lòng không để trống email.',
+            'email.email' => 'Vui lòng nhập đúng định dạng email.',
+            'phone.required' => 'Vui lòng không để trống số điện thoại.',
+            'phone.phone' => 'Vui lòng nhập đúng phone.',
+            'new_password.required' => 'Vui lòng không để trống mật khẩu.',
+            'new_password.strong' => 'Độ dài tối thiểu là 8 ký tự, và phải bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.',
+            're_new_password.match' => 'Mật khẩu chưa khớp.',
+        ]);
+
+        //Bat dau validate
+        $this->req->validate();
+        $dataError = $this->req->errors();
+        // Neu co loi validate se hien loi
+        if (!empty($dataError)) {
+            $this->Toast($type, reset($dataError));
+            return $this->res->setToastSession('error', reset($dataError), 'account');
+        }
+
+
+        // Neu nguoi email khac voi input nguoi dung vua nhap thi se kiem tra ton tai hay khong? neu khong thi se kh kiem tra
+
+        $checkEmail = $this->userModel->checkPhoneExisted($dataPost['email']);
+        if ($dataUserUp['email'] != $dataPost['email'] && !empty($checkEmail)) {
+            return $this->res->setToastSession('error', 'Email đẫ tồn tại', 'account');
+        }
+
+        $checkPhone = $this->userModel->checkPhoneExisted($dataPost['phone']);
+        if ($dataUserUp['phone'] != $dataPost['phone'] && !empty($checkPhone)) {
+            return $this->res->setToastSession('error', 'Số điện thoại đẫ tồn tại', 'account');
+        }
+
+
+        //Kiem tra lai mat khau
+        if (!password_verify($dataPost['old_password'], $dataUserUp['password'])) {
+            return $this->res->setToastSession('error', 'Mật khẩu không chính xác.', 'account');
+        }
+
+        $hashedPassword = password_hash($dataPost['new_password'], PASSWORD_BCRYPT);
+
+
+        // Cap nhap vao database
+        $dataUpdate =  [
+            'fullname' => $dataPost['fullname'],
+            'email' => $dataPost['email'],
+            'phone' => $dataPost['phone'],
+            'password' => $hashedPassword,
+            'update_at' => date('Y-m-d H:i:s'),
+        ];
+
+
+        if (!empty($avatar['name'])) {
+            //  validate Upload image thumb
+            if (!Format::validateUploadImage($avatar)) {
+                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'account');
+            }
+
+            //upload anh len cloud
+            $urlAvatar = Services::uploadImageToCloudinary($avatar['tmp_name']);
+            if (empty($urlAvatar)) {
+                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'account');
+            }
+
+            $dataUpdate['avatar'] = $urlAvatar;
+        }
+
+        $updateUser = $this->userModel->updateUser($this->user_id, $dataUpdate);
+        if ($updateUser) {
+            return $this->res->setToastSession('success', 'Cập nhập tài khoản thành công.', 'account');;
+        } else {
+            return $this->res->setToastSession('error', 'Cập nhập tài khoản thất bại.', 'account');;
+        }
     }
 }

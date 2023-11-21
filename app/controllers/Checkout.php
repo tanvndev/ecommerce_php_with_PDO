@@ -115,7 +115,7 @@ class Checkout extends Controller
         //Set rule
         $this->req->rules([
             'fullname' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|phone',
             'address' => 'required',
         ]);
 
@@ -123,43 +123,18 @@ class Checkout extends Controller
         $this->req->message([
             'fullname.required' => 'Vui lòng không để trống họ và tên.',
             'phone.required' => 'Vui lòng không để trống số điện thoại.',
+            'phone.phone' => 'Vui lòng nhập đúng số điện thoại.',
             'address.required' => 'Vui lòng không để trống địa chỉ.',
         ]);
 
-        // Kiem tra co ton tai address chua de them
-        if (isset($dataPost['fullname'])) {
-
-            //Bat dau validate
-            $this->req->validate();
-            $dataError = $this->req->errors();
-            // Neu co loi validate se hien loi
-            if (!empty($dataError)) {
-                return $this->res->setToastSession('error', reset($dataError), 'checkout');
-            }
 
 
-            $dataUserCurrent = $this->userModel->getOneUser($this->user_id);
-
-            //Kiem tra da co so dien thoai chua
-            $checkPhone = $this->userModel->checkPhoneExisted($dataPost['phone']);
-
-            if ($dataUserCurrent['phone'] != $dataPost['phone'] && !empty($checkPhone)) {
-                return $this->res->setToastSession('error', 'Số điện thoại đã tồn tại.', 'checkout');
-            }
-
-            //Cap nhap thong tin giao hang
-            $updateUser = $this->userModel->updateUser($this->user_id, [
-                'fullname' => $dataPost['fullname'],
-                'address' => $dataPost['address'],
-                'phone' => $dataPost['phone'],
-            ]);
-
-
-            if ($updateUser) {
-                return $this->res->setToastSession('success', 'Cập nhập thông tin thành công.', 'checkout');
-            } else {
-                return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại.', 'checkout');
-            }
+        //Bat dau kiem tra da nhap dia chi hay chua
+        $this->req->validate();
+        $dataError = $this->req->errors();
+        // Neu co loi validate se hien loi
+        if (!empty($dataError)) {
+            return $this->res->setToastSession('error', reset($dataError), 'checkout');
         }
 
         //Kiem tra da chon hinh thuc thanh toan hay chua
@@ -172,10 +147,13 @@ class Checkout extends Controller
         $dataInsertOrder = [
             'order_code' => $order_code,
             'user_id' => $this->user_id,
+            'fullname' => $dataPost['fullname'] ?? '',
+            'phone' => $dataPost['phone'] ?? '',
+            'address' => $dataPost['address'] ?? '',
             'note' => $dataPost['note'] ?? '',
             'coupon_id' => 0,
             'total_money' => $totalPrice,
-            'status' => 'Chờ lấy hàng',
+            'order_status_id' => 1,
         ];
 
         // Kiem tra co nhap ma giam gia hay khong de tinh
@@ -211,7 +189,7 @@ class Checkout extends Controller
             return $this->handlePaymentMethod($dataInsertOrder, $dataCartNew, $payment_method_id);
         }
 
-        // Thanh toan khi dung vn pay
+        // Thanh toan khi dung vnpay
         if (trim(end($paymentMethodArr)) == 'vnpay') {
 
             $dataOrderTemp = [
@@ -236,10 +214,12 @@ class Checkout extends Controller
     }
     private function handlePaymentMethod($dataInsertOrder, $dataCartNew, $payment_method_id, $dataGet = [])
     {
+
         // Them vao hoa don va hoa don chi tiet
         $createOrder = $this->orderModel->addNewOrder($dataInsertOrder);
         $cart_id = $dataCartNew[0]['cart_id'];
         $payment_transaction_id = 0;
+
 
 
         if (!$createOrder) {
@@ -258,11 +238,11 @@ class Checkout extends Controller
                 'total_money' => $orderItem['price'] * $orderItem['quantity'],
             ]);
 
+            //Them vao order item
             if (!$createOrderItem) {
                 return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'checkout');
             }
         }
-
 
 
 
@@ -307,7 +287,6 @@ class Checkout extends Controller
 
 
         // Dat hang thanh cong se xoa gio hang
-
         $deleteCartItem = $this->cartModel->deleteAllCartItem($cart_id);
 
         $deleteCart = $this->cartModel->deleteAllCart($cart_id);
@@ -316,7 +295,7 @@ class Checkout extends Controller
         Cookie::unsetCookie('dataOrderTemp');
 
         if ($deleteCart && $deleteCartItem) {
-            return $this->res->setToastSession('success', 'Bạn đã đặt hàng thành công.', 'home');
+            return $this->res->setToastSession('success', 'Bạn đã đặt hàng thành công.', 'account');
         } else {
             return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'checkout');
         }
@@ -324,7 +303,7 @@ class Checkout extends Controller
 
 
 
-
+    //Xử lý khi có thanh toán online
     function paymentFinal()
     {
         $dataOrderTemp = json_decode(Cookie::get('dataOrderTemp'), 1);
@@ -341,8 +320,35 @@ class Checkout extends Controller
 
         //Kiem tra do la hinh thuc thanh toan nao
 
+        //Thanh toan vnpay
         if (isset($dataGet['vnp_OrderInfo']) == 'vnpay_payment' && $dataGet['vnp_ResponseCode'] == '00' && $dataGet['vnp_TransactionStatus'] == '00') {
             return $this->handlePaymentMethod($dataInsertOrder, $dataCartNew, $payment_method_id, $dataGet);
+        }
+
+        // Thanh toan momo
+    }
+
+    // Xu ly trang thai don hang
+    function updateOrderStatus()
+    {
+        if (!$this->req->isPost()) {
+            return $this->res->redirect('account');
+        }
+
+        $dataPost = $this->req->getFields();
+
+        if (empty($dataPost['order_id']) || empty($dataPost['order_status_id'])) {
+            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');
+        }
+
+        $updateStatus = $this->orderModel->updateOrder($dataPost['order_id'], [
+            'order_status_id' => $dataPost['order_status_id']
+        ]);
+
+        if ($updateStatus) {
+            return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'account');
+        } else {
+            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');
         }
     }
 }

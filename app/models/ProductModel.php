@@ -25,7 +25,7 @@ class ProductModel extends BaseModel
 
     function getProdByCateNft()
     {
-        return $this->db->table($this->tableName())->select('id, title, cate_id, thumb, price')->where('cate_id', '=', 31)->limit(8)->get();
+        return $this->db->table($this->tableName())->select('id, title, cate_id, thumb, price')->where('cate_id', '=', 29)->limit(8)->get();
     }
 
     function getProdMostSold()

@@ -1,14 +1,19 @@
+<?php
+// echo '<pre>';
+// print_r($dataUserCurrent);
+// echo '</pre>';
+?>
 <section class="dashboard-account-area">
     <div class="container">
         <div class="dashboard-warp">
             <div class="dashboard-author">
                 <div class="media">
                     <div class="thumbnail">
-                        <img src="https://new.axilthemes.com/demo/template/etrade/assets/images/product/author1.png" alt="Hello Annie">
+                        <img src="<?= $dataUserCurrent['avatar'] ?>" alt="<?= $dataUserCurrent['fullname'] ?>">
                     </div>
                     <div class="media-body">
-                        <h5 class="title mb-0">Xin chào, Tân</h5>
-                        <span class="joining-date">Thành viên kể từ tháng 9 năm 2020</span>
+                        <h5 class="title mb-0">Xin chào, <?= $dataUserCurrent['fullname'] ?></h5>
+                        <span class="joining-date">Thành viên kể từ <?= date('d-m-Y', strtotime($dataUserCurrent['create_At'])) ?>.</span>
                     </div>
                 </div>
             </div>
@@ -46,7 +51,7 @@
                         <div class="tab-pane fade show active" id="nav-dashboard" role="tabpanel">
                             <div class="dashboard-overview">
 
-                                <div class="welcome-text">Xin chào, Tân (không phải <span class="fw-bold ">Annie?</span>
+                                <div class="welcome-text">Xin chào, <?= $dataUserCurrent['fullname'] ?> (không phải <span class="fw-bold "><?= $dataUserCurrent['fullname'] ?>?</span>
                                     <a href="logout">Đăng xuất</a>)
                                 </div>
                                 <p>Từ bảng điều khiển tài khoản của mình, bạn có thể xem các đơn đặt hàng gần đây, quản lý địa chỉ giao hàng và thanh toán cũng như chỉnh sửa mật khẩu và chi tiết tài khoản của mình.</p>
@@ -76,12 +81,12 @@
                                                             <?= $dataOrderItem['order_date'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $dataOrderItem['display_name'] ?>
+                                                            <?= $dataOrderItem['payment_method_name'] ?>
                                                         </td>
 
-                                                        <td class=" <?= true ? 'status-success' : 'status-danger' ?>">
+                                                        <td class=" <?= $dataOrderItem['order_status_id'] == 5 ? 'status-danger' : 'status-success' ?>">
                                                             <span class="fw-medium">
-                                                                <?= $dataOrderItem['order_status'] ?>
+                                                                <?= $dataOrderItem['order_status_name'] ?>
                                                             </span>
                                                         </td>
 
@@ -124,22 +129,21 @@
                                                         <?= $orderItemDetail['order_date'] ?>
                                                     </td>
                                                     <td>
-                                                        <?= $orderItemDetail['display_name'] ?>
+                                                        <?= $orderItemDetail['payment_method_name'] ?>
                                                     </td>
-                                                    <td class=" <?= true ? 'status-success' : 'status-danger' ?>">
+                                                    <td class=" <?= $orderItemDetail['order_status_id'] == 5 ? 'status-danger' : 'status-success' ?>">
                                                         <span class="fw-medium">
-                                                            <?= $dataOrderItem['order_status'] ?>
+                                                            <?= $orderItemDetail['order_status_name'] ?>
                                                         </span>
                                                     </td>
                                                     <td> <?= Format::formatCurrency($orderItemDetail['total_money']) ?></td>
                                                     <td>
                                                         <ul class="options">
                                                             <li class="m-0 ">
-                                                                <a onclick="updateBrand(<?php echo $brandItem['id'] ?>)" data-bs-toggle="modal" data-bs-target="#updateBrand" href="javascript:void(0)">
+                                                                <a href="orderDetail/<?= "{$orderItemDetail['order_id']}-{$orderItemDetail['order_code']}" ?>">
                                                                     <i class="view fas fa-eye"></i>
                                                                 </a>
                                                             </li>
-
                                                         </ul>
                                                     </td>
 
@@ -165,11 +169,10 @@
                                                 <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
                                             </div>
                                             <ul class="address-details">
-                                                <li>Name: Annie Mario</li>
-                                                <li>Email: annie@example.com</li>
-                                                <li>Phone: 1234 567890</li>
-                                                <li class="mt--30">7398 Smoke Ranch Road <br>
-                                                    Las Vegas, Nevada 89128</li>
+                                                <li>Họ và tên: <?= $dataUserCurrent['fullname'] ?></li>
+                                                <li>Email: <?= $dataUserCurrent['email'] ?></li>
+                                                <li>Số điện thoại: <?= $dataUserCurrent['phone'] ?></li>
+                                                <li class="mt--30"><?= $dataUserCurrent['address'] ?></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -180,11 +183,10 @@
                                                 <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
                                             </div>
                                             <ul class="address-details">
-                                                <li>Name: Annie Mario</li>
-                                                <li>Email: annie@example.com</li>
-                                                <li>Phone: 1234 567890</li>
-                                                <li class="mt--30">7398 Smoke Ranch Road <br>
-                                                    Las Vegas, Nevada 89128</li>
+                                                <li>Họ và tên: <?= $dataUserCurrent['fullname'] ?></li>
+                                                <li>Email: <?= $dataUserCurrent['email'] ?></li>
+                                                <li>Số điện thoại: <?= $dataUserCurrent['phone'] ?></li>
+                                                <li class="mt--30"><?= $dataUserCurrent['address'] ?></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -194,48 +196,49 @@
                         <div class="tab-pane fade" id="nav-account" role="tabpanel">
                             <div class="col-lg-9">
                                 <div class="dashboard-account">
-                                    <form class="account-details-form">
+                                    <form method="post" action="updateUserCurrent" enctype="multipart/form-data" class="account-details-form">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label>First Name</label>
-                                                    <input type="text" class="form-control" value="Annie">
+                                                    <label>Họ và tên</label>
+                                                    <input type="text" name="fullname" class="form-control" value="<?= $dataUserCurrent['fullname'] ?>" placeholder="Nhập họ và tên" required>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label>Last Name</label>
-                                                    <input type="text" class="form-control" value="Mario">
+                                                    <label>Email</label>
+                                                    <input type="email" name="email" class="form-control" value="<?= $dataUserCurrent['email'] ?>" placeholder="Nhập địa chỉ email" required>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label>Số điện thoại</label>
+                                                    <input type="tel" name="phone" class="form-control" value="<?= $dataUserCurrent['phone'] ?>" placeholder="Nhập số điện thoại" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label>Ảnh đại diện</label>
+                                                    <input type="file" name="avatar" class="form-control" placeholder="Nhập số điện thoại" required>
+                                                </div>
+                                            </div>
+
                                             <div class="col-12">
-                                                <div class="form-group mb--40">
-                                                    <label>Country/ Region</label>
-                                                    <select class="select2">
-                                                        <option value="1">United Kindom (UK)</option>
-                                                        <option value="1">United States (USA)</option>
-                                                        <option value="1">United Arab Emirates (UAE)</option>
-                                                        <option value="1">Australia</option>
-                                                    </select>
-                                                    <p class="b3 mt--10">This will be how your name will be displayed in the account section and in reviews</p>
-                                                </div>
-                                            </div>
-                                            <div class="col-12">
-                                                <h5 class="title">Password Change</h5>
+                                                <h5 class="title">Thay đổi mật khẩu</h5>
                                                 <div class="form-group">
-                                                    <label>Password</label>
-                                                    <input type="password" class="form-control" value="123456789101112131415">
+                                                    <label>Mật khẩu cũ</label>
+                                                    <input name="old_password" type="password" placeholder="Mật khẩu hiện tại" class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>New Password</label>
-                                                    <input type="password" class="form-control">
+                                                    <label>Mật khẩu mới</label>
+                                                    <input name="new_password" type="password" placeholder="Độ dài tối thiểu là 8 ký tự, và phải bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt." class="form-control" required>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Confirm New Password</label>
-                                                    <input type="password" class="form-control">
+                                                    <label>Xác nhận mật khẩu mới</label>
+                                                    <input name="re_new_password" type="password" placeholder="Độ dài tối thiểu là 8 ký tự, và phải bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt." class="form-control" required>
                                                 </div>
                                                 <div class="form-group mb--0">
-                                                    <input type="submit" class="btn btn-custom" value="Save Changes">
+                                                    <input type="submit" class="btn btn-custom" value="Cập nhập thông tin">
                                                 </div>
                                             </div>
                                         </div>

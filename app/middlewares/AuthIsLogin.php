@@ -1,6 +1,6 @@
 <?php
 // Check quyen nguoi dung
-class Authorization extends Middlewares
+class AuthIsLogin extends Middlewares
 {
     private $res = null;
     function __construct()
@@ -9,27 +9,29 @@ class Authorization extends Middlewares
     }
     function handle()
     {
-        $this->checkRoleAdmin();
+        $this->checkLogin();
     }
 
-    private function checkRoleAdmin()
+    private function checkLogin()
     {
+
         $accessToken = null;
         //Check accessToken
         if (!empty(Session::get('userLogin'))) {
             $accessToken = JWT::verifyJWT(Session::get('userLogin')) ?? '';
         } else {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập.', 'home');
         }
+
 
         //check accessToken con han
         if (!empty($accessToken) && isset($accessToken['error'])) {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập.', 'home');
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+        if ($dataUserCurrent['isBlock'] == 1) {
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập.', 'home');
         }
     }
 }

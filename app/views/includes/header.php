@@ -31,7 +31,7 @@ $menu = array(
     <div class="topbar">
         <div class="container d-flex justify-content-end ">
             <a href="coming-soon">Trợ giúp</a>
-            <a href="coming-soon">Tham gia với chúng tôi</a>
+            <a href="contact">Liên hệ với chúng tôi</a>
             <?php
             if (isset($userData) && !empty($userData)) {
             ?>

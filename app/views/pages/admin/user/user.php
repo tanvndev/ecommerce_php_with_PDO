@@ -41,10 +41,9 @@
                         <tr>
                             <td>
                                 <div class="table-image">
-                                    <img src="public/images/users/<?= $userItem['avatar'] ?>" class="img-fluid" alt="<?= $userItem['fullname'] . $userItem['avatar'] ?>">
+                                    <img style="width: 70px; height: 70px; object-fit: contain; border-radius: 50%;" src="<?= $userItem['avatar'] ?>" class="img-fluid" alt="<?= $userItem['fullname'] ?>">
                                 </div>
                             </td>
-
                             <td class="fw-bold "><?= $userItem['fullname'] ?></td>
                             <td><?= $userItem['phone'] ?></td>
                             <td><?= $userItem['email'] ?></td>

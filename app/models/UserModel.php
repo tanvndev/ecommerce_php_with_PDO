@@ -110,7 +110,7 @@ class UserModel extends BaseModel
     }
     function getOneUser($id)
     {
-        return $this->db->table($this->tableName())->select('id, fullname, email, password, avatar, address, phone, isBlock, role_id')->where('id', '=', $id)->getOne();
+        return $this->db->table($this->tableName())->select('id, avatar, fullname, email, password, avatar, address, phone, isBlock, create_At, role_id')->where('id', '=', $id)->getOne();
     }
     function updateUser($id, $data)
     {

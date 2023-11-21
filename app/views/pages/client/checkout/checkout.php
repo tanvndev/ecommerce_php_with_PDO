@@ -32,49 +32,42 @@
                 <div class="col-lg-6 pe-5 ">
                     <div class="checkout-billing">
                         <h4 class="title mb--30">Thanh toán</h4>
-                        <?php
-                        if (!empty($dataAddress['fullname']) && !empty($dataAddress['address']) && !empty($dataAddress['phone'])) {
-                        ?>
-                            <div class="address-default">
-                                <div class="heading-address">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span class="ms-3 ">Địa chỉ nhận hàng</span>
-                                </div>
-                                <div class="address">
-                                    <h5>
-                                        <?= $dataAddress['fullname'] . ' - ' ?>
-                                        <span><?= $dataAddress['phone'] ?></span>
-                                    </h5>
-                                    <p>
-                                        <?= $dataAddress['address'] ?>
-                                    </p>
-                                </div>
 
-                                <div class="change-address">
-                                    <span>Mặc định </span>
-                                    <a href="">Thay đổi </a>
-                                </div>
+                        <!-- <div class="address-default">
+                            <div class="heading-address">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="ms-3 ">Địa chỉ nhận hàng</span>
                             </div>
-                        <?php } else { ?>
-                            <p class="text-danger ">Vui lòng nhập đầy đủ thông tin nhận hàng.</p>
-                            <div class="form-group">
-                                <label>Họ và tên <span class="text-danger ">*</span></label>
-                                <input name="fullname" type="text" value="<?= $dataAddress['fullname'] ?? '' ?>" class="mb--15" placeholder="Họ và tên">
+                            <div class="address">
+                                <h5>
+                                    Trần Văn B - 01234584572</span>
+                                </h5>
+                                <p>
+                                Ha noi
+                                </p>
                             </div>
 
-                            <div class="form-group">
-                                <label>Số điện thoại <span class="text-danger ">*</span></label>
-                                <input name="phone" type="tel" value="<?= $dataAddress['phone'] ?? '' ?>" class="mb--15" placeholder="Số điện thoại">
+                            <div class="change-address">
+                                <span>Mặc định </span>
+                                <a href="">Thay đổi </a>
                             </div>
+                        </div> -->
 
-                            <div class="form-group">
-                                <label>Địa chỉ giao hàng<span class="text-danger ">*</span></label>
-                                <input name="address" type="text" value="<?= $dataAddress['address'] ?? '' ?>" class="mb--15" placeholder="Địa chỉ cụ thể">
-                            </div>
-                        <?php } ?>
-                        <div class="coupon-apply mb--40">
-                            <input type="text" name="coupon_code" class="mb--15" placeholder="Nhập mã giảm giá">
-                            <button type="button" class="btn">Áp dụng</button>
+                        <p class="text-danger ">Vui lòng xem kỹ thông tin nhận hàng.</p>
+                        <div class="form-group">
+                            <label>Họ và tên <span class="text-danger ">*</span></label>
+                            <input name="fullname" type="text" value="<?= $dataAddress['fullname'] ?? '' ?>" class="mb--15" placeholder="Họ và tên">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Số điện thoại <span class="text-danger ">*</span></label>
+                            <input name="phone" type="tel" value="<?= $dataAddress['phone'] ?? '' ?>" class="mb--15" placeholder="Số điện thoại">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Địa chỉ giao hàng<span class="text-danger ">*</span></label>
+
+                            <textarea name="address" rows="1 placeholder=" Ghi chú về đơn đặt hàng của bạn, ví dụ: ghi chú đặc biệt để giao hàng."><?= $dataAddress['address'] ?? '' ?></textarea>
                         </div>
 
 
@@ -82,6 +75,13 @@
                             <label>Lời nhắn cho người bán</label>
                             <textarea name="note" rows="2" placeholder="Ghi chú về đơn đặt hàng của bạn, ví dụ: ghi chú đặc biệt để giao hàng."></textarea>
                         </div>
+
+                        <!--  -->
+                        <div class="coupon-apply mb--40">
+                            <input id="coupon_code" type="text" name="coupon_code" class="mb--15" placeholder="Nhập mã giảm giá">
+                            <button onclick="updateProductCoupon(<?= $dataCart[0]['totalPrice'] ?>)" type="button" class="btn">Áp dụng</button>
+                        </div>
+
                     </div>
                 </div>
                 <div class="col-lg-6">

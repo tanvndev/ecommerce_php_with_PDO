@@ -83,7 +83,7 @@ class Format
         return isset($special_titles[$title]) ? ucfirst($special_titles[$title]) : ucfirst($title);
     }
 
-    function createSlug($string)
+    static function createSlug($string)
     {
         $string = preg_replace('/[^a-z0-9-\s]/i', '', $string);
         $string = preg_replace('/\s+/', ' ', $string);

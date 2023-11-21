@@ -1,7 +1,7 @@
 <section class="sidebar-wrapper">
     <div class="top-fixed-sidebar">
         <div class="logo-wrapper">
-            <a href="admin">
+            <a href="admin/dashboard">
                 <img class="img-fluid for-white" src="public/images/logo/logo.png" alt="logo">
             </a>
         </div>

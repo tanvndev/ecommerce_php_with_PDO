@@ -734,6 +734,7 @@
           height: 80px;
           width: 100px;
           border-radius: 5px;
+          object-fit: contain;
         }
       }
       p {
@@ -751,6 +752,23 @@
         line-height: 1.2;
         margin: 10px 0 0 0;
         font-weight: 400;
+        text-wrap: wrap;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+      }
+
+      .product_variant {
+        p {
+          margin-top: 4px;
+          font-size: 12px;
+          font-weight: 600;
+          span {
+            font-weight: normal;
+            color: var(--color-primary);
+          }
+        }
       }
     }
 
@@ -812,7 +830,31 @@
     }
     .payment-mode {
       h4 {
-        margin-bottom: 4px;
+        margin-bottom: 10px;
+      }
+      .btn-custom {
+        padding: 10px 30px;
+        display: inline-block;
+
+        &:hover::before {
+          transform: scale(1.04);
+        }
+
+        &:focus {
+          color: var(--color-white);
+        }
+      }
+
+      .btn-custom.success {
+        &::before {
+          background-color: var(--color-success);
+        }
+      }
+
+      .btn-custom.danger {
+        &::before {
+          background-color: var(--color-secondary);
+        }
       }
     }
     .delivery-sec {

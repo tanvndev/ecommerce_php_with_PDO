@@ -38,7 +38,7 @@
                                         <?php
                                         foreach ($brandData as $brandItem) {
                                             $dataOldBrand = $dataProd['brand_id'] ?? '';
-                                            $selectedBrand = $cateItem['id'] == $dataOldBrand ? 'selected' : '';
+                                            $selectedBrand = $brandItem['id'] == $dataOldBrand ? 'selected' : '';
                                         ?>
                                             <option <?= $selectedBrand  ?> value="<?= $brandItem['id'] ?>"><?= $brandItem['name'] ?></option>
                                         <?php } ?>

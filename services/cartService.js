@@ -183,7 +183,6 @@ const updateQuantityCart = async (id, action) => {
 };
 
 const deleteCart = async (id) => {
-  console.log(id);
   try {
     const response = await fetch(`cart/deleteCartApi/${id}`, {
       method: 'DELETE',
@@ -196,7 +195,7 @@ const deleteCart = async (id) => {
       }
 
       if (data.code == 400) {
-        showToast('error', data.message);
+        return showToast('error', data.message);
       }
     } else {
       console.log('Error deleting cart:', response.status);
@@ -236,5 +235,43 @@ const updateHtmlCart = (data) => {
 
     //Cart main
     $('#order-subtotal').html(formatCurrency(0));
+  }
+};
+
+const updateProductCoupon = async (totalPrice) => {
+  const couponCodeEle = $('#coupon_code');
+  const order_coupon_amount = $('.order-coupon-amount');
+  const order_total_amount = $('.order-total-amount');
+  const couponCodeVal = couponCodeEle.val();
+  if (!couponCodeVal) {
+    return showToast('error', 'Vui lòng không để trống mã giảm giá.');
+  }
+
+  try {
+    const response = await fetch(
+      `coupon/applyCouponApi/${couponCodeVal}/${totalPrice}`,
+      {
+        method: 'GET',
+      },
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.code == 200) {
+        order_coupon_amount.text(
+          '-' + formatCurrency(totalPrice - data.data.totalPrice),
+        );
+        order_total_amount.text(formatCurrency(data.data.totalPrice));
+        return showToast('success', data.message);
+      }
+
+      if (data.code == 400) {
+        return showToast('error', data.message);
+      }
+    } else {
+      console.log('Error deleting cart:', response.status);
+    }
+  } catch (error) {
+    console.error('An error occurred:', error);
   }
 };

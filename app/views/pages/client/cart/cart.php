@@ -27,13 +27,13 @@
                 </div>
 
             </div>
-            <div class="cart-discount-btn-area">
+            <!-- <div class="cart-discount-btn-area">
                 <input placeholder="Nhập mã giảm giá" type="text">
                 <div class="product-cupon-btn">
                     <button type="submit" class="cart-btn">Áp dụng</button>
                 </div>
 
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-xl-5 col-lg-7 offset-xl-7 offset-lg-5">
                     <div class="cart-order-summery mt--80">
@@ -66,6 +66,7 @@
                                         <td>State Tax</td>
                                         <td>$8.00</td>
                                     </tr> -->
+
                                     <tr class="order-total">
                                         <td>Tổng</td>
                                         <td class="order-total-amount">$125.00</td>
@@ -73,7 +74,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <a href="checkout.html" class="btn-custom">Tiến hành thanh toán</a>
+                        <a href="checkout" class="btn-custom">Tiến hành thanh toán</a>
                     </div>
                 </div>
             </div>

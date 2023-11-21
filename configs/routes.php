@@ -4,7 +4,6 @@ $routes['default_controller'] = 'home';
 // Fake url => Real url
 
 // Client
-$routes['thu-nghiem'] = 'admin/test/get_user';
 $routes['product/(.+)'] = 'product/productDetail/$1';
 $routes['product/getProductVariant/(.+)'] = 'product/getVariantProdApi/$1';
 $routes['login'] = 'account/login';
@@ -16,10 +15,17 @@ $routes['signup-comfirm/(.+)'] = 'account/finalRegisterUser/$1';
 $routes['strongPassword'] = 'account/checkStrongPasswordApi';
 $routes['isIdenti'] = 'account/checkIdentificateExistedApi';
 
-$routes['coming-soon'] = 'Other/comingSoon';
+$routes['account'] = 'account/default';
+$routes['orderDetail/(.+)'] = 'account/orderDetail/$1';
+$routes['updateUserCurrent'] = 'account/updateUserCurrent';
+
+
+$routes['checkout'] = 'checkout/default';
 $routes['checkout-final'] = 'checkout/checkoutFinal';
 $routes['payment-final'] = 'checkout/paymentFinal';
+$routes['update-order-status'] = 'checkout/updateOrderStatus';
 
+$routes['coming-soon'] = 'Other/comingSoon';
 // Server
 $routes['admin/dashBoard'] = 'admin/dashBoard/default';
 
@@ -33,7 +39,6 @@ $routes['admin/delete-product-image/(.+)/(.+)'] = 'admin/product/deleteImageProd
 
 //Product ratings
 $routes['admin/rating-product'] = 'admin/product/rating';
-$routes['admin/delete-rating-product'] = 'admin/product/deleteRating';
 
 // Product variants
 $routes['admin/product-variants/(.+)'] = 'admin/product/productVariants/$1';
@@ -63,7 +68,8 @@ $routes['admin/attribute-value/(.+)'] = 'admin/attributes/attributeValue/$1';
 
 
 //Order
-$routes['admin/order-detail'] = 'admin/order/orderDetail';
+$routes['admin/order-detail/(.+)'] = 'admin/order/orderDetail/$1';
+$routes['admin/update-order-status'] = 'admin/order/updateOrderStatus';
 
 // Custom store
 $routes['admin/store-custom'] = 'admin/dashboard/storeCustom';

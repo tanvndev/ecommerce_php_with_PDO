@@ -8,10 +8,34 @@ class User extends Controller
 
     function __construct()
     {
-        $this->userModel = $this->model('UserModel');
-        $this->req = new Request;
         $this->res = new Response;
+        $this->checkRoleAdmin();
+
+        $this->req = new Request;
+        $this->userModel = $this->model('UserModel');
     }
+
+    private function checkRoleAdmin()
+    {
+        $accessToken = null;
+        //Check accessToken
+        if (!empty(Session::get('userLogin'))) {
+            $accessToken = JWT::verifyJWT(Session::get('userLogin')) ?? '';
+        } else {
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+        }
+
+        //check accessToken con han
+        if (!empty($accessToken) && isset($accessToken['error'])) {
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+        }
+
+        $dataUserCurrent = $accessToken['payload'];
+        if ($dataUserCurrent['role_id'] != 1) {
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+        }
+    }
+
     function Default()
     {
 
@@ -184,18 +208,24 @@ class User extends Controller
             'update_at' => date('Y-m-d H:i:s'),
         ];
 
+
         if (!empty($avatar['name'])) {
-            //Get name after uploads image
-            $imageName = Format::uploadSingleImage($avatar, 'users');
-            if ($imageName['error']) {
-                $this->Toast('error', $imageName['error']);
+            //  validate Upload image thumb
+            if (!Format::validateUploadImage($avatar)) {
                 return $this->renderUpdatePage($dataUserUp);
             }
-            $dataUpdate['avatar'] = $imageName['success'];
+
+            //upload anh len cloud
+            $urlAvatar = Services::uploadImageToCloudinary($avatar['tmp_name']);
+            if (empty($urlAvatar)) {
+                return $this->renderUpdatePage($dataUserUp);
+            }
+
+            $dataUpdate['avatar'] = $urlAvatar;
         }
 
-        $success = $this->userModel->updateUser($id, $dataUpdate);
-        if ($success) {
+        $updateUser = $this->userModel->updateUser($id, $dataUpdate);
+        if ($updateUser) {
             return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/user');;
         } else {
             $this->Toast($type, 'Cập nhập thất bại vui lòng thử lại.');

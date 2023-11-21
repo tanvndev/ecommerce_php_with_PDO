@@ -5,45 +5,51 @@
 <section class="product-wrap">
     <div class="card">
         <div class="title-header">
-            <h5 class="title">Đơn hàng #1123</h5>
-
+            <h5 class="title">Đơn hàng #<?= $dataOrder[0]['order_code'] ?></h5>
         </div>
 
         <div class="order-detail">
             <div class="order-top">
                 <ul class="info">
-                    <li>October 21, 2021 at 9:08 pm</li>
-                    <li>6 items</li>
-                    <li>Total $5,882.00</li>
+                    <li><?= $dataOrder[0]['order_date'] ?></li>
+                    <li><?= count($dataOrder) ?> mặt hàng</li>
+                    <li>Tổng <?= Format::formatCurrency($dataOrder[0]['total_money']) ?></li>
                 </ul>
             </div>
             <div class="row g-4 pt-5 ">
                 <div class="col-xl-8">
                     <div class="table-details">
-                        <div class="heading">Items</div>
+                        <div class="heading">Mặt hàng</div>
                         <table class="table table-borderless">
                             <tbody>
-                                <?php for ($i = 0; $i < 4; $i++) {
+                                <?php
+                                $subtotal = 0;
+                                foreach ($dataOrder as $dataOrderItem) {
+                                    extract($dataOrderItem);
+                                    $subtotal += $sub_total;
                                 ?>
                                     <tr class="table-order">
                                         <td>
                                             <div class="image">
-                                                <img src="https://themes.pixelstrap.com/fastkart/back-end/assets/images/profile/1.jpg" class="img-fluid blur-up lazyload" alt="">
+                                                <img src="<?= $thumb ?>" class="img-fluid blur-up lazyload" alt="<?= $title ?>">
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="">
-                                                <p>Product Name</p>
-                                                <h5>Outwear &amp; Coats</h5>
+                                            <div class="product_variant">
+                                                <h5 class="mt-0">
+                                                    <?= $title ?>
+
+                                                </h5>
+                                                <p>Phân loại: <span><?= $attribute_values ?></span></p>
                                             </div>
                                         </td>
                                         <td>
-                                            <p>Quantity</p>
-                                            <h5>1</h5>
+                                            <p>Số lượng</p>
+                                            <h5><?= $quantity ?></h5>
                                         </td>
                                         <td>
-                                            <p>Price</p>
-                                            <h5>$63.54</h5>
+                                            <p>Giá</p>
+                                            <h5><?= Format::formatCurrency($price) ?></h5>
                                         </td>
                                     </tr>
 
@@ -55,29 +61,30 @@
                             <tfoot class="mt-4">
                                 <tr class="table-order-footer">
                                     <td colspan="3">
-                                        <h5>Subtotal :</h5>
+                                        <h5>Tạm tính :</h5>
                                     </td>
                                     <td>
-                                        <h4>$55.00</h4>
+                                        <h4><?= Format::formatCurrency($subtotal) ?></h4>
                                     </td>
                                 </tr>
 
                                 <tr class="table-order-footer ">
+
                                     <td colspan="3">
-                                        <h5>Shipping :</h5>
+                                        <h5>Ưu dãi :</h5>
                                     </td>
                                     <td>
-                                        <h4>$12.00</h4>
+                                        <h4><?= Format::formatCurrency($total_money - $subtotal) ?></h4>
                                     </td>
                                 </tr>
 
 
                                 <tr class="table-order-footer">
                                     <td colspan="3">
-                                        <h4 class="theme-color fw-bold">Total Price :</h4>
+                                        <h4 class="theme-color fw-bold">Thành tiền :</h4>
                                     </td>
                                     <td>
-                                        <h4 class="theme-color fw-bold">$6935.00</h4>
+                                        <h4 class="theme-color fw-bold"><?= Format::formatCurrency($total_money) ?></h4>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -92,23 +99,42 @@
                         <div class="row g-4">
                             <h4>Tóm tắt</h4>
                             <ul class="order-details">
-                                <li>Mã đơn hàng: 5563853658932</li>
-                                <li>Ngày đặt hàng: October 22, 2018</li>
-                                <li>Tổng tiền: $907.28</li>
+                                <li>Mã đơn hàng: #<?= $order_code ?></li>
+                                <li>Ngày đặt hàng: <?= date('d/m/Y', strtotime($order_date)) ?></li>
+                                <li>Tổng tiền: <?= Format::formatCurrency($total_money) ?></li>
                             </ul>
 
                             <h4>Địa chỉ giao hàng</h4>
                             <ul class="order-details">
-                                <li>Hang Trong, Hoàn Kiếm, Hanoi</li>
+                                <li><?= "$fullname - $phone - $address" ?></li>
+                            </ul>
+
+                            <h4>Phương thức thanh toán</h4>
+                            <ul class="order-details">
+                                <li><?= $payment_method_name ?></li>
                             </ul>
 
                             <div class="payment-mode">
-                                <h4>Phương thức thanh toán</h4>
-                                <p>Thanh toán khi nhận hàng</p>
+                                <h4>Cập nhập trạng thái đơn hàng</h4>
+                                <?php
+                                if ($order_status_id == 1) {
+                                ?>
+                                    <!-- 2 la trang thai huy don hang -->
+                                    <a onclick="setDataIdToInput(2)" data-bs-toggle="modal" data-bs-target="#deleteConfirm" class="btn btn-custom success">Chuẩn bị giao hàng</a>
+                                <?php } elseif ($order_status_id == 2) { ?>
+                                    <!-- 4 la trang thai da nhan duoc hang -->
+                                    <a onclick="setDataIdToInput(3)" data-bs-toggle="modal" data-bs-target="#deleteConfirm" class="btn btn-custom success">Đang giao hàng</a>
+                                <?php } elseif ($order_status_id == 3) { ?>
+                                    <p>Đơn hàng đang được vận chuyển.</p>
+                                <?php } elseif ($order_status_id == 4) { ?>
+                                    <p>Khách hàng đã nhận hàng thành công.</p>
+                                <?php } elseif ($order_status_id == 5) { ?>
+                                    <p>Đơn hàng đã huỷ.</p>
+                                <?php } ?>
                             </div>
 
                             <div class="delivery-sec">
-                                <h3>Dự kiến nhận hàng: <span>october 22, 2018</span>
+                                <h3>Dự kiến nhận hàng: <span><?= date('d/m/Y', strtotime($order_date) + 3 * 24 * 3600) ?></span>
                                 </h3>
                             </div>
                         </div>
@@ -118,3 +144,37 @@
         </div>
     </div>
 </section>
+
+<script>
+    function setDataIdToInput(id) {
+        $('#order_status_id').val(id)
+    }
+</script>
+
+<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content py-3">
+            <div class="modal-header border-0  d-block text-center">
+                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
+                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' bạn sẽ không để thực hiện lại hãy suy nghĩ thật kĩ trước khi hành động.</p>
+            </div>
+            <div class="modal-footer border-0 ">
+                <form method="POST" action="admin/update-order-status">
+                    <input type="hidden" value="<?= $order_id ?>" name="order_id">
+                    <input type="hidden" value="<?= $idData ?>" name="idData">
+                    <input type="hidden" id="order_status_id" name="order_status_id">
+                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
+                </form>
+                <div class="ms-3 ">
+                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
