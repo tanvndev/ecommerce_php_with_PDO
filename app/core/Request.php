@@ -34,9 +34,9 @@ class Request
                 foreach ($_GET as $key => $value) {
                     if (is_array($value)) {
                         // Sử dụng để lấy dữ liệu từ một nguồn nhất định và thực hiện kiểm tra và xử lý dữ liệu đó dựa trên các quy tắc kiểm tra được xác định trước các quy tắc tra GG
-                        $dataFields[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        $dataFields[$key] = filter_input(INPUT_GET, $key, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
                     } else {
-                        $dataFields[$key] = filter_input(INPUT_GET, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        $dataFields[$key] = filter_input(INPUT_GET, $key, FILTER_DEFAULT);
                     }
                 }
             }
@@ -48,9 +48,9 @@ class Request
                 foreach ($_POST as $key => $value) {
                     if (is_array($value)) {
                         // Sử dụng để lấy dữ liệu từ một nguồn nhất định và thực hiện kiểm tra và xử lý dữ liệu đó dựa trên các quy tắc kiểm tra được xác định trước các quy tắc tra GG
-                        $dataFields[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
+                        $dataFields[$key] = filter_input(INPUT_POST, $key, FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
                     } else {
-                        $dataFields[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                        $dataFields[$key] = filter_input(INPUT_POST, $key, FILTER_DEFAULT);
                     }
                 }
             }

@@ -19,17 +19,17 @@ class Authorization extends Middlewares
         if (!empty(Session::get('userLogin'))) {
             $accessToken = JWT::verifyJWT(Session::get('userLogin')) ?? '';
         } else {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'admin/dashboard');
         }
 
         //check accessToken con han
         if (!empty($accessToken) && isset($accessToken['error'])) {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'admin/dashboard');
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
+        if ($dataUserCurrent['role_id'] != 3) {
+            return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'admin/dashboard');
         }
     }
 }

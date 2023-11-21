@@ -253,8 +253,17 @@
         asNavFor: '.product-thumb-small',
       });
 
-      $('#quick-view-modal').on('shown.bs.modal', function (event) {
-        $('.slick-slider').slick('setPosition');
+      $('.header-campaign-activation').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: true,
+        dots: false,
+        autoplay: true,
+        prevArrow:
+          '<button class="slide-arrow prev-arrow"><i class="fal fa-long-arrow-left"></i></button>',
+        nextArrow:
+          '<button class="slide-arrow next-arrow"><i class="fal fa-long-arrow-right"></i></button>',
       });
 
       $('.slide-banner-thumb').slick({

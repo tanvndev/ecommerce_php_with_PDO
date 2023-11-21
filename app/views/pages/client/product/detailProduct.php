@@ -1,6 +1,6 @@
 <?php
 // echo '<pre>';
-// print_r($dataProd);
+// print_r($dataCoupon);
 // echo '</pre>';
 ?>
 
@@ -9,16 +9,16 @@
         <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-10">
                 <div class="header-campaign-activation">
-                    <div class="slick-slide">
-                        <div class="campaign-content">
-                            <p>SINH VIÊN NHẬN NGAY 10% GIẢM GIÁ: <a href="#">NHẬN GIẢM GIÁ</a></p>
+                    <?php
+                    foreach ($dataCoupon as $dataCouponItem) :
+                    ?>
+                        <div class="slick-slide">
+                            <div class="campaign-content">
+                                <p class="text-uppercase "><?= $dataCouponItem['title'] ?>: <a href="coupon">NHẬN GIẢM GIÁ</a></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="slick-slide">
-                        <div class="campaign-content">
-                            <p>SINH VIÊN NHẬN NGAY 15% GIẢM GIÁ: <a href="#">NHẬN GIẢM GIÁ</a></p>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
+
                 </div>
             </div>
         </div>
@@ -42,8 +42,8 @@
                             </div>
                         </div>
                         <div class="col-lg-10">
-                            <div class=" zoom-gallery">
-                                <div class="product-thumb-large">
+                            <div class=" zoom-gallery ">
+                                <div class="product-thumb-large ">
                                     <?php foreach ($dataImageProd as $imageItem) {
                                     ?>
                                         <div class="thumbnail">
@@ -357,9 +357,9 @@
 
                                             <li class="select-option">
                                                 <?php if ($quantity > 0) : ?>
-                                                    <button type="button" onclick="addCart(<?= $itemDataProdRecent['id'] ?>)" class="btn-action-lagre">
-                                                        Thêm vào giỏ hàng
-                                                    </button>
+                                                    <a type="button" href="<?= $productLink ?>" class="btn-action-lagre">
+                                                        Lựa chọn phân loại
+                                                    </a>
                                                 <?php else : ?>
                                                     <a class="btn-action-lagre disabled" href="#">
                                                         Sản phẩm hết hàng
@@ -368,7 +368,7 @@
                                             </li>
 
                                             <li class="wishlist">
-                                                <a class="btn-action" href="wishlist"><i class="far fa-heart"></i></a>
+                                                <button class="btn-action" type="button"><i class="far fa-heart"></i></button>
                                             </li>
                                         </ul>
                                     </div>

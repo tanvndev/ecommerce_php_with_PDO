@@ -104,12 +104,16 @@ class Cart extends Controller
             return;
         }
 
+        // lấy ra id cart
         $dataCart = $this->cartModel->getCartId($this->user_id);
         $dataProductVariant = $this->productModel->getOneProdVariant($dataPost['product_variant_id']);
 
+        //số lượng người dùng chọn
         $quantityToAdd = $dataPost['quantity'];
 
-        $dataCartItem = $this->cartModel->getOneCartItemProdVariant($dataPost['product_variant_id']);
+
+        // Loi o day phai kiem tra cart id nua 
+        $dataCartItem = $this->cartModel->getOneCartItemProdVariant($dataPost['product_variant_id'], $dataCart['id']);
 
         if (!empty($dataCartItem)) {
             // Nếu đã có sản phẩm rồi thì cộng thêm số lượng

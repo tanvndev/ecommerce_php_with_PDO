@@ -61,9 +61,9 @@ class CartModel extends BaseModel
         return $this->db->findByIdAndUpdate($this->tableName(), $id, $data);
     }
 
-    function getOneCartItemProdVariant($id)
+    function getOneCartItemProdVariant($id, $cart_id)
     {
-        $dataCartItem = $this->db->table('cart_item')->where('product_variant_id', '=', $id)->getOne();
+        $dataCartItem = $this->db->table('cart_item')->where('product_variant_id', '=', $id)->where('cart_id', '=', $cart_id)->getOne();
         if (!empty($dataCartItem)) {
             return $dataCartItem;
         }

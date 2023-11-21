@@ -6,6 +6,7 @@ class Checkout extends Controller
     private $res = null;
     private $paymentModel;
     private $userModel;
+    private $productModel;
     private $cartModel;
     private $couponModel;
     private $orderModel;
@@ -19,6 +20,7 @@ class Checkout extends Controller
         $this->cartModel = $this->model('CartModel');
         $this->couponModel = $this->model('CouponModel');
         $this->orderModel = $this->model('OrderModel');
+        $this->productModel = $this->model('ProductModel');
         $this->user_id = ViewShare::$dataShare['userData']['user_id'] ?? '';
     }
 
@@ -33,6 +35,8 @@ class Checkout extends Controller
         $dataAddress = $this->userModel->getAddress($this->user_id);
         $dataPaymentMethod = $this->paymentModel->getAllPaymentMethod();
         $dataCart = $this->cartModel->getAllCart($this->user_id);
+        $dataCoupon = $this->couponModel->getAllCoupon();
+
 
         // handle khi co datacart
         if (!empty($dataCart)) {
@@ -71,6 +75,7 @@ class Checkout extends Controller
             'dataPaymentMethod' => $dataPaymentMethod,
             'dataAddress' => $dataAddress,
             'dataCart' => $dataCartNew,
+            'dataCoupon' => $dataCoupon,
 
         ]);
     }
@@ -326,6 +331,10 @@ class Checkout extends Controller
         }
 
         // Thanh toan momo
+
+        // Neu thanh toan that bai 
+        Cookie::unsetCookie('dataOrderTemp');
+        return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'account');
     }
 
     // Xu ly trang thai don hang
@@ -345,7 +354,14 @@ class Checkout extends Controller
             'order_status_id' => $dataPost['order_status_id']
         ]);
 
+
+
         if ($updateStatus) {
+            if ($dataPost['order_id'] == 4) {
+                $dataProd = $this->productModel->getOneProd($dataPost['prod_id']);
+                $sold = $dataProd['sold'] + 1;
+                $this->productModel->updateProduct($dataPost['prod_id'], ['sold' => $sold]);
+            }
             return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'account');
         } else {
             return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');

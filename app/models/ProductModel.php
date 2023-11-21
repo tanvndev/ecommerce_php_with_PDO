@@ -23,9 +23,9 @@ class ProductModel extends BaseModel
         return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('id')->limit(12)->get();
     }
 
-    function getProdByCateNft()
+    function getProdByCate()
     {
-        return $this->db->table($this->tableName())->select('id, title, cate_id, thumb, price')->where('cate_id', '=', 29)->limit(8)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug, cate_id, thumb, price')->where('cate_id', '=', 29)->limit(8)->get();
     }
 
     function getProdMostSold()

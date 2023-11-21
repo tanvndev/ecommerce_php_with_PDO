@@ -9,6 +9,9 @@ $config['app'] = [
         'payment-final' => AuthIsLogin::class,
         'update-order-status' => AuthIsLogin::class,
         'cart' => AuthIsLogin::class,
+
+        'admin/update-user/(.+)' => Authorization::class,
+        'admin/delete-user' => Authorization::class,
     ],
     'globalMiddleware' => [
         Authentication::class

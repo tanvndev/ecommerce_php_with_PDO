@@ -9,16 +9,23 @@
         <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-10">
                 <div class="header-campaign-activation">
-                    <div class="slick-slide">
-                        <div class="campaign-content">
-                            <p>SINH VIÊN NHẬN NGAY 10% GIẢM GIÁ: <a href="#">NHẬN GIẢM GIÁ</a></p>
+                    <?php
+                    foreach ($dataCoupon as $dataCouponItem) :
+                        $couponValue = null;
+                        preg_match('/(\d+)(%)/', $dataCouponItem['value'], $couponValueArr);
+                        if (end($couponValueArr) == '%') {
+                            $couponValue = $dataCouponItem['value'];
+                        } else {
+                            $couponValue = Format::formatCurrency($dataCouponItem['value']);
+                        }
+                    ?>
+                        <div class="slick-slide">
+                            <div class="campaign-content">
+                                <p class="text-uppercase "><?= "{$dataCouponItem['title']} $couponValue" ?> : <a href="coupon">NHẬN GIẢM GIÁ</a></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="slick-slide">
-                        <div class="campaign-content">
-                            <p>SINH VIÊN NHẬN NGAY 15% GIẢM GIÁ: <a href="#">NHẬN GIẢM GIÁ</a></p>
-                        </div>
-                    </div>
+                    <?php endforeach ?>
+
                 </div>
             </div>
         </div>

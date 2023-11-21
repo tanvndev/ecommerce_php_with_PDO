@@ -47,7 +47,14 @@
                             <td class="fw-bold "><?= $userItem['fullname'] ?></td>
                             <td><?= $userItem['phone'] ?></td>
                             <td><?= $userItem['email'] ?></td>
-                            <td><?= $userItem['role_id'] == 1 ? 'ADMIN' : 'CUSTOMER' ?></td>
+                            <?php
+                            foreach ($dataRole as $dataRoleItem) {
+                                if ($dataRoleItem['id'] == $userItem['role_id']) {
+
+                            ?>
+                                    <td class="text-capitalize fw-bold "><?= $dataRoleItem['description'] ?></td>
+                            <?php }
+                            } ?>
                             <td>
                                 <div>
                                     <label class="switch">
@@ -104,7 +111,7 @@
                 <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
             </div>
             <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/user/deleteUser">
+                <form method="POST" action="admin/delete-user">
                     <input type="hidden" id="idUser" name="id">
                     <input type="hidden" id="role_id" name="role_id">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>

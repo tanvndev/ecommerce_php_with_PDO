@@ -56,6 +56,7 @@ $routes['admin/update-coupon/(.+)'] = 'admin/coupon/updateCoupon/$1';
 //User
 $routes['admin/add-user'] = 'admin/user/addUser';
 $routes['admin/update-user/(.+)'] = 'admin/user/updateUser/$1';
+$routes['admin/delete-user'] = 'admin/user/deleteUser';
 
 //News
 $routes['admin/add-news'] = 'admin/news/addNews';

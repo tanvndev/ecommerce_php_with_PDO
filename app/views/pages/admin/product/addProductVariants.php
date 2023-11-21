@@ -5,7 +5,7 @@
 ?>
 <section class="add-wrap-admin">
     <div class="container-fluid ">
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-8 m-auto ">
                     <div class="card">

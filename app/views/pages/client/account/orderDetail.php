@@ -97,9 +97,9 @@
 
                         <!--  -->
                         <?php
-                        echo '<pre>';
-                        print_r($dataOrder);
-                        echo '</pre>';
+                        // echo '<pre>';
+                        // print_r($dataOrder);
+                        // echo '</pre>';
                         ?>
 
                         <div class="col-xl-4">
@@ -175,6 +175,7 @@
             <div class="modal-footer border-0 ">
                 <form method="POST" action="update-order-status">
                     <input type="hidden" value="<?= $order_id ?>" name="order_id">
+                    <input type="hidden" value="<?= $prod_id ?>" name="order_id">
                     <input type="hidden" id="order_status_id" name="order_status_id">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>

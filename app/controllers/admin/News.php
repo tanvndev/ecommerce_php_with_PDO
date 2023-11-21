@@ -20,7 +20,6 @@ class News extends Controller
 
     private function checkRoleAdmin()
     {
-
         $accessToken = null;
         //Check accessToken
         if (!empty(Session::get('userLogin'))) {
@@ -35,10 +34,11 @@ class News extends Controller
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
+        if ($dataUserCurrent['role_id'] == 3) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
         }
     }
+
 
     function Default()
     {

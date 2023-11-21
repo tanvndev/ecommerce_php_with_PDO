@@ -230,12 +230,7 @@
 
         const newVariant = `
         <div id="form-input-item-${itemCounter}" class="form-input-item">
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Ảnh</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control input-file" name="images[]" type="file" multiple>
-                                        </div>
-                                    </div>
+                             
 
                                     <div class="mb-5 row align-items-center">
                                         <label class="form-label-title col-sm-3 mb-0">Kết hợp</label>

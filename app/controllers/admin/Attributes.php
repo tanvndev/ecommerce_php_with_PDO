@@ -30,7 +30,7 @@ class Attributes extends Controller
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
+        if ($dataUserCurrent['role_id'] == 3) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
         }
     }

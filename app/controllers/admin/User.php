@@ -31,13 +31,15 @@ class User extends Controller
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
+        if ($dataUserCurrent['role_id'] == 3) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
         }
     }
 
+
     function Default()
     {
+
 
         if (!$this->req->isPost()) {
             $toastMessage = Session::get('toastMessage');
@@ -45,12 +47,15 @@ class User extends Controller
             $this->ToastSession($toastMessage, $toastType);
         }
         $dataUserAd = $this->userModel->getAllUser() ?? [];
+        $dataRole = $this->db->table('role')->get();
+
 
         $this->view('layoutServer', [
             'title' => 'Danh sách người dùng',
             'active' => 'user',
             'pages' => 'user/user',
             'dataUserAd' => $dataUserAd,
+            'dataRole' => $dataRole,
 
         ]);
     }
@@ -136,10 +141,11 @@ class User extends Controller
 
     function updateUser($id)
     {
+        $dataRole = $this->db->table('role')->get();
         $dataUserUp = $this->userModel->getOneUser($id) ?? [];
         $type = 'error';
         if (!$this->req->isPost()) {
-            return $this->renderUpdatePage($dataUserUp);
+            return $this->renderUpdatePage($dataUserUp, $dataRole);
         }
         //Get data post
         $dataPost = $this->req->getFields();
@@ -170,7 +176,7 @@ class User extends Controller
         // Neu co loi validate se hien loi
         if (!empty($dataError)) {
             $this->Toast($type, reset($dataError));
-            return $this->renderUpdatePage($dataUserUp);
+            return $this->renderUpdatePage($dataUserUp, $dataRole);
         }
 
 
@@ -179,13 +185,13 @@ class User extends Controller
         $checkEmail = $this->userModel->checkPhoneExisted($dataPost['email']);
         if ($dataUserUp['email'] != $dataPost['email'] && !empty($checkEmail)) {
             $this->Toast($type, 'Email đã tồn tại.');
-            return $this->renderUpdatePage($dataUserUp);
+            return $this->renderUpdatePage($dataUserUp, $dataRole);
         }
 
         $checkPhone = $this->userModel->checkPhoneExisted($dataPost['phone']);
         if ($dataUserUp['phone'] != $dataPost['phone'] && !empty($checkPhone)) {
             $this->Toast($type, 'Số điện thoại đã tồn tại.');
-            return $this->renderUpdatePage($dataUserUp);
+            return $this->renderUpdatePage($dataUserUp, $dataRole);
         }
 
 
@@ -212,13 +218,13 @@ class User extends Controller
         if (!empty($avatar['name'])) {
             //  validate Upload image thumb
             if (!Format::validateUploadImage($avatar)) {
-                return $this->renderUpdatePage($dataUserUp);
+                return $this->renderUpdatePage($dataUserUp, $dataRole);
             }
 
             //upload anh len cloud
             $urlAvatar = Services::uploadImageToCloudinary($avatar['tmp_name']);
             if (empty($urlAvatar)) {
-                return $this->renderUpdatePage($dataUserUp);
+                return $this->renderUpdatePage($dataUserUp, $dataRole);
             }
 
             $dataUpdate['avatar'] = $urlAvatar;
@@ -229,16 +235,17 @@ class User extends Controller
             return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/user');;
         } else {
             $this->Toast($type, 'Cập nhập thất bại vui lòng thử lại.');
-            return $this->renderUpdatePage($dataUserUp);
+            return $this->renderUpdatePage($dataUserUp, $dataRole);
         }
     }
-    private function renderUpdatePage($dataUserUp = [])
+    private function renderUpdatePage($dataUserUp, $dataRole)
     {
         $this->view('layoutServer', [
             'title' => 'Cập nhập người dùng',
             'active' => 'user',
             'pages' => 'user/updateUser',
-            'dataUserUp' => $dataUserUp
+            'dataUserUp' => $dataUserUp,
+            'dataRole' => $dataRole,
         ]);
     }
 

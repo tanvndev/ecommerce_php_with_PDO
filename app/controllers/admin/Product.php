@@ -23,10 +23,8 @@ class Product extends Controller
         $this->brandModel = $this->model('BrandModel');
         $this->attributeModel = $this->model('AttributeModel');
     }
-
     private function checkRoleAdmin()
     {
-
         $accessToken = null;
         //Check accessToken
         if (!empty(Session::get('userLogin'))) {
@@ -41,7 +39,7 @@ class Product extends Controller
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 1) {
+        if ($dataUserCurrent['role_id'] == 3) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
         }
     }
@@ -139,15 +137,15 @@ class Product extends Controller
         //Kiem tra co gia sale hay khong
 
         if (!empty($dataPost['sale_price'])) {
-
-            // Kiem tra gia sale phai nho hon gia 
-            if ($dataPost['sale_price'] > $dataPost['price']) {
+            // Kiem tra gia sale phai nho hon gia
+            if ($dataPost['sale_price'] >= $dataPost['price']) {
                 $this->Toast('error', 'Giá sale phải nhỏ hơn giá.');
                 return $this->renderAddPage($cateData, $brandData, $attributeData, $attributeValueData, $dataValueOld);
             }
-            $discount = round(($dataPost['sale_price'] / $dataPost['price']) * 100, 0);
-            $dataInsertProd['discount'] = $discount;
-            $dataInsertProd['price'] = $dataPost['sale_price'];
+
+            $discount = round((($dataPost['price'] - $dataPost['sale_price']) / $dataPost['price']) * 100, 0);
+            $dataUpdateProd['discount'] = $discount;
+            $dataUpdateProd['price'] = $dataPost['sale_price'];
         }
 
 
@@ -202,6 +200,7 @@ class Product extends Controller
             //dataInsert of product_variants
             $dataInsertVariants = [];
 
+
             foreach ($dataPost['quantity_variant'] as $keyVariant => $quantity_variant) {
                 $dataInsertVariants[] = [
                     'prod_id' => $prod_id,
@@ -213,12 +212,12 @@ class Product extends Controller
                 // Kiem tra co gia sale hay khong
                 if (!empty($dataPost['sale_price_variant'][$keyVariant])) {
                     // Kiem tra gia sale phai nho hon gia 
-                    if ($dataPost['sale_price_variant'][$keyVariant] > $dataPost['price_variant'][$keyVariant]) {
+                    if ($dataPost['sale_price_variant'][$keyVariant] >= $dataPost['price_variant'][$keyVariant]) {
                         $this->Toast('error', 'Giá sale phải nhỏ hơn giá.');
                         return $this->renderAddPage($cateData, $brandData, $attributeData, $attributeValueData, $dataValueOld);
                     }
 
-                    $discountVariant = round(($dataPost['sale_price_variant'][$keyVariant] / $dataPost['price_variant'][$keyVariant]) * 100, 0);
+                    $discountVariant = round((($dataPost['price_variant'][$keyVariant] - $dataPost['sale_price_variant'][$keyVariant]) / $dataPost['price_variant'][$keyVariant]) * 100, 0);
 
                     $dataInsertVariants[$keyVariant]['price'] = $dataPost['sale_price_variant'][$keyVariant];
                     $dataInsertVariants[$keyVariant]['discount'] = $discountVariant;
@@ -422,17 +421,19 @@ class Product extends Controller
 
         //Kiem tra co gia sale hay khong
 
-        if (!empty($dataPost['sale_price'])) {
 
-            // Kiem tra gia sale phai nho hon gia 
-            if ($dataPost['sale_price'] > $dataPost['price']) {
+        if (!empty($dataPost['sale_price'])) {
+            // Kiem tra gia sale phai nho hon gia
+            if ($dataPost['sale_price'] >= $dataPost['price']) {
                 $this->Toast('error', 'Giá sale phải nhỏ hơn giá.');
                 return $this->renderUpdatePage($cateData, $brandData, $prodImages, $dataProd);
             }
-            $discount = round(($dataPost['sale_price'] / $dataPost['price']) * 100, 0);
+
+            $discount = round((($dataPost['price'] - $dataPost['sale_price']) / $dataPost['price']) * 100, 0);
             $dataUpdateProd['discount'] = $discount;
             $dataUpdateProd['price'] = $dataPost['sale_price'];
         }
+
 
 
         //  validate Upload image thumb
@@ -601,6 +602,7 @@ class Product extends Controller
             }
 
 
+
             foreach ($dataPost['product_variants_id'] as $keyVariantId => $product_variants_id) {
                 $dataUpdateVariants[] = [
                     'id' => $product_variants_id,
@@ -616,13 +618,17 @@ class Product extends Controller
                         return $this->res->setToastSession('error', 'Giá sale phải nhỏ hơn giá', 'admin/product-variants/' . $id);
                     }
 
-                    $discountVariant = round(($dataPost['sale_price_variant'][$keyVariantId] / $dataPost['price_variant'][$keyVariantId]) * 100, 0);
+                    $discountVariant = round((($dataPost['price_variant'][$keyVariantId] - $dataPost['sale_price_variant'][$keyVariantId]) / $dataPost['price_variant'][$keyVariantId]) * 100, 0);
+                    echo '<pre>';
+                    print_r($discountVariant);
+                    echo '</pre>';
 
                     $dataUpdateVariants[$keyVariantId]['price'] = $dataPost['sale_price_variant'][$keyVariantId];
                     $dataUpdateVariants[$keyVariantId]['discount'] = $discountVariant;
                 }
             }
         }
+
 
         foreach ($dataUpdateVariants as $value) {
             $updateProductVariant = $this->db->findByIdAndUpdate('product_variants', $value['id'], [
@@ -659,6 +665,7 @@ class Product extends Controller
                 'attributeValueData' => $attributeValueData ?? [],
             ]);
         }
+
 
         $image = $_FILES['images'];
 
@@ -708,7 +715,7 @@ class Product extends Controller
                     return $this->res->setToastSession('error', 'Giá sale phải nhỏ hơn giá.', 'admin/add-product-variants/' . $id);
                 }
 
-                $discountVariant = round(($dataPost['sale_price_variant'][$keyVariant] / $dataPost['price_variant'][$keyVariant]) * 100, 0);
+                $discountVariant = round((($dataPost['price_variant'][$keyVariant] - $dataPost['sale_price_variant'][$keyVariant]) / $dataPost['price_variant'][$keyVariant]) * 100, 0);
 
                 $dataInsertVariants[$keyVariant]['price'] = $dataPost['sale_price_variant'][$keyVariant];
                 $dataInsertVariants[$keyVariant]['discount'] = $discountVariant;

@@ -79,20 +79,21 @@
                             <!--  -->
                             <div class="mb-5 row align-items-center">
                                 <label class="form-label-title col-sm-3 mb-0">Quyền</label>
+
                                 <div class="col-sm-9">
                                     <div class="d-flex flex-wrap gap-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input" <?= $dataUserUp['role_id'] == 1 ? 'checked' : '' ?> value="1" type="radio" name="role_id" id="admin">
-                                            <label class="form-check-label" for="admin">
-                                                Người quản trị
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" <?= $dataUserUp['role_id'] == 2 ? 'checked' : '' ?> value="2" type="radio" name="role_id" id="customer">
-                                            <label class="form-check-label" for="customer">
-                                                Người dùng
-                                            </label>
-                                        </div>
+                                        <?php
+                                        foreach ($dataRole as $value) :
+                                            $checkedRole = $value['id'] == $dataUserUp['role_id'] ? 'checked' : '';
+
+                                        ?>
+                                            <div class="form-check">
+                                                <input <?= $checkedRole ?> class="form-check-input" value="<?= $value['id'] ?>" type="radio" name="role_id" id="<?= $value['name'] ?>">
+                                                <label class="form-check-label text-capitalize " for="<?= $value['name'] ?>">
+                                                    <?= $value['description'] ?>
+                                                </label>
+                                            </div>
+                                        <?php endforeach ?>
                                     </div>
 
                                 </div>

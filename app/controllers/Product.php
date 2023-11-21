@@ -4,6 +4,8 @@ class Product extends Controller
 {
     private $productModel;
     private $categoryModel;
+    private $couponModel;
+
     private $req = null;
     private $res = null;
     public function __construct()
@@ -12,6 +14,7 @@ class Product extends Controller
         $this->res = new Response;
         $this->productModel = $this->model('ProductModel');
         $this->categoryModel = $this->model('CategoryModel');
+        $this->couponModel = $this->model('CouponModel');
     }
 
 
@@ -47,6 +50,8 @@ class Product extends Controller
         $dataImageProd = $this->productModel->getImageProd($id) ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
         $dataVariant = $this->productModel->getAllProdVariants($id);
+        $dataCoupon = $this->couponModel->getAllCoupon();
+
         // update View
         $newView = $dataProd['view'] + 1;
         $this->db->findByIdAndUpdate('product', $id, ['view' => $newView]);
@@ -88,6 +93,7 @@ class Product extends Controller
             'dataImageProd' => $dataImageProd,
             'dataVariant' => $dataProdVariantsNew ?? [],
             'dataProdRecent' => $dataProdRecent,
+            'dataCoupon' => $dataCoupon,
         ]);
     }
 

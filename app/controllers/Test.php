@@ -79,3 +79,94 @@ class Test extends Controller
         ]);
     }
 }
+die();
+?>
+<!-- Product Quick View Modal Start -->
+<!-- display: block;
+padding-right: 20px; -->
+<div class="modal fade quick-view-product show" style="display: block;
+padding-right: 20px;" id="quick-view-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="far fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="single-product">
+                    <div class="row">
+                        <div class="col-lg-5 mb--40">
+                            <div class="thumb">
+                                <img src="<?= $dataProd['thumb'] ?>" alt="">
+                            </div>
+                        </div>
+                        <div class="col-lg-7 mb--40">
+                            <div class="single-product-content">
+                                <div class="inner">
+                                    <h2 class="product-title"><?= $dataProd['title'] ?></h2>
+                                    <div class="product-stock">Số lượng:
+                                        <span id="product-stock"><?= $dataProd['quantity'] ?></span>
+                                    </div>
+                                    <div id="product-price" class="price">
+                                        <span class="price-amount"><?= Format::formatCurrency($dataProd['price']) ?></span>
+
+                                        <?php if ($dataProd['discount'] != 0) : ?>
+                                            <span class="price-amount-old"><?= Format::calculateOriginalPrice($dataProd['price'], $dataProd['discount']) ?></span>
+                                            <span class="text-danger "><?= ($dataProd['discount'] . '%') ?> </span>
+                                        <?php endif ?>
+                                    </div>
+
+
+                                    <p class="description"><?= $dataProd['short_description'] ?></p>
+
+                                    <form id="formProduct" action="cart/addCartApi" method="post">
+                                        <?php if (!empty($dataVariant)) : ?>
+                                            <div class="product-variations-wrapper mt-5 ">
+
+                                                <div class="product-variation">
+                                                    <h6 class="title">Phân loại:</h6>
+                                                    <div class="color-variant-wrapper">
+                                                        <input id="product_variant_id" type="hidden" name="product_variant_id">
+                                                        <ul class="product-variant">
+                                                            <?php
+                                                            foreach ($dataVariant as $dataVariantItem) {
+                                                            ?>
+                                                                <li id="<?= $dataVariantItem['id'] ?>" onclick="getVariant(<?= $dataVariantItem['id'] ?>)"><?= $dataVariantItem['attribute_values'] ?></li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endif ?>
+
+                                        <div class="product-action-wrapper d-flex-center">
+                                            <div class="pro-quantity">
+                                                <button type="button" class="dec quantity-btn">-</button>
+                                                <input type="text" name="quantity" value="1">
+                                                <button type="button" class="inc quantity-btn">+</button>
+                                            </div>
+
+                                            <ul class="product-action d-flex-center mb-0 ">
+                                                <li class="add-to-cart">
+                                                    <?php
+                                                    $quantity = $dataProd['quantity'];
+                                                    $isProductAvailable = ($quantity != 0);
+                                                    $buttonText = $isProductAvailable ? 'Thêm vào giỏ hàng' : 'Sản phẩm tạm hết';
+                                                    $buttonClass = $isProductAvailable ? 'btn-custom btn-bg-primary' : 'btn-custom btn-bg-primary disabled';
+                                                    ?>
+
+                                                    <button onclick="addCart()" type="button" class="<?= $buttonClass; ?>"><?= $buttonText; ?></button>
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Product Quick View Modal End -->

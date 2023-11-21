@@ -23,9 +23,10 @@ class Home extends Controller
         }
 
         $dataCate = $this->categoryModel->getAllCategory() ?? [];
-        $dataBanner = $this->productModel->getProdByCateNft() ?? [];
+        $dataBanner = $this->productModel->getProdByCate() ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
         $dataProdMostSold = $this->productModel->getProdMostSold() ?? [];
+
 
         $this->view('layoutClient', [
             'title' => 'Trang chủ',
