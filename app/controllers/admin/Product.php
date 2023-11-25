@@ -89,6 +89,7 @@ class Product extends Controller
         $productVariantNew = array_values($productVariantNew);
 
 
+
         $this->view('layoutServer', [
             'active' => 'product',
             'title' => 'Danh sách sản phẩm',
@@ -653,9 +654,6 @@ class Product extends Controller
                     }
 
                     $discountVariant = round((($dataPost['price_variant'][$keyVariantId] - $dataPost['sale_price_variant'][$keyVariantId]) / $dataPost['price_variant'][$keyVariantId]) * 100, 0);
-                    echo '<pre>';
-                    print_r($discountVariant);
-                    echo '</pre>';
 
                     $dataUpdateVariants[$keyVariantId]['price'] = $dataPost['sale_price_variant'][$keyVariantId];
                     $dataUpdateVariants[$keyVariantId]['discount'] = $discountVariant;
