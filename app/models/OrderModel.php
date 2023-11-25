@@ -14,6 +14,26 @@ class OrderModel extends BaseModel
     {
         return 'id';
     }
+
+    function getAmountStatistical()
+    {
+        $sql = "SELECT
+                YEAR(order_date) AS order_year,
+                MONTH(order_date) AS order_month,
+                COUNT(*) AS total_orders,
+                SUM(total_money) AS total_amount
+            FROM
+                orders
+            WHERE
+                order_date >= DATE_SUB(NOW(), INTERVAL 12 MONTH) AND order_status_id = 4
+            GROUP BY
+                YEAR(order_date), MONTH(order_date)
+            ORDER BY
+                order_year DESC, order_month DESC";
+
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
     function getAllOrderItemByUser($user_id, $order_id)
     {
         $sql = "
@@ -58,10 +78,26 @@ class OrderModel extends BaseModel
         return $this->db->table('orders o')->select('o.id AS order_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('order_status os', 'os.id = o.order_status_id')->where('o.user_id', '=', $user_id)->get();
     }
 
+    function getOneOrder($id)
+    {
+        return $this->db->findById($this->tableName(), $this->selectField, $id);
+    }
+
 
     function getAllOrder()
     {
         return $this->db->table('orders o')->select('o.id AS order_id, o.user_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id, u.fullname')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('user u', 'o.user_id = u.id')->join('order_status os', 'os.id = o.order_status_id')->get();
+    }
+
+    function getAllOrderStatus()
+    {
+        return $this->db->table('order_status')->get();
+    }
+
+    function getOderItem($order_id)
+    {
+
+        return $this->db->table('order_item')->where('order_id', '=', $order_id)->get();
     }
 
     function addNewOrder($data)

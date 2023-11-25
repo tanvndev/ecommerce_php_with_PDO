@@ -6,7 +6,7 @@
                     <div class="contact-form">
                         <h3 class="title mb--10">Chúng tôi rất mong nhận được phản hồi từ bạn.</h3>
                         <p class="bot-title">Nếu bạn có những sản phẩm tuyệt vời mà bạn đang tạo ra hoặc muốn hợp tác với chúng tôi thì hãy liên hệ với chúng tôi.</p>
-                        <form id="contact-form" method="POST" action="mail.php" class="contact-form">
+                        <form method="POST" action="coming-soon" class="contact-form">
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -45,18 +45,17 @@
                     <div class="contact-form-about">
                         <div class="contact-location mb--40">
                             <h4 class="title mb--20">Cửa hàng của chúng tôi</h4>
-                            <span class="address mb--20">8212 E. Glen Creek Street Orchard Park, NY 14127, United States of America</span>
-                            <span class="phone">Số điện thoại: +123 456 7890</span>
-                            <span class="email">Email: Hello@etrade.com</span>
+                            <span class="address mb--20"><?= $dataStoreCustom['address'] ?></span>
+                            <span class="phone">Số điện thoại: <?= $dataStoreCustom['phone'] ?></span>
+                            <span class="email">Email: <?= $dataStoreCustom['email'] ?></span>
                         </div>
                         <div class="contact-career mb--40">
                             <h4 class="title mb--20">Nghề nghiệp</h4>
                             <p>Thay vì mua sáu thứ, hãy mua một thứ mà bạn thực sự thích.</p>
                         </div>
                         <div class="opening-hour">
-                            <h4 class="title mb--20">Giờm mở cửa</h4>
-                            <p>Thứ hai đến thứ 7: 9am - 10pm
-                                <br> Chủ nhật: 10am - 6pm
+                            <h4 class="title mb--20">Giờ mở cửa</h4>
+                            <p><?= $dataStoreCustom['open_time'] ?>
                             </p>
                         </div>
                     </div>

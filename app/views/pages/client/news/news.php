@@ -1,26 +1,32 @@
+<?php
+// echo '<pre>';
+// print_r($dataProdRecent);
+// echo '</pre>';
+?>
 <section class="news-area">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
                 <div class="row g-5">
-                    <?php for ($i = 0; $i < 8; $i++) {
+                    <?php foreach ($dataNews as $dataNewsItem) {
+                        extract($dataNewsItem);
                     ?>
                         <div class="col-md-6">
                             <div class="content-blog">
                                 <div class="inner">
                                     <div class="thumbnail">
-                                        <a href="blog-details.html">
-                                            <img src="https://new.axilthemes.com/demo/template/etrade/assets/images/blog/blog-12.png" alt="Blog Images">
+                                        <a href="news/<?= "$slug-$id" ?>">
+                                            <img src="<?= $thumb ?>" alt="<?= $title ?>">
                                         </a>
-                                        <div class="blog-category">
-                                            <a href="#">Digital Art's</a>
-                                        </div>
+                                        <!-- <div class="blog-category">
+                                            <a href="#"></a>
+                                        </div> -->
                                     </div>
                                     <div class="content">
-                                        <h5 class="title"><a href="blog-details.html">Keeping yourself safe when buying NFTs on eTrade</a></h5>
+                                        <h5 class="title"><a href="news/<?= "$slug-$id" ?>"><?= $title ?></a></h5>
 
                                         <div class="read-more-btn">
-                                            <a class="right-icon" href="blog-details.html">Read More <i class="fal fa-long-arrow-right"></i></a>
+                                            <a class="right-icon" href="news/<?= "$slug-$id" ?>">Đọc thêm <i class="fal fa-long-arrow-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -48,23 +54,23 @@
                 <aside class="news-sidebar-area">
 
                     <div class="news-single-widget">
-                        <h6 class="widget-title">Latest Posts</h6>
+                        <h6 class="widget-title">Bài viết mới nhất</h6>
 
-                        <?php for ($i = 0; $i < 4; $i++) {
+                        <?php foreach ($dataNews as $newsItem) {
                         ?>
                             <div class="content-blog-side">
                                 <div class="thumbnail">
-                                    <a href="blog-details.html">
-                                        <img src="https://new.axilthemes.com/demo/template/etrade/assets/images/blog/blog-04.png" alt="Blog Images">
+                                    <a href="news/<?= "{$newsItem['slug']}-{$newsItem['id']}" ?>">
+                                        <img src="<?= $newsItem['thumb'] ?>" alt="<?= $newsItem['title'] ?>">
                                     </a>
                                 </div>
                                 <div class="content">
-                                    <h6 class="title"><a href="blog-details.html">Dubai’s FRAME Offers its Take on the</a></h6>
+                                    <h6 class="title"><a href="news/<?= "{$newsItem['slug']}-{$newsItem['id']}" ?>"><?= $newsItem['title'] ?></a></h6>
                                     <div class="news-post-meta">
                                         <div class="post-meta-content">
                                             <ul class="post-meta-list">
-                                                <li>Mar 27, 2022</li>
-                                                <li>300k Views</li>
+                                                <li><?= date('d M, Y', strtotime($newsItem['create_at'])) ?></li>
+                                                <li><?= $newsItem['view'] ?> Lượt xem</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -75,23 +81,30 @@
 
                     </div>
                     <div class="news-single-widget mt--40">
-                        <h6 class="widget-title">Recent Viewed Products</h6>
+                        <h6 class="widget-title">Sản phẩm đã xem gần đây</h6>
                         <ul class="product_list_widget">
-                            <?php for ($i = 0; $i < 3; $i++) {
-
+                            <?php
+                            $i = 0;
+                            foreach ($dataProdRecent as $item) {
+                                if ($i == 4) {
+                                    break;
+                                }
+                                $i++;
                             ?>
                                 <li>
                                     <div class="thumbnail">
-                                        <a class="overflow-hidden " href="blog-details.html">
-                                            <img src="https://new.axilthemes.com/demo/template/etrade/assets/images/product/product-12.jpg" alt="Blog Images">
+                                        <a class="overflow-hidden " href="product/<?= "{$item['slug']}-{$item['id']}" ?>">
+                                            <img src="<?= $item['thumb'] ?>" alt="<?= $item['title'] ?>">
                                         </a>
                                     </div>
                                     <div class="content">
-                                        <h6 class="title"><a href="blog-details.html">Men's Fashion Tshirt</a></h6>
+                                        <h6 class="title"><a href="product/<?= "{$item['slug']}-{$item['id']}" ?>"><?= $item['title'] ?></a></h6>
                                         <div class="product-meta-content">
                                             <span class=" amount">
-                                                <del>$30</del>
-                                                $20
+                                                <?php if ($item['discount']) : ?>
+                                                    <del><?= Format::calculateOriginalPrice($item['price'], $item['discount']) ?></del>
+                                                <?php endif; ?>
+                                                <?= Format::formatCurrency($item['price']) ?>
                                             </span>
                                         </div>
                                     </div>
@@ -103,7 +116,7 @@
                     </div>
 
 
-                    <div class="news-single-widget mt--40">
+                    <!-- <div class="news-single-widget mt--40">
                         <h6 class="widget-title">Tags</h6>
                         <div class="tagcloud">
                             <a href="#">Design</a>
@@ -115,7 +128,7 @@
                             <a href="#">CSS</a>
                             <a href="#">JS</a>
                         </div>
-                    </div>
+                    </div> -->
 
                 </aside>
             </div>

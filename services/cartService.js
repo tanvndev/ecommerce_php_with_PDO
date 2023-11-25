@@ -19,7 +19,7 @@ const itemCartHtml = (item) => {
             </div>
             <div class="item-content">
               
-                <h3 class="item-title"><a href="product-${item.slug}-${
+                <h3 class="item-title"><a href="product/${item.slug}-${
     item.product_id
   }">${item.title}</a></h3>
 
@@ -228,6 +228,7 @@ const updateHtmlCart = (data) => {
 
     //Cart Mian
     $('#order-subtotal').html(formatCurrency(totalAmout));
+    $('#order-total-amount').html(formatCurrency(totalAmout));
   } else {
     cartList.append(notCartHtml());
     $('#subtotal-amount').html(formatCurrency(0));
@@ -235,6 +236,7 @@ const updateHtmlCart = (data) => {
 
     //Cart main
     $('#order-subtotal').html(formatCurrency(0));
+    $('#order-total-amount').html(formatCurrency(0));
   }
 };
 

@@ -59,11 +59,8 @@
 
 
     <!-- Apexchar js -->
-    <!-- <script src="public/js/vendor/apex-chart/apex-chart1.js"></script>
     <script src="public/js/vendor/apex-chart/moment.min.js"></script>
     <script src="public/js/vendor/apex-chart/apex-chart.js"></script>
-    <script src="public/js/vendor/apex-chart/stock-prices.js"></script> -->
-    <!-- <script src="public/js/vendor/apex-chart/chart-custom.js"></script> -->
 
     <!-- Main JS -->
     <script src="public/js/admin/main.js"></script>
@@ -72,6 +69,7 @@
     <script src="services/base.js"></script>
     <script src="services/userService.js"></script>
     <script src="services/productService.js"></script>
+    <script src="services/statisticalService.js"></script>
 
 </body>
 

@@ -22,9 +22,14 @@
                             <!--  -->
 
                             <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Ảnh bài viết <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
+                                <label class="form-label-title col-sm-3 mb-0">Ảnh bài viết</label>
+                                <div class="col-sm-6">
                                     <input name="thumb" class="form-control input-file" type="file">
+
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <img class="img-review" src="<?= $dataNews['thumb'] ?>" alt="<?= 'image ' . $dataNews['title'] ?>">
                                 </div>
                             </div>
                             <!--  -->

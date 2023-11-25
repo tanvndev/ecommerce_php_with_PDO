@@ -1,5 +1,7 @@
 <?php
-
+// echo '<pre>';
+// print_r($dataOrderStatus);
+// echo '</pre>';
 ?>
 
 <section class="product-wrap">
@@ -114,67 +116,80 @@
                                 <li><?= $payment_method_name ?></li>
                             </ul>
 
+
                             <div class="payment-mode">
-                                <h4>Cập nhập trạng thái đơn hàng</h4>
+                                <h4>Trạng thái đơn hàng</h4>
                                 <?php
-                                if ($order_status_id == 1) {
+                                foreach ($dataOrderStatus as $item) {
+                                    $cancer = $item['id'] == 5 ? 'inactive' : 'active';
+                                    if ($selected = $item['id'] == $order_status_id) {
                                 ?>
-                                    <!-- 2 la trang thai huy don hang -->
-                                    <a onclick="setDataIdToInput(2)" data-bs-toggle="modal" data-bs-target="#deleteConfirm" class="btn btn-custom success">Chuẩn bị giao hàng</a>
-                                <?php } elseif ($order_status_id == 2) { ?>
-                                    <!-- 4 la trang thai da nhan duoc hang -->
-                                    <a onclick="setDataIdToInput(3)" data-bs-toggle="modal" data-bs-target="#deleteConfirm" class="btn btn-custom success">Đang giao hàng</a>
-                                <?php } elseif ($order_status_id == 3) { ?>
-                                    <p>Đơn hàng đang được vận chuyển.</p>
-                                <?php } elseif ($order_status_id == 4) { ?>
-                                    <p>Khách hàng đã nhận hàng thành công.</p>
-                                <?php } elseif ($order_status_id == 5) { ?>
-                                    <p>Đơn hàng đã huỷ.</p>
-                                <?php } ?>
+                                        <p class="status <?= $cancer ?>"><?= $item['name'] ?></p>
+                                <?php }
+                                } ?>
                             </div>
 
                             <div class="delivery-sec">
-                                <h3>Dự kiến nhận hàng: <span><?= date('d/m/Y', strtotime($order_date) + 3 * 24 * 3600) ?></span>
+                                <h3>
+                                    Dự kiến nhận hàng: <span><?= date('d/m/Y', strtotime($order_date) + 3 * 24 * 3600) ?></span>
                                 </h3>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <?php if (!in_array($order_status_id, [3, 4, 5])) : ?>
+                    <div class="col-xl-4 ms-auto">
+                        <div class="update-status">
+                            <button data-bs-toggle="modal" data-bs-target="#updateModal" class="btn btn-custom">Cập nhập trạng thái đơn hàng</button>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
-    </div>
 </section>
 
-<script>
-    function setDataIdToInput(id) {
-        $('#order_status_id').val(id)
-    }
-</script>
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade theme-modal" id="updateModal" aria-hidden="true" tabindex="-1">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content py-3">
             <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
+                <h5 class="modal-title w-100 mb-5 fs-1 ">Cập nhập trạng thái đơn hàng</h5>
                 <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' bạn sẽ không để thực hiện lại hãy suy nghĩ thật kĩ trước khi hành động.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/update-order-status">
-                    <input type="hidden" value="<?= $order_id ?>" name="order_id">
-                    <input type="hidden" value="<?= $idData ?>" name="idData">
-                    <input type="hidden" id="order_status_id" name="order_status_id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
-                </div>
+            <form action="admin/update-order-status" method="POST">
+                <div class="modal-body add-wrap-admin">
+                    <div class="form-input">
+                        <input type="hidden" value="<?= $order_id ?>" name="order_id">
+                        <input type="hidden" value="<?= $idData ?>" name="idData">
+                        <div class="mb-5 row align-items-center">
+                            <label class="form-label-title col-sm-3 mb-0">Tên thương hiệu</label>
+                            <div class="col-sm-9">
+                                <select class="select-custom" name="order_status_id" id="select-custom" required>
+                                    <?php
+                                    foreach ($dataOrderStatus as $orderStatusItem) {
+                                        $selectedStatus = $orderStatusItem['id'] == $order_status_id ?? '' ? 'selected' : '';
+                                        if ($orderStatusItem['id'] != 4) {
 
-            </div>
+                                    ?>
+                                            <option <?= $selectedStatus  ?> value="<?= $orderStatusItem['id'] ?>"><?= $orderStatusItem['name'] ?></option>
+                                    <?php }
+                                    } ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 ">
+                    <div class="ms-3 ">
+                        <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ bỏ</button>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-custom btn-yes fw-bold">Cập nhập</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

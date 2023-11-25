@@ -18,19 +18,27 @@ class ProductModel extends BaseModel
         return 'id';
     }
 
+
     function getProdRecently()
     {
-        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('id')->limit(12)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('view')->limit(12)->get();
     }
 
     function getProdByCate()
     {
-        return $this->db->table($this->tableName())->select('id, title, slug, cate_id, thumb, price')->where('cate_id', '=', 29)->limit(8)->get();
+        $sql = "SELECT p.id, p.title, p.slug, p.thumb, p.price FROM banner b JOIN product p ON p.cate_id = b.cate_id WHERE p.status = 1 ORDER BY p.id DESC ";
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 
     function getProdMostSold()
     {
         return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('sold')->limit(10)->get();
+    }
+
+    function getProdNewDate()
+    {
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('create_at')->limit(20)->get();
     }
 
     function getOneProd($id)
@@ -54,8 +62,34 @@ class ProductModel extends BaseModel
             FROM product_attribute attrPro
             JOIN attribute attr ON attrPro.attribute_id = attr.id
             WHERE attrPro.prod_id = $id";
-        $stmt = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-        return $stmt;
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function getProductStock()
+    {
+        $sql = "SELECT pv.quantity, pv.price, p.id AS prod_id
+            FROM product_variants pv
+            JOIN product p ON pv.prod_id = p.id
+            ";
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function getProductPrice($id)
+    {
+        $sql = "SELECT pv.price, p.id AS prod_id
+            FROM product_variants pv
+            JOIN product p ON pv.prod_id = p.id
+            WHERE p.id = $id ";
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    function getOneProdVariantApi($variantId)
+    {
+        return $this->db->findById('product_variants', '*', $variantId);
     }
 
     function countProduct()
@@ -121,7 +155,20 @@ class ProductModel extends BaseModel
 
     function getOneProdVariant($variantId)
     {
-        return $this->db->findById('product_variants', '*', $variantId);
+
+        $sql = "SELECT pv.id AS product_variant_id, p.id AS prod_id, pv.quantity as variant_quantity, p.quantity AS product_quantity, p.sold
+        FROM product_variants pv
+        JOIN product p ON pv.prod_id = p.id
+        WHERE pv.id = $variantId
+        ";
+        $data = $this->db->query($sql)->fetch(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+
+    function updateProductVariant($id, $data)
+    {
+        return $this->db->findByIdAndUpdate('product_variants', $id, $data);
     }
 
     function deleteProduct($id)
@@ -150,84 +197,39 @@ class ProductModel extends BaseModel
 
 
 
-
-    function getAllRatingsProd()
+    function getAllRatings()
     {
-        return $this->db->table('ratings r')->select('r.id, r.star, r.comment, u.fullname, p.title ')->join('user u', 'r.user_id = u.id')->join('product p', 'r.prod_id = p.id')->get();
+        return $this->db->table('ratings r')->select('r.id, r.create_at, p.title, r.status , r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->join('product p', 'p.id = r.prod_id')->get();
+    }
+    function getAllRatingDashboard()
+    {
+        return $this->db->table('ratings r')->select('r.id, r.create_at, p.title, r.status , r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->join('product p', 'p.id = r.prod_id')->limit(4)->get();
     }
 
-    function deleteRatingsProd($id)
+    function getAllRatingsProd($prod_id)
     {
-        return $this->db->findIdAndDelete('ratings', $id);
+        return $this->db->table('ratings r')->select('r.id, r.create_at, r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->where('r.prod_id', '=', $prod_id)->where('r.status', '=', 1)->get();
     }
 
-    // function addRatingProd()
-    // {
-    //     $rs = ViewShare::$dataShare;
-    //     if (empty($rs)) {
-    //         return json_encode('Failed');
-    //     }
-
-    //     $this->idUser = $rs['dataUser']['payload']['user_id'];
-
-    //     $star = $_POST['star'] ?? '';
-    //     $prod_id = $_POST['id'] ?? null;
-    //     $comment = $_POST['comment'];
-    //     if (empty($comment)) {
-    //         $comment = 'Người dùng không để lại cảm nghĩ.';
-    //     }
-    //     $update_at = date('Y-m-d H:i:s');
-
-    //     if (empty($star)) {
-    //         return json_encode(['error' => 'Vui lòng chọn số sao.']);
-    //     }
-
-    //     try {
-    //         // check If user had ratings 
-    //         $sql = 'SELECT * FROM ratings WHERE prod_id = ? AND user_id = ?';
-    //         $stmt = $this->conn->prepare($sql);
-    //         $stmt->execute([$prod_id, $this->idUser]);
-    //         $dataRatings = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //         $dataInsertAndUpdate = [
-    //             'user_id' => $this->idUser,
-    //             'prod_id' => $prod_id,
-    //             'star' => $star,
-    //             'comment' => $comment,
-    //             'update_at' => $update_at
-    //         ];
-
-    //         // add new rating if not has or upate 
-    //         if (empty($dataRatings)) {
-    //             $this->create('ratings', $dataInsertAndUpdate);
-    //         } else {
-    //             $this->findByNameAndUpdate('ratings', $dataInsertAndUpdate, 'id = ' . $dataRatings['id']);
-    //         }
-
-    //         $dataRatingAll = $this->findByName('ratings', $prod_id, 'prod_id');
 
 
-    //         $totalRatings = 0;
-    //         foreach ($dataRatingAll as $dataRatingItem) {
-    //             $totalRatings += $dataRatingItem['star'];
-    //         }
 
+    function getOneRating($id)
+    {
+        return $this->db->findById('ratings', 'status', $id);
+    }
 
-    //         $dataUpdateProd = [
-    //             'totalUserRatings' => count($dataRatingAll),
-    //             'totalRatings' => count($dataRatingAll) > 0 ? round($totalRatings / count($dataRatingAll), 2) : $star,
-    //             'update_at' => $update_at
-    //         ];
+    function addRatingProd($data)
+    {
+        return $this->db->create('ratings', $data);
+    }
 
-    //         $this->findByNameAndUpdate('product', $dataUpdateProd, 'id = ' . $prod_id);
-
-    //         if (empty($dataRatings)) {
-    //             return json_encode(['success' => 'Thêm đánh giá thành công.']);
-    //         } else {
-    //             return json_encode(['success' => 'Cập nhật đánh giá thành công.']);
-    //         }
-    //     } catch (PDOException $e) {
-    //         return json_encode(['error' => 'Thêm đánh giá thất bại.']);
-    //     }
-    // }
+    function getOneRaingProd($prod_id, $user_id)
+    {
+        return $this->db->table('ratings')->where('prod_id', '=', $prod_id)->where('user_id', '=', $user_id)->getOne();
+    }
+    function updateRatingProd($id, $data)
+    {
+        return $this->db->findByIdAndUpdate('ratings', $id, $data);
+    }
 }

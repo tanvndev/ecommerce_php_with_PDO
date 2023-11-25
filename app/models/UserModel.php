@@ -100,7 +100,7 @@ class UserModel extends BaseModel
 
     function countUser()
     {
-        $data = $this->db->table($this->tableName())->select('COUNT(*) AS countUser')->where('role_id', '<>', 1)->getOne();
+        $data = $this->db->table($this->tableName())->select('COUNT(*) AS countUser')->where('role_id', '<>', 1)->where('role_id', '<>', 2)->getOne();
         return $data;
     }
 

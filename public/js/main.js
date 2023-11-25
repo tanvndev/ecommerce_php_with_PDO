@@ -171,10 +171,10 @@
       $('.category').slick({
         infinite: true,
         slidesToShow: 7,
-        slidesToScroll: 7,
+        slidesToScroll: 4,
         arrows: true,
         dots: false,
-        autoplay: false,
+        autoplay: true,
         speed: 1000,
         prevArrow:
           '<button class="slide-arrow prev-arrow"><i class="fal fa-long-arrow-left"></i></button>',
@@ -217,6 +217,20 @@
             },
           },
         ],
+      });
+
+      $('.new-arrivals-product').slick({
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 2,
+        arrows: true,
+        dots: false,
+        autoplay: true,
+        speed: 1000,
+        prevArrow:
+          '<button class="slide-arrow prev-arrow"><i class="fal fa-long-arrow-left"></i></button>',
+        nextArrow:
+          '<button class="slide-arrow next-arrow"><i class="fal fa-long-arrow-right"></i></button>',
       });
 
       $('.product-thumb-small').slick({

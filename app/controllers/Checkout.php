@@ -354,17 +354,30 @@ class Checkout extends Controller
             'order_status_id' => $dataPost['order_status_id']
         ]);
 
-
-
-        if ($updateStatus) {
-            if ($dataPost['order_id'] == 4) {
-                $dataProd = $this->productModel->getOneProd($dataPost['prod_id']);
-                $sold = $dataProd['sold'] + 1;
-                $this->productModel->updateProduct($dataPost['prod_id'], ['sold' => $sold]);
-            }
-            return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'account');
-        } else {
+        if (!$updateStatus) {
             return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');
         }
+
+        if ($dataPost['order_status_id'] == 4) {
+            $dataOrderItem = $this->orderModel->getOderItem($dataPost['order_id']);
+
+            foreach ($dataOrderItem as $orderItem) {
+                $product_variant_id = $orderItem['product_variant_id'];
+                $order_quantity = $orderItem['quantity'];
+
+                $dataProductVariant = $this->productModel->getOneProdVariant($product_variant_id);
+                // Update luot ban
+
+                $this->productModel->updateProduct($dataProductVariant['prod_id'], [
+                    'sold' => $dataProductVariant['sold'] + $order_quantity
+                ]);
+                // Update so luong da mua
+                $this->productModel->updateProductVariant($product_variant_id, [
+                    'quantity' => $dataProductVariant['variant_quantity'] - $order_quantity
+                ]);
+            }
+        }
+
+        return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'account');
     }
 }

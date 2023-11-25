@@ -27,4 +27,22 @@ class PaymentModel extends BaseModel
     {
         return $this->db->create('payment_transactions', $data);
     }
+
+    function getAllPaymentMethodAd()
+    {
+        return $this->db->table('payment_method')->get();
+    }
+
+    function addNewPaymentMethod($data)
+    {
+        return $this->db->create('payment_method', $data);
+    }
+    function updatePaymentMethod($id, $data)
+    {
+        return $this->db->findByIdAndUpdate('payment_method', $id, $data);
+    }
+    function getOnePaymentMethod($id)
+    {
+        return $this->db->findById('payment_method', '*', $id);
+    }
 }

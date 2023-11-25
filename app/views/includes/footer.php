@@ -58,17 +58,21 @@
                          <h5 class="widget-title">Hỗ trợ</h5>
                          <div class="logo mb--30">
                              <a href="">
-                                 <img class="light-logo" src="public/images/logo/logo.png" alt="Logo Images">
+                                 <img class="light-logo" src="<?= $dataStoreCustom['logo'] ?>" alt="Logo Images">
                              </a>
                          </div>
                          <div class="inner">
-                             <p>Tầng 1 siêu thị Winmart Nhật Tân, <br /> Ng. 689 Đ. Lạc Long Quân, Phú Thượng, Tây Hồ, Hà Nội
+                             <p><?= $dataStoreCustom['address'] ?>
                              </p>
                              <ul class="support-list-item">
-                                 <li><a href="mailto:tanvnph33606@gmail.com"><i class="fal fa-envelope-open"></i>
-                                         tanvnph33606@gmail.com</a></li>
-                                 <li><a href="tel:0332225690"><i class="fal fa-phone-alt"></i>0332225690</a></li>
-                                 <li><i class="fal fa-map-marker-alt"></i> 685 Market Street, <br> Las Vegas, LA 95820, <br> United States.</li>
+                                 <li>
+                                     <a href="mailto:<?= $dataStoreCustom['email'] ?>">
+                                         <i class="fal fa-envelope-open"></i>
+                                         <?= $dataStoreCustom['email'] ?>
+                                     </a>
+                                 </li>
+                                 <li><a href="tel:<?= $dataStoreCustom['phone'] ?>"><i class="fal fa-phone-alt"></i><?= $dataStoreCustom['phone'] ?></a></li>
+                                 <li><i class="fal fa-map-marker-alt"></i> <?= $dataStoreCustom['address'] ?></li>
                              </ul>
                          </div>
                      </div>
@@ -82,7 +86,7 @@
                                  <li><a href="account">Tài khoản của bạn</a></li>
                                  <li><a href="login">Đăng nhập / Đăng kí</a></li>
                                  <li><a href="cart">Giỏ hàng</a></li>
-                                 <li><a href="wishlist">Yêu thích</a></li>
+                                 <li><a href="coming-soon">Yêu thích</a></li>
                                  <li><a href="product">Danh mục sản phẩm</a></li>
                              </ul>
                          </div>
@@ -94,11 +98,11 @@
                          <h5 class="widget-title">Đường dẫn nhanh</h5>
                          <div class="inner">
                              <ul class="inner-ul">
-                                 <li><a href="#">Chính sách Bảo mật</a></li>
-                                 <li><a href="#">Điều khoản sử dụng</a></li>
-                                 <li><a href="#">FAQ</a></li>
-                                 <li><a href="#">Giới thiệu</a></li>
-                                 <li><a href="#">Liên hệ</a></li>
+                                 <li><a href="coming-soon">Chính sách Bảo mật</a></li>
+                                 <li><a href="coming-soon">Điều khoản sử dụng</a></li>
+                                 <li><a href="coming-soon">FAQ</a></li>
+                                 <li><a href="coming-soon">Giới thiệu</a></li>
+                                 <li><a href="contact">Liên hệ</a></li>
                              </ul>
                          </div>
                      </div>

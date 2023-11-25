@@ -31,3 +31,7 @@ dist-ssr
 
 # Composer
 /vendor/
+
+# Style.scss & Style.map.css
+*.scss
+*.css.map

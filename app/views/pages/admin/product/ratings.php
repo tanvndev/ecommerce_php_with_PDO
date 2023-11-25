@@ -19,8 +19,8 @@
                         <th>Tên khách hàng</th>
                         <th>Tên sản phẩm</th>
                         <th>Xếp hạng</th>
-                        <th>Bình luận</th>
-                        <th>Thực thi</th>
+                        <th>Đánh giá</th>
+                        <th>Ẩn</th>
                     </tr>
                 </thead>
 
@@ -40,14 +40,10 @@
                             </td>
 
                             <td>
-                                <ul class="options">
-
-                                    <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(<?= $id ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                                <label class="switch">
+                                    <input onchange="toggleStatusProdRating(<?= $id ?>)" name="status" <?= $status == 1 ? 'checked' : ''  ?> type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
                             </td>
                         </tr>
 

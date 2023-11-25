@@ -4,9 +4,11 @@ class Product extends Controller
 {
     use SweetAlert;
     private $productModel;
+    private $userModel;
     private $categoryModel;
     private $brandModel;
     private $attributeModel;
+    private $user_id = null;
     private $req = null;
     private $res = null;
 
@@ -17,8 +19,10 @@ class Product extends Controller
         $this->res = new Response;
         $this->checkRoleAdmin();
 
+        $this->user_id = ViewShare::$dataShare['userData']['user_id'] ?? '';
         $this->req = new Request;
         $this->productModel = $this->model('ProductModel');
+        $this->userModel = $this->model('UserModel');
         $this->categoryModel = $this->model('CategoryModel');
         $this->brandModel = $this->model('BrandModel');
         $this->attributeModel = $this->model('AttributeModel');
@@ -56,6 +60,34 @@ class Product extends Controller
 
         $prod = $this->productModel->getAllProduct() ?? [];
         $cateData = $this->categoryModel->getAllCategory() ?? [];
+        $brandData = $this->brandModel->getAllBrand() ?? [];
+        $productVariant = $this->productModel->getProductStock() ?? [];
+
+
+        $productVariantNew = array();
+        foreach ($productVariant as $item) {
+            $prod_id = $item['prod_id'];
+            $quantity = $item['quantity'];
+            $price = $item['price'];
+
+            if (!isset($productVariantNew[$prod_id])) {
+                $productVariantNew[$prod_id] = [
+                    'prod_id' => $prod_id,
+                    'quantity' => $quantity,
+                    'min_price' => $price,
+                    'max_price' => $price,
+                ];
+            } else {
+                // Cộng dồn số lượng
+                $productVariantNew[$prod_id]['quantity'] += $quantity;
+                // Nếu đã có giá trị, so sánh và cập nhật giá trị nhỏ nhất và lớn nhất
+                $productVariantNew[$prod_id]['min_price'] = min($productVariantNew[$prod_id]['min_price'], $price);
+                $productVariantNew[$prod_id]['max_price'] = max($productVariantNew[$prod_id]['max_price'], $price);
+            }
+        }
+
+        $productVariantNew = array_values($productVariantNew);
+
 
         $this->view('layoutServer', [
             'active' => 'product',
@@ -63,6 +95,8 @@ class Product extends Controller
             'pages' => 'product/product',
             'prodData' => $prod,
             'cateData' => $cateData,
+            'brandData' => $brandData,
+            'productVariant' => $productVariantNew,
         ]);
     }
 
@@ -889,14 +923,15 @@ class Product extends Controller
     }
 
 
-
     function rating()
     {
-
         if (!$this->req->isPost()) {
+            $toastMessage = Session::get('toastMessage');
+            $toastType = Session::get('toastType');
+            $this->ToastSession($toastMessage, $toastType);
         }
 
-        $dataRatings = $this->productModel->getAllRatingsProd() ?? [];
+        $dataRatings = $this->productModel->getAllRatings() ?? [];
 
         $this->view('layoutServer', [
             'title' => 'Danh sách đánh giá',
@@ -906,18 +941,40 @@ class Product extends Controller
         ]);
     }
 
-    function deleteRating()
+    function hideComment()
     {
         if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Xoá bình luận thất bại.', 'admin/rating-product');
+            echo $this->res->dataApi('400', 'Cập nhập thất bại.', []);
+            return;
         }
+
+        $dataUser = $this->userModel->getOneUser($this->user_id);
+        if ($dataUser['role_id'] != 1) {
+            echo $this->res->dataApi('400', 'Xin lỗi bạn không có quyền. Vui lòng liên hệ quản trị.', []);
+            return;
+        }
+
         $dataPost = $this->req->getFields();
-        $delRating = $this->productModel->deleteRatingsProd($dataPost['id']);
+        $dataUpdate = [
+            'update_at' => date('Y-m-d H:i:s'),
+        ];
 
-        if ($delRating) {
-            return $this->res->setToastSession('success', 'Xoá bình luận thành công.', 'admin/rating-product');
+        $data = $this->productModel->getOneRating($dataPost['id']);
+
+        if ($data['status'] == 1) {
+            $dataUpdate['status'] = 0;
+        } else {
+            $dataUpdate['status'] = 1;
         }
 
-        return $this->res->setToastSession('error', 'Xoá bình luận thất bại.', 'admin/rating-product');
+        $updateRating = $this->productModel->updateRatingProd($dataPost['id'], $dataUpdate);
+
+        if (!$updateRating) {
+            echo $this->res->dataApi('400', 'Cập nhập thất bại.', []);
+            return;
+        }
+
+        echo $this->res->dataApi('200', 'Cập nhập thành công.', []);
+        return;
     }
 }

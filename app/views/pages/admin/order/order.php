@@ -27,12 +27,11 @@
                         <th>Phương thức thanh toán</th>
                         <th>Thành tiền</th>
                         <th>Trạng thái</th>
-                        <th>Thực thi</th>
+                        <th>Cập nhập đơn hàng</th>
                     </tr>
                 </thead>
 
                 <tbody>
-
                     <?php foreach ($dataOrder as $dataOrderItem) {
                         extract($dataOrderItem)
                     ?>
@@ -50,18 +49,11 @@
                                 </span>
                             </td>
 
-
                             <td>
                                 <ul class="options">
                                     <li class="m-0 ">
-                                        <a href="admin/update-category/<?php echo $cateItem['id'] ?>">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li>
-
-                                    <li class="m-0 ">
                                         <a href="admin/order-detail/<?= "$order_id-$user_id-$order_code" ?>">
-                                            <i class="view fas fa-eye"></i>
+                                            <i class="edit fas fa-edit"></i>
                                         </a>
                                     </li>
                                 </ul>

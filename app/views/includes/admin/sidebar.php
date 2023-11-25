@@ -2,7 +2,7 @@
     <div class="top-fixed-sidebar">
         <div class="logo-wrapper">
             <a href="admin/dashboard">
-                <img class="img-fluid for-white" src="public/images/logo/logo.png" alt="logo">
+                <img class="img-fluid for-white" src="<?= $dataStoreCustom['logo'] ?>" alt="logo">
             </a>
         </div>
     </div>
@@ -44,6 +44,10 @@
                         <li>
                             <i class="fas fa-minus"></i>
                             <a href="admin/coupon">Mã giảm giá</a>
+                        </li>
+                        <li>
+                            <i class="fas fa-minus"></i>
+                            <a href="admin/payment-method">Hình thức thanh toán</a>
                         </li>
                     </ul>
                 </li>

@@ -1,22 +1,18 @@
 <?php
-class Test extends Controller
+class TestAll extends Controller
 {
     private $req = null;
-    function __construct()
+    private $res = null;
+    function __constringuct()
     {
         $this->req = new Request;
+        $this->res = new Response;
     }
     function Default()
     {
-        $orderData = array(
-            'order_id' => 123456,
-            'order_desc' => 'Hoá đơn mua hàng',
-            'amount' => 200000,
-            'bank_code' => 'NCB',
-        );
-        $check = Services::generateVnPayUrl($orderData);
-
-        header('location: ' . $check);
+        echo '<pre>';
+        print_r(ViewShare::$dataShare);
+        echo '</pre>';
     }
 
     function getDataGet()
@@ -25,6 +21,10 @@ class Test extends Controller
         echo '<pre>';
         print_r($dataGet);
         echo '</pre>';
+    }
+
+    function testSlug()
+    {
     }
 
     function detail($i)
@@ -54,7 +54,7 @@ class Test extends Controller
         $this->req->rules([
             'fullname' => 'required|min:5|max:30',
             'email' => 'required|email|min:6',
-            'password' => 'required|strong',
+            'password' => 'required|stringong',
             're_password' => 'match:password',
         ]);
 
@@ -68,7 +68,7 @@ class Test extends Controller
             'email.email' => 'Dung dinh dang email',
             'email.min' => 'Toi thieu 6 ky tu',
             'password.required' => 'Mat khau khong duoc de trong',
-            'password.strong' => 'Mat khau chua dung yeu cau',
+            'password.stringong' => 'Mat khau chua dung yeu cau',
             're_password.match' => 'Mat khau khong khop',
         ]);
 
@@ -79,12 +79,12 @@ class Test extends Controller
         ]);
     }
 }
-die();
+// die();
 ?>
 <!-- Product Quick View Modal Start -->
 <!-- display: block;
 padding-right: 20px; -->
-<div class="modal fade quick-view-product show" style="display: block;
+<!-- <div class="modal fade quick-view-product show" style="display: block;
 padding-right: 20px;" id="quick-view-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -168,5 +168,5 @@ padding-right: 20px;" id="quick-view-modal" tabindex="-1" aria-hidden="true">
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- Product Quick View Modal End -->

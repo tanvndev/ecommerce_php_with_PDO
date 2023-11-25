@@ -77,10 +77,10 @@
                                                 <h5>Ưu dãi :</h5>
                                             </td>
                                             <td>
+
                                                 <h4><?= Format::formatCurrency($total_money - $subtotal) ?></h4>
                                             </td>
                                         </tr>
-
 
                                         <tr class="table-order-footer">
                                             <td colspan="3">
@@ -124,6 +124,18 @@
 
                                     <div class="payment-mode">
                                         <h4>Trạng thái đơn hàng</h4>
+                                        <?php
+                                        foreach ($dataOrderStatus as $item) {
+                                            $cancer = $item['id'] == 5 ? 'inactive' : 'active';
+                                            if ($selected = $item['id'] == $order_status_id) {
+                                        ?>
+                                                <p class="status <?= $cancer ?>"><?= $item['name'] ?></p>
+                                        <?php }
+                                        } ?>
+                                    </div>
+
+                                    <div class="payment-mode">
+                                        <h4>Thao tác</h4>
                                         <?php
                                         if ($order_status_id == 1 || $order_status_id == 2) {
                                         ?>
@@ -175,7 +187,7 @@
             <div class="modal-footer border-0 ">
                 <form method="POST" action="update-order-status">
                     <input type="hidden" value="<?= $order_id ?>" name="order_id">
-                    <input type="hidden" value="<?= $prod_id ?>" name="order_id">
+                    <input type="hidden" value="<?= $prod_id ?>" name="prod_id">
                     <input type="hidden" id="order_status_id" name="order_status_id">
                     <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
                 </form>

@@ -179,8 +179,6 @@
                             </table>
                         </div>
                         <div class="order-payment-method">
-
-
                             <?php
                             foreach ($dataPaymentMethod as $paymentMethod) {
 
@@ -195,7 +193,7 @@
                                 </div>
                             <?php } ?>
                         </div>
-                        <button type="submit" class="btn btn-custom">Đặt hàng</button>
+                        <button type="submit" class="btn btn-custom">Thanh toán</button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 <?php
 // echo '<pre>';
-// print_r($dataBanner);
+// print_r($dataBannerTitle);
 // echo '</pre>';
 ?>
 
@@ -9,12 +9,12 @@
         <div class="row align-items-center">
             <div class="col-lg-6 col-xl-6 pr--80">
                 <div>
-                    <span class="title-highlighter highlighter-secondary"> <i class="fas fa-fire"></i>Thị trường NFT lớn nhất</span>
+                    <span class="title-highlighter highlighter-secondary"> <i class="fas fa-fire"></i><?= $dataBannerTitle['title'] ?></span>
 
-                    <h1 class="title">Khám phá, sưu tập và bán NFT đặc biệt</h1>
+                    <h1 class="title"><?= $dataBannerTitle['description'] ?></h1>
 
                     <div class="shop-btn">
-                        <a href="product/category/31" class="axil-btn btn-bg-white right-icon">Khám phá <i class="fal fa-long-arrow-right"></i></a>
+                        <a href="product/category/31" class="btn btn-bg-white right-icon">Khám phá <i class="fal fa-long-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -58,14 +58,14 @@
     <div class="container">
         <div class="title">
             <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Danh mục</span>
-            <h2 class="title">Tìm kiếm theo Danh mục</h2>
+            <h2 class="title">Tìm kiếm theo danh mục</h2>
         </div>
 
         <div class="category">
             <?php
             foreach ($dataCate as $cateItem) {
             ?>
-                <a class="category-item" href="product/<?= $cateItem['id'] ?>">
+                <a class="category-item" href="product-category?category=<?= $cateItem['id'] ?>">
                     <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
                         <div class="categorie-link">
                             <img class="img-fluid" src="public/images/category/<?= $cateItem['image'] ?>" alt="<?= $cateItem['name'] ?>">
@@ -90,7 +90,7 @@
                             <h2 class="title">Nâng cao Trải nghiệm Âm nhạc Của Bạn</h2>
                         </div>
 
-                        <a href="product/" class="btn-custom btn-bg-primary">Kiểm tra ngay!</a>
+                        <a href="product-category?category=4" class="btn-custom btn-bg-primary">Kiểm tra ngay!</a>
                     </div>
 
                 </div>
@@ -201,7 +201,6 @@
                     </div>
                 <?php endforeach; ?>
 
-
                 <div class="col-lg-12 text-center mt--20 mt_sm--0">
                     <a href="product/" class="btn-custom btn-bg-lighter">Xem tất cả</a>
                 </div>
@@ -212,13 +211,75 @@
     </div>
 </section>
 
+<section class="new-arrivals-product-area pb--0">
+    <div class="container">
+        <div class="title">
+            <span class="title-highlighter highlighter-secondary"> <i class="far fa-shopping-basket"></i> Tuần này</span>
+            <h2 class="title">Sản phẩm mới</h2>
+        </div>
+        <div class="new-arrivals-product">
+            <?php
+            foreach ($dataProdNewDate as $prodNewDateItem) :
+            ?>
+                <div class="product-area-two">
+                    <div class="thumbnail">
+                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
+                            <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="<?= $prodNewDateItem['thumb'] ?>" alt="<?= $prodNewDateItem['title'] ?>">
+                        </a>
+                        <?php
+                        if ($prodNewDateItem['discount'] != 0) :
+                        ?>
+                            <div class="label-block">
+                                <div class="product-badget">Giảm <?= $prodNewDateItem['discount'] ?> %</div>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                    <div class="product-content">
+                        <div class="inner">
+                            <h5 class="title">
+                                <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>"><?= $prodNewDateItem['title'] ?></a>
+                            </h5>
+                            <div class="product-price-variant">
+                                <?php
+                                if ($prodNewDateItem['discount'] != 0) :
+                                ?>
+                                    <span class="price old-price"><?= Format::calculateOriginalPrice($prodNewDateItem['price'], $prodNewDateItem['discount']) ?></span>
+                                <?php endif ?>
+                                <span class="price current-price"><?= Format::formatCurrency($prodNewDateItem['price']) ?></span>
+                            </div>
+                            <div class="product-hover-action">
+                                <ul class="cart-action">
+                                    <li class="quickview">
+                                        <a class="btn-action" href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                    </li>
+                                    <li class="select-option">
+                                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">Lựa chọn phân loại
+                                        </a>
+                                    </li>
+                                    <li class="wishlist">
+                                        <button class="btn-action"><i class="far fa-heart"></i>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <?php endforeach ?>
+        </div>
+    </div>
+</section>
+
 
 <section class="most-sold-product">
     <div class="container">
         <div class="most-sold-product-wrap">
             <div class="section-title-wrapper text-center ">
                 <span class="title-highlighter highlighter-primary"><i class="fas fa-star"></i> Bán chạy nhất</span>
-                <h2 class="title">Sản phẩm Bán chạy nhất trong Cửa hàng</h2>
+                <h2 class="title">Sản phẩm bán chạy trong cửa hàng</h2>
             </div>
 
             <div class="content">
@@ -280,3 +341,114 @@
         </div>
     </div>
 </section>
+
+
+<!-- Start Why Choose Area  -->
+<section class="why-choose-area pb--50 ">
+    <div class="container">
+        <div class="section-title-wrapper text-center ">
+            <span class="title-highlighter justify-content-center  highlighter-secondary"><i class="fal fa-thumbs-up"></i>Tại sao chọn chúng tôi</span>
+            <h2 class="title">Tại sao bạn chọn chúng tôi</h2>
+        </div>
+        <div class="row row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 row--20">
+            <div class="col">
+                <div class="service-box">
+                    <div class="icon">
+                        <img src="public/images/icons/service6.png" alt="Service">
+                    </div>
+                    <h6 class="title">Giao hàng nhanh tróng &amp; an toàn</h6>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box">
+                    <div class="icon">
+                        <img src="public/images/icons/service7.png" alt="Service">
+                    </div>
+                    <h6 class="title">Đảm bảo 100% về sản phẩm</h6>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box">
+                    <div class="icon">
+                        <img src="public/images/icons/service8.png" alt="Service">
+                    </div>
+                    <h6 class="title">Hàng ngàn mã ưu đãi hập dẫn</h6>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box">
+                    <div class="icon">
+                        <img src="public/images/icons/service9.png" alt="Service">
+                    </div>
+                    <h6 class="title">Chính sách hoàn trả 24 giờ</h6>
+                </div>
+            </div>
+            <div class="col">
+                <div class="service-box">
+                    <div class="icon">
+                        <img src="public/images/icons/service10.png" alt="Service">
+                    </div>
+                    <h6 class="title">Chất lượng chuyên nghiệp</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Why Choose Area  -->
+
+
+<!-- Start Product Poster Area  -->
+<section class="poster-home">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mb--30">
+                <div class="single-poster">
+                    <a href="product-category?category=4">
+                        <img src="public/images/others/poster-01.png" alt="eTrade promotion poster">
+                        <div class="poster-content">
+                            <div class="inner">
+                                <h3 class="title">Âm thanh
+                                    <br>phong phú.
+                                </h3>
+                                <span class="sub-title">Bộ sưu tập <i class="fal fa-long-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 mb--30">
+                <div class="single-poster">
+                    <a href="product-category?category=9">
+                        <img src="public/images/others/poster-02.png" alt="eTrade promotion poster">
+                        <div class="poster-content content-left">
+                            <div class="inner">
+                                <span class="sub-title  ">Ưu đãi 50% vào mùa đông</span>
+                                <h3 class="title mt-2 ">Nhận kính <br> VR</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Product Poster Area  -->
+
+<!-- Start Newsletter Area  -->
+<!-- <div class="newsletter-area pt--0">
+    <div class="container">
+        <div class="etrade-newsletter-wrapper bg_image bg_image--5">
+            <div class="newsletter-content">
+                <span class="title-highlighter highlighter-primary2"><i class="fas fa-envelope-open"></i>Newsletter</span>
+                <h2 class="title mb--40 mb_sm--30">Get weekly update</h2>
+                <div class="input-group newsletter-form">
+                    <div class="position-relative newsletter-inner mb--15">
+                        <input placeholder="example@gmail.com" type="text">
+                    </div>
+                    <button type="submit" class="btn mb--15">Subscribe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- End Newsletter Area  -->

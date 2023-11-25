@@ -1,26 +1,106 @@
 try {
-  fetch('admin/getProdForCateChart')
+  fetch('admin/statistical/amountStatistical')
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      createChartAmount(data);
+      if (data.code == 200) {
+        // console.log(data);
+        createChartAmount(data.data);
+        createChartOrderTotal();
+      }
     });
 } catch (error) {
   console.log(error);
 }
 
+let dataAmount = [];
+let dataTotalOrder = [];
 function createChartAmount(dataQW) {
-  const data = [];
+  console.log(dataQW);
+  const data = [
+    {
+      order_month: 1,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 2,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 3,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 4,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 5,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 6,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 7,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 8,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 9,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 10,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 11,
+      total_orders: 0,
+      total_amount: 0,
+    },
+    {
+      order_month: 12,
+      total_orders: 0,
+      total_amount: 0,
+    },
+  ];
+  data.forEach((item, index) => {
+    const matchingItem = dataQW.find(
+      (qwItem) => qwItem.order_month === item.order_month,
+    );
 
-  dataQW.forEach((element) => {
-    data.push(element);
+    if (matchingItem) {
+      // Update the values in the data array
+      data[index].total_amount = +matchingItem.total_amount;
+      data[index].total_orders = +matchingItem.total_orders;
+    }
   });
+  data.map((item) => {
+    dataAmount.push(item.total_amount);
+    dataTotalOrder.push(item.total_orders);
+  });
+
   let options = {
     series: [
       {
-        name: 'series1',
-        data: [60, 70, 54, 51, 42, 109, 100],
+        name: 'Doanh thu',
+        data: dataAmount,
       },
     ],
     chart: {
@@ -32,7 +112,7 @@ function createChartAmount(dataQW) {
         left: 0,
         blur: 3,
         color: '#720f1e',
-        opacity: 0.15,
+        opacity: 0.01,
       },
       toolbar: {
         show: true,
@@ -131,7 +211,7 @@ function createChartAmount(dataQW) {
     yaxis: {
       labels: {
         formatter: function (value) {
-          return value + 'đ';
+          return formatCurrency(value);
         },
       },
       crosshairs: {
@@ -149,18 +229,18 @@ function createChartAmount(dataQW) {
     },
     xaxis: {
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'April',
-        'May',
-        'June',
-        'July',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
+        'Tháng 1',
+        'Tháng 2',
+        'Tháng 3',
+        'Tháng 4',
+        'Tháng 5',
+        'Tháng 6',
+        'Tháng 7',
+        'Tháng 8',
+        'Tháng 9',
+        'Tháng 10',
+        'Tháng 11',
+        'Tháng 12',
       ],
       range: undefined,
       axisBorder: {
@@ -180,134 +260,141 @@ function createChartAmount(dataQW) {
     chart.render();
   }
 }
-// var options = {
-//   series: [
-//     {
-//       // name: "High - 2013",
-//       data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35],
-//     },
 
-//     {
-//       // name: "Low - 2013",
-//       data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47],
-//     },
-//   ],
+function createChartOrderTotal() {
+  let options = {
+    series: [
+      {
+        name: 'Lượt bán',
+        data: dataTotalOrder,
+      },
+    ],
 
-//   chart: {
-//     height: 320,
-//     toolbar: {
-//       show: true,
-//     },
-//     zoom: {
-//       enabled: true,
-//     },
-//   },
+    chart: {
+      height: 320,
+      toolbar: {
+        show: true,
+      },
+      zoom: {
+        enabled: true,
+      },
+    },
 
-//   legend: {
-//     show: false,
-//   },
+    legend: {
+      show: false,
+    },
 
-//   colors: ['#0da487', '#2483e2'],
+    colors: ['#0da487', '#2483e2'],
 
-//   markers: {
-//     size: 1,
-//   },
+    markers: {
+      size: 1,
+    },
 
-//   // grid: {
-//   //   show: false,
-//   //   xaxis: {
-//   //     lines: {
-//   //       show: false,
-//   //     },
-//   //   },
-//   // },
+    // grid: {
+    //   show: false,
+    //   xaxis: {
+    //     lines: {
+    //       show: false,
+    //     },
+    //   },
+    // },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return parseInt(value);
+        },
+      },
+    },
 
-//   xaxis: {
-//     categories: [
-//       'Jan',
-//       'Feb',
-//       'Mar',
-//       'April',
-//       'May',
-//       'June',
-//       'July',
-//       'Aug',
-//       'Sep',
-//       'Oct',
-//       'Nov',
-//       'Dec',
-//     ],
-//     labels: {
-//       show: false,
-//     },
-//   },
+    xaxis: {
+      categories: [
+        'T1',
+        'T2',
+        'T3',
+        'T4',
+        'T5',
+        'T6',
+        'T7',
+        'T8',
+        'T9',
+        'T10',
+        'T11',
+        'T12',
+      ],
+      labels: {
+        show: true,
+      },
+    },
 
-//   responsive: [
-//     {
-//       breakpoint: 1400,
-//       options: {
-//         chart: {
-//           height: 300,
-//         },
-//       },
-//     },
+    responsive: [
+      {
+        breakpoint: 1400,
+        options: {
+          chart: {
+            height: 300,
+          },
+        },
+      },
 
-//     {
-//       breakpoint: 992,
-//       options: {
-//         chart: {
-//           height: 210,
-//           width: '100%',
-//           offsetX: 0,
-//         },
-//       },
-//     },
+      {
+        breakpoint: 992,
+        options: {
+          chart: {
+            height: 210,
+            width: '100%',
+            offsetX: 0,
+          },
+        },
+      },
 
-//     {
-//       breakpoint: 578,
-//       options: {
-//         chart: {
-//           height: 200,
-//           width: '105%',
-//           offsetX: -20,
-//           offsetY: 10,
-//         },
-//       },
-//     },
+      {
+        breakpoint: 578,
+        options: {
+          chart: {
+            height: 200,
+            width: '105%',
+            offsetX: -20,
+            offsetY: 10,
+          },
+        },
+      },
 
-//     {
-//       breakpoint: 430,
-//       options: {
-//         chart: {
-//           width: '108%',
-//         },
-//       },
-//     },
+      {
+        breakpoint: 430,
+        options: {
+          chart: {
+            width: '108%',
+          },
+        },
+      },
 
-//     {
-//       breakpoint: 330,
-//       options: {
-//         chart: {
-//           width: '112%',
-//         },
-//       },
-//     },
-//   ],
-// };
-// const earningChart = document.querySelector('#earning-chart');
-// if (earningChart) {
-//   var chart2 = new ApexCharts(earningChart, options);
-//   chart2.render();
-// }
+      {
+        breakpoint: 330,
+        options: {
+          chart: {
+            width: '112%',
+          },
+        },
+      },
+    ],
+  };
+  const earningChart = document.querySelector('#earning-chart');
+  if (earningChart) {
+    var chart2 = new ApexCharts(earningChart, options);
+    chart2.render();
+  }
+}
 
 //api
 try {
-  fetch('admin/getProdForCateChart')
+  fetch('admin/statistical/getProdForCateChart')
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      createChartProductCate(data);
+      if (data.code == 200) {
+        createChartProductCate(data.data);
+      }
     });
 } catch (error) {
   console.log(error);
@@ -317,7 +404,7 @@ function createChartProductCate(data) {
   const series = [];
   const labels = [];
   data.map((dataProdCate) => {
-    labels.push(dataProdCate.category_name);
+    labels.push(dataProdCate.name);
     series.push(dataProdCate.product_count);
   });
 
@@ -326,7 +413,7 @@ function createChartProductCate(data) {
     labels,
     chart: {
       width: '100%',
-      height: 350,
+      height: 325,
       type: 'donut',
     },
 
@@ -349,12 +436,12 @@ function createChartProductCate(data) {
     plotOptions: {
       pie: {
         startAngle: -90,
-        endAngle: 270,
+        endAngle: 320,
       },
     },
 
     dataLabels: {
-      enabled: false,
+      enabled: true,
     },
 
     responsive: [
@@ -362,11 +449,11 @@ function createChartProductCate(data) {
         breakpoint: 1835,
         options: {
           chart: {
-            height: 245,
+            height: 320,
           },
 
           legend: {
-            position: 'bottom',
+            position: 'right',
 
             itemMargin: {
               horizontal: 5,

@@ -1,6 +1,6 @@
 <section class="add-wrap-admin">
     <div class="container-fluid ">
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-sm-8 m-auto ">
                     <div class="card">
@@ -21,7 +21,6 @@
                                 <label class="form-label-title col-sm-3 mb-0">Ảnh danh mục</label>
                                 <div class="col-sm-6">
                                     <input name="image" class="form-control input-file" type="file">
-
                                 </div>
 
                                 <div class="col-sm-3">

@@ -6,6 +6,7 @@ class Order extends Controller
     private $req = null;
     private $res = null;
     private $orderModel;
+    private $paymentModel;
     function __construct()
     {
         $this->res = new Response;
@@ -13,6 +14,7 @@ class Order extends Controller
 
         $this->req = new Request;
         $this->orderModel = $this->model('OrderModel');
+        $this->paymentModel = $this->model('PaymentModel');
     }
 
     private function checkRoleAdmin()
@@ -76,6 +78,7 @@ class Order extends Controller
         // $order_code = end($idDataArr);
 
         $dataOrder = $this->orderModel->getAllOrderItemByUser($user_id, $order_id);
+        $dataOrderStatus = $this->orderModel->getAllOrderStatus();
 
         if (!empty($dataOrder)) {
             $dataOrderNew = [];
@@ -115,12 +118,12 @@ class Order extends Controller
         }
 
 
-
         $this->view('layoutServer', [
             'active' => 'order',
             'title' => 'Chi tiết đơn hàng',
             'pages' => 'order/orderDetail',
             'dataOrder' => $dataOrderNew,
+            'dataOrderStatus' => $dataOrderStatus,
             'idData' => $idData,
         ]);
     }
@@ -133,8 +136,14 @@ class Order extends Controller
         }
 
         $dataPost = $this->req->getFields();
+
         if (empty($dataPost['order_id']) || empty($dataPost['order_status_id']) || empty($dataPost['idData'])) {
             return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại.', 'admin/order');
+        }
+
+        $dataOrder = $this->orderModel->getOneOrder($dataPost['order_id']);
+        if ($dataOrder['order_status_id'] >= $dataPost['order_status_id']) {
+            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'admin/order-detail/' . $dataPost['idData']);
         }
 
         $updateStatus = $this->orderModel->updateOrder($dataPost['order_id'], [
@@ -146,5 +155,150 @@ class Order extends Controller
         } else {
             return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'admin/order-detail/' . $dataPost['idData']);
         }
+    }
+
+    function paymentMethod()
+    {
+        $dataPaymentMethod = $this->paymentModel->getAllPaymentMethodAd();
+
+        if (!$this->req->isPost()) {
+            $toastMessage = Session::get('toastMessage');
+            $toastType = Session::get('toastType');
+            $this->ToastSession($toastMessage, $toastType);
+        }
+
+        $this->view('layoutServer', [
+            'active' => 'product',
+            'title' => 'Danh sách hình thức thanh toán',
+            'pages' => 'order/paymentMethod',
+            'dataPaymentMethod' => $dataPaymentMethod ?? [],
+        ]);
+    }
+
+    function addPaymentMethod()
+    {
+        $dataValueOld = [];
+        if (!$this->req->isPost()) {
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+        //Get data post
+        $dataPost = $this->req->getFields();
+        $dataValueOld = $dataPost;
+
+        //Get image
+        $thumb = $_FILES['thumb'] ?? '';
+
+        //Validate
+        if (empty($thumb['name'])) {
+            $this->Toast('error', 'Vui lòng không để trống.');
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+
+        if (empty($dataPost['name']) || empty($dataPost['display_name']) || empty($dataPost['description'])) {
+            $this->Toast('error', 'Vui lòng không để trống.');
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+
+        $dataInsert = [
+            'name' => $dataPost['name'],
+            'display_name' => $dataPost['display_name'],
+            'description' => $dataPost['description'],
+        ];
+
+        //  validate Upload image thumb
+        if (!Format::validateUploadImage($thumb)) {
+            $this->Toast('error', 'Kiểm tra lại file ảnh.');
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+
+        //upload anh len cloud
+        $urlThumb = Services::uploadImageToCloudinary($thumb['tmp_name']);
+        if (empty($urlThumb)) {
+            $this->Toast('error', 'Tải ảnh thất bại.');
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+
+        $dataInsert['thumb'] = $urlThumb;
+
+        $createPaymentMethod = $this->paymentModel->addNewPaymentMethod($dataInsert);
+
+        if ($createPaymentMethod) {
+            return $this->res->setToastSession('success', 'Thêm mới thành công.', 'admin/payment-method');;
+        } else {
+            $this->Toast('error', 'Thêm thất bại vui lòng thử lại.');
+            return $this->renderAddPaymentMethod($dataValueOld);
+        }
+    }
+
+    function renderAddPaymentMethod($dataValueOld)
+    {
+        $this->view('layoutServer', [
+            'active' => 'product',
+            'title' => 'Thêm hình thức thanh toán',
+            'pages' => 'order/addPaymentMethod',
+            'dataValueOld' => $dataValueOld,
+        ]);
+    }
+
+    function updatePaymentMethod($id)
+    {
+        $dataPaymentMethod = $this->paymentModel->getOnePaymentMethod($id);
+        if (!$this->req->isPost()) {
+            return $this->renderUpdatePaymentMethod($dataPaymentMethod);
+        }
+
+        //Get data post
+        $dataPost = $this->req->getFields();
+        //Get image
+        $thumb = $_FILES['thumb'] ?? '';
+        //Validate
+
+        if (empty($dataPost['name']) || empty($dataPost['display_name']) || empty($dataPost['description'])) {
+            $this->Toast('error', 'Vui lòng không để trống.');
+            return $this->renderAddPaymentMethod($dataPaymentMethod);
+        }
+
+        $dataUpdate = [
+            'name' => $dataPost['name'],
+            'display_name' => $dataPost['display_name'],
+            'description' => $dataPost['description'],
+            'status' => $dataPost['status'] ?? 0,
+        ];
+
+        if (!empty($thumb['name'])) {
+            //  validate Upload image thumb
+            if (!Format::validateUploadImage($thumb)) {
+                $this->Toast('error', 'Kiểm tra lại file ảnh.');
+                return $this->renderAddPaymentMethod($dataPaymentMethod);
+            }
+
+            //upload anh len cloud
+            $urlThumb = Services::uploadImageToCloudinary($thumb['tmp_name']);
+            if (empty($urlThumb)) {
+                $this->Toast('error', 'Tải ảnh thất bại.');
+                return $this->renderAddPaymentMethod($dataPaymentMethod);
+            }
+
+            $dataUpdate['thumb'] = $urlThumb;
+        }
+
+        $updatePaymentMethod = $this->paymentModel->updatePaymentMethod($id, $dataUpdate);
+
+        if ($updatePaymentMethod) {
+            return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/payment-method');;
+        } else {
+            $this->Toast('error', 'Cập nhập thất bại vui lòng thử lại.');
+            return $this->renderAddPaymentMethod($dataPaymentMethod);
+        }
+    }
+
+    function renderUpdatePaymentMethod($dataPaymentMethod)
+    {
+        $this->view('layoutServer', [
+            'active' => 'product',
+            'title' => 'Thêm hình thức thanh toán',
+            'pages' => 'order/updatePaymentMethod',
+            'dataPaymentMethod' => $dataPaymentMethod,
+        ]);
     }
 }

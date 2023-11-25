@@ -18,7 +18,15 @@ class NewsModel extends BaseModel
 
     function getAllNews()
     {
-        return $this->db->table($this->tableName())->select('user.fullname, news.id, news.title, news.content, news.thumb, news.create_at, news.view, news.status')->join('user', 'news.user_id = user.id')->get();
+        return $this->db->table($this->tableName())->select('user.fullname, news.id, news.slug, news.title, news.content, news.thumb, news.create_at, news.view, news.status')->join('user', 'news.user_id = user.id')->where('news.status', '=', '0')->orderBy('news.create_at')->get();
+    }
+
+    function getNewsUser($id)
+    {
+        $sql = "SELECT user.fullname, user.avatar, news.id, news.title, news.content, news.thumb, news.slug, news.create_at, news.view, news.status FROM news INNER JOIN user ON news.user_id = user.id WHERE news.id = $id ";
+        $data = $this->db->query($sql);
+
+        return $data->fetch(PDO::FETCH_ASSOC);
     }
 
     function getOneNews($id)

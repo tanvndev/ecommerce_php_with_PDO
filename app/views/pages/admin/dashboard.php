@@ -8,7 +8,7 @@
                         <div class="media d-flex  align-items-center">
                             <div class="media-body p-0">
                                 <span class="m-0">Tổng doanh thu</span>
-                                <h4 class="mb-0 counter"><?php echo Format::formatNumber($totalRevenue) ?>
+                                <h4 class="mb-0 counter"><?= Format::formatNumber($totalRevenue) ?>
                                 </h4>
                             </div>
                             <div class="icon icon--success text-center">
@@ -27,7 +27,7 @@
                         <div class="media d-flex  align-items-center">
                             <div class="media-body p-0">
                                 <span class="m-0">Tổng lượt bán</span>
-                                <h4 class="mb-0 counter"><?php echo $totalSold ?>
+                                <h4 class="mb-0 counter"><?= $totalSold ?>
                                 </h4>
                             </div>
                             <div class="icon icon--violet text-center">
@@ -47,7 +47,7 @@
                         <div class="media d-flex  align-items-center">
                             <div class="media-body p-0">
                                 <span class="m-0">Tổng sản phẩm</span>
-                                <h4 class="mb-0 counter"><?php echo $prodCount ?>
+                                <h4 class="mb-0 counter"><?= $prodCount ?>
                                 </h4>
                             </div>
                             <div class="icon icon--primary text-center">
@@ -66,7 +66,7 @@
                         <div class="media d-flex  align-items-center">
                             <div class="media-body p-0">
                                 <span class="m-0">Tổng khách hàng</span>
-                                <h4 class="mb-0 counter"><?php echo $userCount ?>
+                                <h4 class="mb-0 counter"><?= $userCount ?>
                                 </h4>
                             </div>
                             <div class="icon icon--danger text-center">
@@ -79,7 +79,7 @@
 
             <!--  -->
 
-            <div class="col-xl-6 ">
+            <div class="col-xl-12 ">
                 <div class="card-hover card-chart">
                     <div class="card-header border-0 pb-1">
                         <div class="card-header-title">
@@ -111,11 +111,11 @@
                                         <td>
                                             <div class="best-product-box">
                                                 <div class="product-image">
-                                                    <img src="<?php echo $dataProdBestSell['thumb'] ?>" class="img-fluid" alt="<?php echo $dataProdBestSell['title'] ?>">
+                                                    <img src="<?= $dataProdBestSell['thumb'] ?>" class="img-fluid" alt="<?= $dataProdBestSell['title'] ?>">
                                                 </div>
                                                 <div class="product-name ms-4">
-                                                    <h5 style="max-width: 150px;" class="mb-2 text-truncate "><?php echo $dataProdBestSell['title']  ?></h5>
-                                                    <h6 class="mb-0 "><?php echo $dataProdBestSell['create_At'] ?></h6>
+                                                    <h5 style="max-width: 200px;" class="mb-2 text-truncate "><?= $dataProdBestSell['title']  ?></h5>
+                                                    <h6 class="mb-0 "><?= $dataProdBestSell['create_At'] ?></h6>
                                                 </div>
                                             </div>
                                         </td>
@@ -123,28 +123,21 @@
                                         <td>
                                             <div class="product-detail-box">
                                                 <h6 class="mb-2">Giá</h6>
-                                                <h5 class="mb-0"><?php echo Format::formatCurrency($dataProdBestSell['price']) ?></h5>
+                                                <h5 class="mb-0"><?= Format::formatCurrency($dataProdBestSell['price']) ?></h5>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="product-detail-box">
                                                 <h6 class="mb-2">Lượt bán</h6>
-                                                <h5 class="mb-0"><?php echo $dataProdBestSell['sold'] ?></h5>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="product-detail-box">
-                                                <h6 class="mb-2">Tồn kho</h6>
-                                                <h5 class="mb-0"><?php echo $dataProdBestSell['quantity'] ?></h5>
+                                                <h5 class="mb-0"><?= $dataProdBestSell['sold'] ?></h5>
                                             </div>
                                         </td>
 
                                         <td>
                                             <div class="product-detail-box">
                                                 <h6 class="mb-2">Tổng tiền</h6>
-                                                <h5 class="mb-0"><?php echo Format::formatNumber($dataProdBestSell['sold'] * $dataProdBestSell['price']) ?>
+                                                <h5 class="mb-0"><?= Format::formatNumber($dataProdBestSell['sold'] * $dataProdBestSell['price']) ?>
                                                 </h5>
                                             </div>
                                         </td>
@@ -158,11 +151,63 @@
                 </div>
             </div>
 
+            <!--  -->
 
+            <div class="col-xl-6">
+                <div class="card-hover card-table">
+                    <div class="card-header pb-1">
+                        <div class="card-header-title">
+                            <h4>Đánh giá gần đây</h4>
+                        </div>
+                    </div>
+                    <div class="card-body border-0 p-0">
+                        <table class="table box--padding">
+
+                            <tbody>
+
+                                <?php foreach ($dataRatingsProd as $dataRatingsProdItem) {
+                                    extract($dataRatingsProdItem);
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6 class="mb-2">Người dùng</h6>
+                                                <h5 class="mb-0"><?= $fullname ?></h5>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6 class="mb-2">Tên sản phẩm</h6>
+                                                <h5 style="max-width: 200px;" class="mb-0 text-truncate "><?= $title  ?></h5>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6 class="mb-2">Xếp hạng</h6>
+                                                <h5 style="color: var(--star);" class="mb-0"><?= Format::renderStars($star) ?></h5>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="product-detail-box">
+                                                <h6 class="mb-2">Ngày</h6>
+                                                <h5 class="mb-0"><?= date('d M, Y', strtotime($create_at)) ?></h5>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <!--  -->
-            <!-- 
-            <div class="col-xl-6">
+
+            <!-- <div class="col-xl-6">
                 <div class="card-hover card-table">
                     <div class="card-header pb-1">
                         <div class="card-header-title">
@@ -223,11 +268,11 @@
 
             <!--  -->
 
-            <!-- <div class="col-xl-6 ">
+            <div class="col-xl-6 ">
                 <div class="card-hover card-chart">
                     <div class="card-header border-0 pb-1">
                         <div class="card-header-title">
-                            <h4>coming soon</h4>
+                            <h4>Báo cáo số lượng mua hàng</h4>
                         </div>
                     </div>
                     <div class="card-body border-0  p-0">
@@ -236,7 +281,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
 
             <!--  -->
 
@@ -244,7 +289,7 @@
                 <div class="card-hover card-chart">
                     <div class="card-header border-0 pb-1">
                         <div class="card-header-title">
-                            <h4>số lượng sản phẩm trong danh mục</h4>
+                            <h4>Số lượng sản phẩm trong danh mục</h4>
                         </div>
                     </div>
                     <div class="card-body border-0  p-0">
@@ -256,59 +301,7 @@
             </div>
 
 
-            <!--  -->
 
-            <div class="col-xl-6">
-                <div class="card-hover card-table">
-                    <div class="card-header pb-1">
-                        <div class="card-header-title">
-                            <h4>Đánh giá gần đây</h4>
-                        </div>
-                    </div>
-                    <div class="card-body border-0 p-0">
-                        <table class="table box--padding">
-
-                            <tbody>
-
-                                <?php foreach ($dataRatingsProd as $dataRatingsProdItem) {
-                                    extract($dataRatingsProdItem);
-                                ?>
-                                    <tr>
-                                        <td>
-                                            <div class="product-detail-box">
-                                                <h6 class="mb-2">Người dùng</h6>
-                                                <h5 class="mb-0"><?php echo  $fullname ?></h5>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="product-detail-box">
-                                                <h6 class="mb-2">Tên sản phẩm</h6>
-                                                <h5 style="max-width: 250px;" class="mb-0 text-truncate "><?php echo $title  ?></h5>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="product-detail-box">
-                                                <h6 class="mb-2">Xếp hạng</h6>
-                                                <h5 style="color: var(--star);" class="mb-0"><?php echo Format::renderStars($star) ?></h5>
-                                            </div>
-                                        </td>
-
-                                        <td>
-                                            <div class="product-detail-box">
-                                                <h6 class="mb-2">Ngày</h6>
-                                                <h5 class="mb-0"><?php echo $update_at ?></h5>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>

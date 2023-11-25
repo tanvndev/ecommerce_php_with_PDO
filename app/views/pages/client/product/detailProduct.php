@@ -1,6 +1,6 @@
 <?php
 // echo '<pre>';
-// print_r($dataCoupon);
+// print_r($productPrice);
 // echo '</pre>';
 ?>
 
@@ -62,17 +62,26 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="col-lg-6">
                     <div class="detail-product-content">
                         <div class="inner">
                             <h2 class="product-title"><?= $dataProd['title'] ?></h2>
                             <div class="product-stock">Số lượng:
-                                <span id="product-stock"><?= $dataProd['quantity'] ?></span>
+                                <span id="product-stock"><?= $dataProd['isVariant'] == 1 ? $dataVariant[0]['quantity'] : $dataProd['quantity'] ?></span>
                             </div>
                             <div id="product-price" class="price">
-                                <span class="price-amount"><?= Format::formatCurrency($dataProd['price']) ?></span>
+                                <span class="price-amount">
+                                    <?php
+                                    echo ($dataProd['isVariant'] == 1) ?
+                                        Format::formatCurrency($productPrice[0]['min_price']) . ' - ' . Format::formatCurrency($productPrice[0]['max_price']) :
+                                        Format::formatCurrency($dataProd['price']);
+                                    ?>
 
-                                <?php if ($dataProd['discount'] != 0) : ?>
+                                </span>
+
+                                <?php if ($dataProd['isVariant'] != 1 && $dataProd['discount'] != 0) : ?>
                                     <span class="price-amount-old"><?= Format::calculateOriginalPrice($dataProd['price'], $dataProd['discount']) ?></span>
                                     <span class="text-danger "><?= ($dataProd['discount'] . '%') ?> </span>
                                 <?php endif ?>
@@ -90,7 +99,7 @@
                                     <li><i class="fal fa-check"></i>Còn hàng</li>
                                 <?php endif ?>
                                 <li><i class="fal fa-check"></i>Miễn phí giao hàng</li>
-                                <li><i class="fal fa-check"></i>Khuyến mãi giảm giá 30% Sử dụng mã: MOTIVE30</li>
+                                <li><i class="fal fa-check"></i>Kiểm tra mã giảm giá của bạn để có mã tốt nhất</li>
                             </ul>
                             <p class="description"><?= $dataProd['short_description'] ?></p>
 
@@ -284,12 +293,12 @@
                         <div class="col-lg-6 mb--40">
                             <div class="comment-respond mt-0">
                                 <h5 class="title mb--30">Đánh giá sản phẩm</h5>
-                                <form method="POST" id="formRatings" action="product/addRatingProd">
+                                <form method="POST" id="formRatings">
                                     <div class="rating-wrapper d-flex-center mb--30">
                                         Số sao <span class="require">*</span>
                                         <div class="reating-inner ml--20">
                                             <input type="hidden" name="star" id="currentRating">
-                                            <input type="hidden" name="id" value="<?= $dataProd['id'] ?>">
+                                            <input type="hidden" name="prod_id" value="<?= $dataProd['id'] ?>">
                                             <span data-rating="1" class="star"><i class="fas fa-star"></i></span>
                                             <span data-rating="2" class="star"><i class="fas fa-star"></i></span>
                                             <span data-rating="3" class="star"><i class="fas fa-star"></i></span>

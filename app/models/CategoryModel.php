@@ -14,6 +14,17 @@ class CategoryModel extends BaseModel
         return 'id';
     }
 
+    function getProdForCateChart()
+    {
+        $sql = "SELECT c.id, c.name, COUNT(p.id) AS product_count
+                FROM category c
+                LEFT JOIN product p ON c.id = p.cate_id
+                GROUP BY c.id, c.name";
+        $stmt = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
+    }
+
+
     function getAllCategory()
     {
         return $this->db->table($this->tableName())->orderBy('id')->get();

@@ -9,7 +9,7 @@ $menu = array(
     ],
     [
         'name' => 'Sản phẩm',
-        'path' => 'product/'
+        'path' => 'product'
     ],
     [
         'name' => 'Tin Tức',
@@ -35,7 +35,7 @@ $menu = array(
             <?php
             if (isset($userData) && !empty($userData)) {
             ?>
-                <a href="coming-soon">Welcome, <?php echo $userData['fullname'] ?? 'Customer' ?></a>
+                <a href="account">Welcome, <?= $userData['fullname'] ?? 'Customer' ?></a>
             <?php } else { ?>
                 <a href="login">Đăng nhập</a>
             <?php } ?>
@@ -44,7 +44,7 @@ $menu = array(
     <div class="header-navbar">
         <nav class="container d-flex-center">
             <div class="header-logo">
-                <a href=""><img src="public/images/logo/logo.png" alt="logo"></a>
+                <a href=""><img src="<?= $dataStoreCustom['logo'] ?>" alt="logo"></a>
             </div>
 
             <div class="header-menu">
@@ -52,7 +52,7 @@ $menu = array(
                     <?php foreach ($menu as $itemMenu) { ?>
                         <li><a <?php if ($itemMenu['path'] == $currentPath) {
                                     echo 'class="active"';
-                                } ?> href="<?php echo $itemMenu['path'] ?>"><?php echo $itemMenu['name'] ?></a></li>
+                                } ?> href="<?= $itemMenu['path'] ?>"><?= $itemMenu['name'] ?></a></li>
                     <?php } ?>
 
                 </ul>
@@ -60,7 +60,7 @@ $menu = array(
             <div class="header-action">
                 <ul class="action">
                     <li>
-                        <form action="product/" method="get">
+                        <form action="product-category" method="get">
                             <div class="position-relative">
                                 <input type="text" name="search" class="form-control" placeholder="Bạn muốn tìm gì?">
                                 <button type="submit" class="btn-search">
@@ -106,12 +106,12 @@ $menu = array(
                                 </li>
                             </ul>
                             <div class="login-btn">
-                                <a href="<?php echo (isset($userData) && !empty($userData)) ? 'Logout' : 'Login' ?>" class="btn-custom">
-                                    <?php echo (isset($userData) && !empty($userData)) ? 'Đăng xuất' : 'Đăng nhập' ?>
+                                <a href="<?= (isset($userData) && !empty($userData)) ? 'Logout' : 'Login' ?>" class="btn-custom">
+                                    <?= (isset($userData) && !empty($userData)) ? 'Đăng xuất' : 'Đăng nhập' ?>
                                 </a>
                             </div>
-                            <div class="register-footer text-center <?php echo (isset($userData) && !empty($userData)) ? 'd-none ' : '' ?>">
-                                <?php echo (isset($userData) && !empty($userData)) ? '' : 'Bạn chưa có tài khoản? <a href="signup" class="btn-link">Đăng ký ngay.</a>' ?>
+                            <div class="register-footer text-center <?= (isset($userData) && !empty($userData)) ? 'd-none ' : '' ?>">
+                                <?= (isset($userData) && !empty($userData)) ? '' : 'Bạn chưa có tài khoản? <a href="signup" class="btn-link">Đăng ký ngay.</a>' ?>
                             </div>
 
                         </div>

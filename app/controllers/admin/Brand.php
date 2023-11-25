@@ -74,6 +74,13 @@ class Brand extends Controller
             return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
         }
 
+        // Kiem tra da co thuong hieu nay chua
+
+        $brandExist = $this->brandModel->checkBrandExisted($dataPost['name']);
+        if (!empty($brandExist)) {
+            return $this->res->setToastSession($type, 'Thương hiệu đã tồn tại.', 'admin/brand');
+        }
+
         $dataInsert = [
             'name' => $dataPost['name']
         ];
@@ -95,8 +102,14 @@ class Brand extends Controller
         $dataPost = $this->req->getFields();
 
         if (empty($dataPost['name'])) {
-
             return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
+        }
+
+        // Kiem tra da co thuong hieu nay chua
+
+        $brandExist = $this->brandModel->checkBrandExisted($dataPost['name']);
+        if (!empty($brandExist)) {
+            return $this->res->setToastSession($type, 'Thương hiệu đã tồn tại.', 'admin/brand');
         }
 
         $dataUpdate = [

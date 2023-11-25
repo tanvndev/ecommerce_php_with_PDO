@@ -18,8 +18,6 @@
                         </tr>
                     </thead>
                     <tbody id="cart_main">
-
-
                     </tbody>
                 </table>
                 <div id="not-cart-main">
@@ -69,7 +67,7 @@
 
                                     <tr class="order-total">
                                         <td>Tổng</td>
-                                        <td class="order-total-amount">$125.00</td>
+                                        <td id="order-total-amount" class="order-total-amount">$125.00</td>
                                     </tr>
                                 </tbody>
                             </table>

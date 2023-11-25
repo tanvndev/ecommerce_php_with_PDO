@@ -83,6 +83,7 @@ class News extends Controller
 
         $dataInsert = [
             'title' => $dataPost['title'],
+            'slug' => Format::createSlug($dataPost['title']),
             'content' => $dataPost['content'],
             'user_id' => $this->user_id,
             'status' => $dataPost['status'] ?? 0,
@@ -147,6 +148,7 @@ class News extends Controller
 
         $dataUpdate = [
             'title' => $dataPost['title'],
+            'slug' => Format::createSlug($dataPost['title']),
             'content' => $dataPost['content'],
             'status' => $dataPost['status'] ?? 0,
         ];

@@ -1,3 +1,8 @@
+<?php
+// echo '<pre>';
+// print_r($productStock);
+// echo '</pre>';
+?>
 <section class="product-wrap">
     <div class="card">
         <div class="title-header">
@@ -17,6 +22,7 @@
                     <tr>
                         <th>Tên sản phẩm</th>
                         <th>Danh mục</th>
+                        <th>Thương hiệu</th>
                         <th>Tồn kho</th>
                         <th>Giá</th>
                         <th>Trạng thái</th>
@@ -32,11 +38,11 @@
                     ?>
                         <tr>
                             <td>
-                                <div class=" product-title-name">
+                                <div class="product-title-name">
                                     <div class="table-image table-image--product">
-                                        <img src="<?php echo $product['thumb'] ?>" class="img-fluid" alt="<?php echo $product['title'] ?>">
+                                        <img src="<?= $product['thumb'] ?>" class="img-fluid" alt="<?= $product['title'] ?>">
                                     </div>
-                                    <div class="text-truncate text-title"><?php echo $product['title'] ?></div>
+                                    <div class="text-truncate text-title"><?= $product['title'] ?></div>
                                 </div>
                             </td>
 
@@ -44,17 +50,31 @@
                             foreach ($cateData as $cateItem) {
                                 if ($cateItem['id'] === $product['cate_id']) {
                             ?>
-                                    <td class="td-category"><?php echo $cateItem['name'] ?></td>
+                                    <td class="td-category"><?= $cateItem['name'] ?></td>
                             <?php }
                             } ?>
 
-                            <td><?php echo $product['quantity'] ?></td>
+                            <?php
+                            foreach ($brandData as $brandItem) {
+                                if ($brandItem['id'] === $product['brand_id']) {
+                            ?>
+                                    <td class="td-category"><?= $brandItem['name'] ?></td>
+                            <?php }
+                            } ?>
 
-                            <td class="td-price"><?php echo Format::formatCurrency($product['price']) ?></td>
+                            <?php
+                            foreach ($productVariant as $productVariantItem) {
+                                if ($productVariantItem['prod_id'] == $product['id']) {
+                            ?>
+                                    <td><?= $productVariantItem['quantity'] ?></td>
+                                    <td class="td-price"><?= Format::formatCurrency($productVariantItem['min_price']) ?> - <?= Format::formatCurrency($productVariantItem['max_price']) ?> </td>
+                            <?php }
+                            } ?>
 
 
-                            <td class=" <?php echo $product['quantity'] >= 1 && $product['status'] == 1 ? 'status-success' : 'status-danger' ?>">
-                                <span class="fw-medium"><?php echo $product['quantity'] >= 1 && $product['status'] == 1 ? 'Đang bán' : 'Dừng bán' ?></span>
+
+                            <td class=" <?= $product['quantity'] >= 1 && $product['status'] == 1 ? 'status-success' : 'status-danger' ?>">
+                                <span class="fw-medium"><?= $product['quantity'] >= 1 && $product['status'] == 1 ? 'Đang bán' : 'Dừng bán' ?></span>
                             </td>
                             <td>
                                 <label class="switch">
@@ -76,13 +96,13 @@
                             <td>
                                 <ul class="options">
                                     <li class="m-0 ">
-                                        <a href="admin/update-product/<?php echo $product['id'] ?>">
+                                        <a href="admin/update-product/<?= $product['id'] ?>">
                                             <i class="edit fas fa-edit"></i>
                                         </a>
                                     </li>
 
                                     <li class="m-0 ">
-                                        <a onclick="deleteProduct(<?php echo $product['id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
+                                        <a onclick="deleteProduct(<?= $product['id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
                                             <i class="delete fas fa-trash-alt"></i>
                                         </a>
                                     </li>

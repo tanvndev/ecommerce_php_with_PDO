@@ -7,6 +7,9 @@ class AppServiceProvider extends ServiceProvider
         if (!empty($this->getDataAccessToken())) {
             ViewShare::share('userData', $this->getDataAccessToken());
         }
+        if (!empty($this->getDataStoreCustom())) {
+            ViewShare::share('dataStoreCustom', $this->getDataStoreCustom());
+        }
     }
 
 
@@ -17,6 +20,15 @@ class AppServiceProvider extends ServiceProvider
             if ($dataToken['valid'] == 1 && !isset($dataToken['error']) && !empty($dataToken['payload']) && $dataToken['payload']['isBlock'] == 0) {
                 return $dataToken['payload'];
             }
+        }
+        return [];
+    }
+
+    private function getDataStoreCustom()
+    {
+        $dataStoreCustom = $this->db->table('store_custom')->getOne();
+        if (!empty($dataStoreCustom)) {
+            return $dataStoreCustom;
         }
         return [];
     }

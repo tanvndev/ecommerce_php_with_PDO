@@ -17,7 +17,12 @@ class BrandModel extends BaseModel
     }
     function getAllBrand()
     {
-        return $this->find();
+        return $this->db->table($this->tableName())->orderBy('id', 'ASC')->get();
+    }
+
+    function checkBrandExisted($name)
+    {
+        return $this->db->table($this->tableName())->where('name', '=', $name)->getOne();
     }
 
     function getOneBrand($id)
@@ -25,12 +30,10 @@ class BrandModel extends BaseModel
         return $this->db->table($this->tableName())->where('id', '=', $id)->getOne();
     }
 
-
     function addNewBrand($data)
     {
         return $this->db->create($this->tableName(), $data);
     }
-
 
     function updateBrand($id, $data)
     {

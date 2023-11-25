@@ -23,9 +23,11 @@ class Home extends Controller
         }
 
         $dataCate = $this->categoryModel->getAllCategory() ?? [];
+        $dataBannerTitle = $this->db->table('banner')->getOne();
         $dataBanner = $this->productModel->getProdByCate() ?? [];
         $dataProdRecent = $this->productModel->getProdRecently() ?? [];
         $dataProdMostSold = $this->productModel->getProdMostSold() ?? [];
+        $dataProdNewDate = $this->productModel->getProdNewDate() ?? [];
 
 
         $this->view('layoutClient', [
@@ -34,8 +36,10 @@ class Home extends Controller
             'pages' => 'home',
             'dataCate' => $dataCate,
             'dataBanner' => $dataBanner,
+            'dataBannerTitle' => $dataBannerTitle,
             'dataProdRecent' => $dataProdRecent,
             'dataProdMostSold' => $dataProdMostSold,
+            'dataProdNewDate' => $dataProdNewDate,
         ]);
     }
 }

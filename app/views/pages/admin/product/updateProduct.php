@@ -102,7 +102,7 @@
                                             <input name="isVariant" <?= $dataProd['isVariant'] == 1 ? 'checked' : '' ?> value="1" type="checkbox">
                                             <span class="slider"></span>
                                         </label>
-                                        <a class="attribute-view" href="<?= $dataProd['id'] ?>">Xem biến thể <i class="far fa-chevron-right"></i></a>
+                                        <a class="attribute-view" href="admin/product-variants/<?= $dataProd['id'] ?>">Xem biến thể <i class="far fa-chevron-right"></i></a>
                                     </div>
                                 </div>
                             </div>

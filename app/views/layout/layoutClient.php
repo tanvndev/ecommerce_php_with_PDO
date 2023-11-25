@@ -39,6 +39,7 @@
 
         <?php
         require_once 'app/views/includes/header.php';
+        $dataStoreCustom = ViewShare::$dataShare['dataStoreCustom'];
         //hide breadcumb
         if ($pages != 'product/detailProduct' && $pages != 'home' && $pages != 'checkout/checkout') {
             require_once 'app/views/includes/breadcumb.php';
@@ -77,6 +78,7 @@
     <!-- Api JS -->
     <script src="services/base.js"></script>
     <script src="services/cartService.js"></script>
+    <script src="services/ratingService.js"></script>
     <script src="services/productService.js"></script>
 
 

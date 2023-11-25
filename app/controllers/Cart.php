@@ -27,7 +27,7 @@ class Cart extends Controller
 
         $this->view('layoutClient', [
             'title' => 'Giỏ hàng',
-            'currentPath' => 'product/',
+            'currentPath' => 'product',
             'pages' => 'cart/cart',
         ]);
     }
@@ -106,7 +106,12 @@ class Cart extends Controller
 
         // lấy ra id cart
         $dataCart = $this->cartModel->getCartId($this->user_id);
-        $dataProductVariant = $this->productModel->getOneProdVariant($dataPost['product_variant_id']);
+        $dataProductVariant = $this->productModel->getOneProdVariantApi($dataPost['product_variant_id']);
+
+        if ($dataProductVariant['quantity'] < $dataPost['quantity']) {
+            echo $this->res->dataApi(400, 'Vui lòng kiểm tra lại số lượng.', []);
+            return;
+        }
 
         //số lượng người dùng chọn
         $quantityToAdd = $dataPost['quantity'];
@@ -220,9 +225,9 @@ class Cart extends Controller
         $deleteCart = $this->cartModel->deleteAllCart($dataCart['id']);
 
         if ($deleteCart && $deleteCartItem) {
-            return  $this->res->setToastSession('success', 'Xoa thanh cong.', 'cart');
+            return  $this->res->setToastSession('success', 'Bạn đã xoá hết sản phẩm trong giỏ hàng.', 'cart');
         } else {
-            return  $this->res->setToastSession('error', 'Xoa that bai vui long thu lai.', 'cart');
+            return  $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'cart');
         }
     }
 }

@@ -15,8 +15,6 @@ class Authentication extends Middlewares
         //Check accessToken
         if (!empty(Session::get('userLogin'))) {
             $accessToken = JWT::verifyJWT(Session::get('userLogin')) ?? '';
-        } else {
-            return;
         }
 
         //check accessToken con han

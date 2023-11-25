@@ -140,7 +140,7 @@
                                                     <td>
                                                         <ul class="options">
                                                             <li class="m-0 ">
-                                                                <a href="orderDetail/<?= "{$orderItemDetail['order_id']}-{$orderItemDetail['order_code']}" ?>">
+                                                                <a href="order-detail/<?= "{$orderItemDetail['order_id']}-{$orderItemDetail['order_code']}" ?>">
                                                                     <i class="view fas fa-eye"></i>
                                                                 </a>
                                                             </li>
@@ -166,7 +166,7 @@
                                         <div class="address-info mb--40">
                                             <div class="addrss-header d-flex align-items-center justify-content-between">
                                                 <h4 class="title mb-0">Địa chỉ giao hàng</h4>
-                                                <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
+                                                <a href="coming-soon" class="address-edit"><i class="far fa-edit"></i></a>
                                             </div>
                                             <ul class="address-details">
                                                 <li>Họ và tên: <?= $dataUserCurrent['fullname'] ?></li>
@@ -180,7 +180,7 @@
                                         <div class="address-info">
                                             <div class="addrss-header d-flex align-items-center justify-content-between">
                                                 <h4 class="title mb-0">Địa chỉ thanh toán</h4>
-                                                <a href="#" class="address-edit"><i class="far fa-edit"></i></a>
+                                                <a href="coming-soon" class="address-edit"><i class="far fa-edit"></i></a>
                                             </div>
                                             <ul class="address-details">
                                                 <li>Họ và tên: <?= $dataUserCurrent['fullname'] ?></li>

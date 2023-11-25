@@ -54,6 +54,8 @@ class Account extends Controller
         $order_id = reset($orderIdArr);
 
         $dataOrder = $this->orderModel->getAllOrderItemByUser($this->user_id, $order_id);
+        $dataOrderStatus = $this->orderModel->getAllOrderStatus();
+
 
         if (!empty($dataOrder)) {
             $dataOrderNew = [];
@@ -100,6 +102,7 @@ class Account extends Controller
             'currentPath' => '',
             'pages' => 'account/orderDetail',
             'dataOrder' => $dataOrderNew ?? [],
+            'dataOrderStatus' => $dataOrderStatus ?? [],
         ]);
     }
 
