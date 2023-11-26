@@ -16,6 +16,7 @@
   ],
   "require": {
     "phpmailer/phpmailer": "^6.8",
-    "cloudinary/cloudinary_php": "^2"
+    "cloudinary/cloudinary_php": "^2",
+    "tecnickcom/tcpdf": "^6.6"
   }
 }

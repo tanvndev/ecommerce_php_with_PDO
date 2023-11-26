@@ -215,6 +215,33 @@ class Checkout extends Controller
                 header('location: ' . $bankUrl);
                 return;
             }
+
+            return $this->res->setToastSession('error', 'Phương thức thanh toán lỗi vui lòng thử lại.', 'home');
+        }
+
+
+        // Thanh toan khi dung momo
+        if (trim(end($paymentMethodArr)) == 'momo') {
+
+            $dataOrderTemp = [
+                'payment_method_id' => $payment_method_id,
+                'dataInsertOrder' => $dataInsertOrder,
+                'dataCartNew' => $dataCartNew,
+            ];
+
+            $bankUrl = Services::generateMomoUrl([
+                'amount' => $dataInsertOrder['total_money'],
+                'order_code' => $dataInsertOrder['order_code'],
+            ]);
+
+
+            if (!empty($bankUrl)) {
+                //Set tam vao data vao cookie
+                Cookie::set('dataOrderTemp', json_encode($dataOrderTemp));
+                header('location: ' . $bankUrl);
+                return;
+            }
+            return $this->res->setToastSession('error', 'Phương thức thanh toán lỗi vui lòng thử lại.', 'home');
         }
     }
     private function handlePaymentMethod($dataInsertOrder, $dataCartNew, $payment_method_id, $dataGet = [])
@@ -274,6 +301,22 @@ class Checkout extends Controller
 
             // MOMO
 
+            if ($dataGet['orderInfo'] == 'momo_payment') {
+
+                $createPaymentTransactions = $this->paymentModel->addNewPaymentTransactions([
+                    'bankCode' => 'SML',
+                    'bankTranNo' => $dataGet['transId'],
+                    'cardType' => $dataGet['payType'],
+                    'payDate' => strtotime($dataGet['responseTime']) ?? time(),
+                    'transactionNo' => $dataGet['transId'],
+                    'secureHash' => $dataGet['signature'],
+                ]);
+                if (!$createPaymentTransactions) {
+                    return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'checkout');
+                }
+
+                $payment_transaction_id = $this->db->lastInsertId();
+            }
 
             // ZALOPAY
         }
@@ -331,6 +374,12 @@ class Checkout extends Controller
         }
 
         // Thanh toan momo
+
+        if (isset($dataGet['orderInfo']) == 'momo_payment' && $dataGet['errorCode'] == '0') {
+            return $this->handlePaymentMethod($dataInsertOrder, $dataCartNew, $payment_method_id, $dataGet);
+        }
+
+        // Thanh toan zalopay
 
         // Neu thanh toan that bai 
         Cookie::unsetCookie('dataOrderTemp');

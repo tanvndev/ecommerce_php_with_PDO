@@ -149,6 +149,29 @@ class Services
         return $vnp_Url;
     }
 
+    private static function execPostRequest($url, $data)
+    {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_HTTPHEADER,
+            array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data)
+            )
+        );
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        //execute post
+        $result = curl_exec($ch);
+        //close connection
+        curl_close($ch);
+        return $result;
+    }
+
     static function generateMomoUrl($orderData)
     {
         global $config;
@@ -158,40 +181,165 @@ class Services
             return false;
         }
 
-        //Config
-        $momo_Url = "https://payment.momo.vn/gw_payment/transactionProcessor";
-        $momo_Returnurl = "http://localhost/WEB2041_Ecommerce/home";
-        $momo_PartnerCode = $configMomo['partner_code'];
-        $momo_AccessKey = $configMomo['access_key'];
-        $momo_SecretKey = $configMomo['secret_key'];
+        $endpoint = "https://test-payment.momo.vn/gw_payment/transactionProcessor";
+        $partnerCode = $configMomo['partner_code'];
+        $accessKey = $configMomo['access_key'];
+        $secretKey = $configMomo['secret_key'];
 
-        $time = time();
+        $orderInfo = "momo_payment";
+        $amount = $orderData['amount'] . "";
+        $orderId = $orderData['order_code'] . "";
+        $returnUrl = "http://localhost/WEB2041_Ecommerce/payment-final";
+        $notifyurl = "http://localhost:8000/atm/ipn_momo.php";
+        // Lưu ý: link notifyUrl không phải là dạng localhost
+        $bankCode = "SML";
 
-        // Tạo một mảng chứa thông tin cần thiết
-        $inputData = array(
-            'partnerCode' => $momo_PartnerCode,
-            'accessKey' => $momo_AccessKey,
-            'requestId' => $orderData['order_id'] . $time,
-            'amount' => $orderData['amount'],
-            'orderId' => $orderData['order_id'],
-            'orderInfo' => $orderData['order_desc'],
-            'returnUrl' => $momo_Returnurl,
-            'notifyUrl' => $momo_Returnurl, // Có thể cần điều chỉnh tùy thuộc vào yêu cầu của Momo
-            'extraData' => 'merchantName=YourMerchantName',
+        $requestId = time() . "";
+        $requestType = "payWithMoMoATM";
+        $extraData = "";
+
+        // echo $serectkey;die;
+        $rawHash = "partnerCode=" . $partnerCode . "&accessKey=" . $accessKey . "&requestId=" . $requestId . "&bankCode=" . $bankCode . "&amount=" . $amount . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&returnUrl=" . $returnUrl . "&notifyUrl=" . $notifyurl . "&extraData=" . $extraData . "&requestType=" . $requestType;
+        $signature = hash_hmac("sha256", $rawHash, $secretKey);
+
+        $data =  array(
+            'partnerCode' => $partnerCode,
+            'accessKey' => $accessKey,
+            'requestId' => $requestId,
+            'amount' => $amount,
+            'orderId' => $orderId,
+            'orderInfo' => $orderInfo,
+            'returnUrl' => $returnUrl,
+            'bankCode' => $bankCode,
+            'notifyUrl' => $notifyurl,
+            'extraData' => $extraData,
+            'requestType' => $requestType,
+            'signature' => $signature
         );
+        $result = self::execPostRequest($endpoint, json_encode($data));
+        $jsonResult = json_decode($result, true);  // decode json
 
-        ksort($inputData);
+        error_log(print_r($jsonResult, true));
+        return $jsonResult['payUrl'];
+    }
 
-        // Xây dựng chuỗi hash
-        $hashdata = implode('', $inputData) . $momo_SecretKey;
-        $signature = hash('sha256', $hashdata);
 
-        // Thêm chữ ký vào mảng dữ liệu
-        $inputData['signature'] = $signature;
+    static private function getHTMLPurchaseDataToPDF($dataInfo, $products)
+    {
+        ob_start();
+?>
+        <html>
 
-        // Tạo URL redirect
-        $momo_Url .= '?' . http_build_query($inputData);
+        <head>
+            <title>Biên nhận mua hàng - <?= $dataInfo['order_code'] ?></title>
+        </head>
 
-        return $momo_Url;
+        <body>
+            <div style="text-align:right;">
+                <b>Người gửi:</b> <?= $dataInfo['sender'] ?>
+            </div>
+            <div style="text-align: left;border-top:1px solid #000;">
+                <div style="font-size: 24px;color: #666; text-transform: uppercase;">Hoá đơn</div>
+            </div>
+            <table style="line-height: 1.5;">
+                <tr>
+                    <td><b>Hoá đơn:</b> #<?= $dataInfo['order_code'] ?>
+                    </td>
+                    <td style="text-align:right;"><b>Người nhận:</b></td>
+                </tr>
+                <tr>
+                    <td><b>Ngày đặt hàng:</b> <?= date('d F Y', strtotime($dataInfo['order_date'])) ?></td>
+                    <td style="text-align:right;"><?= $dataInfo['address'] ?></td>
+                </tr>
+            </table>
+            <div></div>
+            <div style="border-bottom:1px solid #000;">
+                <table style="line-height: 2;">
+                    <tr style="font-weight: bold;border:1px solid #cccccc;background-color:#f2f2f2;">
+                        <td style="border:1px solid #cccccc;width:200px;">Mặt hàng</td>
+                        <td style="text-align:right;border:1px solid #cccccc;width:85px">Đơn giá</td>
+                        <td style="text-align:right;border:1px solid #cccccc;width:75px;">Số lượng</td>
+                        <td style="text-align:right;border:1px solid #cccccc;">Tổng</td>
+                    </tr>
+                    <?php
+                    $subtotal = 0;
+                    foreach ($products as $product) {
+                        extract($product);
+                        $subtotal += $sub_total;
+                    ?>
+                        <tr>
+                            <td style="border:1px solid #cccccc;"><?= $title ?></td>
+                            <td style="text-align:right; border:1px solid #cccccc;"><?= Format::formatCurrency($price) ?></td>
+                            <td style="text-align:right; border:1px solid #cccccc;"><?= $quantity ?></td>
+                            <td style="text-align:right; border:1px solid #cccccc;"><?= Format::formatCurrency($sub_total) ?></td>
+                        </tr>
+                    <?php
+                    }
+
+
+                    ?>
+
+                    <tr style="font-weight: bold;">
+                        <td colspan="3" style="text-align:right;">Tạm tính: </td>
+                        <td style="text-align:right;"><?= Format::formatCurrency($subtotal); ?></td>
+                    </tr>
+
+                    <tr style="font-weight: bold;">
+                        <td colspan="3" style="text-align:right;">Giảm giá: </td>
+                        <td style="text-align:right;">- <?= Format::formatCurrency($subtotal - $total_money); ?></td>
+                    </tr>
+
+                    <tr style="font-weight: bold;">
+                        <td colspan="3" style="text-align:right;">Thành tiền: </td>
+                        <td style="text-align:right;"><?= Format::formatCurrency($total_money); ?></td>
+                    </tr>
+                </table>
+            </div>
+            <p><u>Vui lòng thanh toán tới</u>:<br />
+                Ngân hàng: MB_Bank<br />
+                A/C: 05346346543634563423<br />
+                BIC: 23141434<br />
+            </p>
+            <p><i>Lưu ý: Vui lòng gửi thông báo chuyển tiền qua email tới admin@gmail.com</i></p>
+        </body>
+
+        </html>
+<?php
+        return ob_get_clean();
+    }
+
+    static function generatePDF($dataInfo, $products, $action = '')
+    {
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->SetHeaderData(
+            '',
+            PDF_HEADER_LOGO_WIDTH,
+            '',
+            '',
+            array(0, 0, 0),
+            array(255, 255, 255)
+        );
+        $pdf->SetTitle('Hoá đơn - ' . $dataInfo['order_code']);
+        $pdf->SetMargins(20, 10, 20, true);
+        $pdf->SetFont('dejavusans', '', 11);
+
+        $pdf->AddPage();
+
+        // Gọi phương thức writeHTML để chèn HTML vào PDF
+        $pdf->writeHTML(self::getHTMLPurchaseDataToPDF($dataInfo, $products), true, false, true, false, '');
+
+        // Lưu hoặc xuất PDF
+        $filename = "hoa-don-" . $dataInfo['order_code'];
+        ob_end_clean();
+        if ($action == 'print') {
+            $pdfContent = $pdf->Output($filename . '.pdf', 'S');
+            return $pdfContent;
+        }
+        $pdf->Output($filename . '.pdf', 'I');
+
+        // $pdf->Output('public/uploads/invoice/' . $filename . 'pdf', '');
     }
 }

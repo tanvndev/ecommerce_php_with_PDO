@@ -234,3 +234,21 @@ function learnMoreProductFilter() {
   $('#limit-product-filter').val(+valueLimit + 8);
   filterProduct();
 }
+
+// Print
+const printInvoice = (id) => {
+  // Gửi yêu cầu AJAX để lấy base64PDFContent
+  $.ajax({
+    url: 'admin/order/printInvoiceApi/' + id,
+    type: 'GET',
+
+    success: function (base64PDFContent) {
+      // In trang khi đã nhận được dữ liệu PDF
+      // console.log(base64PDFContent);
+      printPDF(base64PDFContent);
+    },
+    error: function (xhr, status, error) {
+      console.error('Error:', error);
+    },
+  });
+};

@@ -68,3 +68,34 @@ const renderStars = (number) => {
   }
   return starArray.join(' ');
 };
+
+function printPDF(base64PDFContent) {
+  // Chuyển đổi base64 thành dữ liệu nhị phân
+  var binaryPDFContent = atob(base64PDFContent);
+
+  // Chuyển đổi dữ liệu nhị phân thành mảng byte
+  var byteNumbers = new Array(binaryPDFContent.length);
+  for (var i = 0; i < binaryPDFContent.length; i++) {
+    byteNumbers[i] = binaryPDFContent.charCodeAt(i);
+  }
+  var byteArray = new Uint8Array(byteNumbers);
+
+  // Tạo Blob từ mảng byte
+  var blob = new Blob([byteArray], { type: 'application/pdf' });
+
+  // Chuyển đổi Blob thành URL
+  var url = URL.createObjectURL(blob);
+
+  // Tạo một iframe để hiển thị PDF
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.src = url;
+
+  // Thêm iframe vào trang
+  document.body.appendChild(iframe);
+
+  // Khi iframe đã sẵn sàng, gọi window.print() để in trang
+  iframe.onload = function () {
+    iframe.contentWindow.print();
+  };
+}

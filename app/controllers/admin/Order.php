@@ -71,13 +71,11 @@ class Order extends Controller
         $idDataArr = explode('-', $idData);
 
         // [0] => 10 order_id
-        // [1] => 9 user_id
         // [2] => zFicq1700390884 order_code
         $order_id = reset($idDataArr);
-        $user_id = $idDataArr[1];
         // $order_code = end($idDataArr);
 
-        $dataOrder = $this->orderModel->getAllOrderItemByUser($user_id, $order_id);
+        $dataOrder = $this->orderModel->getAllOrderItemByUser($order_id);
         $dataOrderStatus = $this->orderModel->getAllOrderStatus();
 
         if (!empty($dataOrder)) {
@@ -230,7 +228,7 @@ class Order extends Controller
         }
     }
 
-    function renderAddPaymentMethod($dataValueOld)
+    private function renderAddPaymentMethod($dataValueOld)
     {
         $this->view('layoutServer', [
             'active' => 'product',
@@ -292,7 +290,7 @@ class Order extends Controller
         }
     }
 
-    function renderUpdatePaymentMethod($dataPaymentMethod)
+    private function renderUpdatePaymentMethod($dataPaymentMethod)
     {
         $this->view('layoutServer', [
             'active' => 'product',
@@ -300,5 +298,126 @@ class Order extends Controller
             'pages' => 'order/updatePaymentMethod',
             'dataPaymentMethod' => $dataPaymentMethod,
         ]);
+    }
+
+    function printInvoiceApi($order_id)
+    {
+
+        $dataOrder = $this->orderModel->getAllOrderItemByUser($order_id);
+
+        if (empty($dataOrder)) {
+            return $this->res->dataApi('400', 'Có lỗi vui lòng thử lại.', []);
+        }
+        $dataUserCurrent = ViewShare::$dataShare;
+        $nameCurrent = $dataUserCurrent['userData']['fullname'];
+
+
+        if (!empty($dataOrder)) {
+            $dataOrderNew = [];
+            foreach ($dataOrder as $item) {
+                $idVariant = $item['product_variant_id'];
+                if (!isset($dataOrderNew[$idVariant])) {
+                    $dataOrderNew[$idVariant] = [
+                        'product_variant_id' => $idVariant,
+                        'title' => $item['title'],
+                        'price' => $item['price'],
+                        'quantity' => $item['quantity'],
+                        'order_date' => $item['order_date'],
+                        'order_code' => $item['order_code'],
+                        'address' => $item['fullname'] . ' - ' . $item['phone'] . ' - ' . $item['address'],
+                        'sub_total' => $item['price'] * $item['quantity'],
+                        'total_money' => $item['total_money'],
+                        'coupon_id' => $item['coupon_id'],
+                        'payment_method_name' => $item['payment_method_name'],
+                        'attribute_values' => [$item['attribute_value']],
+
+                    ];
+                } else {
+                    $dataOrderNew[$idVariant]['attribute_values'][] = $item['attribute_value'];
+                }
+            }
+
+            foreach ($dataOrderNew as &$item) {
+                $item['attribute_values'] = implode('-', $item['attribute_values']);
+            }
+
+            foreach ($dataOrderNew as &$item) {
+                $item['title'] = $item['title'] . " - ({$item['attribute_values']})";
+            }
+
+            $dataOrderNew = array_values($dataOrderNew);
+        }
+
+        $dataInfo = [
+            'sender' => $nameCurrent,
+            'order_code' => $dataOrderNew[0]['order_code'],
+            'order_date' => $dataOrderNew[0]['order_date'],
+            'address' => $dataOrderNew[0]['address'],
+        ];
+
+        $pdfContent = Services::generatePDF($dataInfo, $dataOrderNew, 'print');
+
+        // Encode PDF content in base64
+        $base64PDFContent = base64_encode($pdfContent);
+        echo $base64PDFContent;
+    }
+
+    function downloadInvoice($order_id)
+    {
+        $dataOrder = $this->orderModel->getAllOrderItemByUser($order_id);
+
+        if (empty($dataOrder)) {
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'order');
+        }
+        $dataUserCurrent = ViewShare::$dataShare;
+        $nameCurrent = $dataUserCurrent['userData']['fullname'];
+
+
+        if (!empty($dataOrder)) {
+            $dataOrderNew = [];
+            foreach ($dataOrder as $item) {
+                $idVariant = $item['product_variant_id'];
+                if (!isset($dataOrderNew[$idVariant])) {
+                    $dataOrderNew[$idVariant] = [
+                        'product_variant_id' => $idVariant,
+                        'title' => $item['title'],
+                        'price' => $item['price'],
+                        'quantity' => $item['quantity'],
+                        'order_date' => $item['order_date'],
+                        'order_code' => $item['order_code'],
+                        'address' => $item['fullname'] . ' - ' . $item['phone'] . ' - ' . $item['address'],
+                        'sub_total' => $item['price'] * $item['quantity'],
+                        'total_money' => $item['total_money'],
+                        'coupon_id' => $item['coupon_id'],
+                        'payment_method_name' => $item['payment_method_name'],
+                        'attribute_values' => [$item['attribute_value']],
+
+                    ];
+                } else {
+                    $dataOrderNew[$idVariant]['attribute_values'][] = $item['attribute_value'];
+                }
+            }
+
+            foreach ($dataOrderNew as &$item) {
+                $item['attribute_values'] = implode('-', $item['attribute_values']);
+            }
+
+            foreach ($dataOrderNew as &$item) {
+                $item['title'] = $item['title'] . " - ({$item['attribute_values']})";
+            }
+
+            $dataOrderNew = array_values($dataOrderNew);
+        }
+
+        $dataInfo = [
+            'sender' => $nameCurrent,
+            'order_code' => $dataOrderNew[0]['order_code'],
+            'order_date' => $dataOrderNew[0]['order_date'],
+            'address' => $dataOrderNew[0]['address'],
+        ];
+
+
+
+        return Services::generatePDF($dataInfo, $dataOrderNew);
     }
 }

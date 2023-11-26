@@ -17,7 +17,6 @@ try {
 let dataAmount = [];
 let dataTotalOrder = [];
 function createChartAmount(dataQW) {
-  console.log(dataQW);
   const data = [
     {
       order_month: 1,

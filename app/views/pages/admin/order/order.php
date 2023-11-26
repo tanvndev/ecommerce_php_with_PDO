@@ -27,6 +27,7 @@
                         <th>Phương thức thanh toán</th>
                         <th>Thành tiền</th>
                         <th>Trạng thái</th>
+                        <th>hoá đơn</th>
                         <th>Cập nhập đơn hàng</th>
                     </tr>
                 </thead>
@@ -36,8 +37,6 @@
                         extract($dataOrderItem)
                     ?>
                         <tr>
-
-
                             <td class="fw-bold "><?= "#$order_code" ?></td>
                             <td><?= $order_date ?></td>
                             <td><?= $fullname ?></td>
@@ -51,12 +50,24 @@
 
                             <td>
                                 <ul class="options">
+
                                     <li class="m-0 ">
-                                        <a href="admin/order-detail/<?= "$order_id-$user_id-$order_code" ?>">
-                                            <i class="edit fas fa-edit"></i>
+                                        <a href="admin/order/downloadInvoice/<?= $order_id ?>">
+                                            <i class="edit far fa-download"></i>
                                         </a>
                                     </li>
+
+                                    <li class="m-0 ">
+                                        <button onclick="printInvoice(<?= $order_id ?>)" style="background-color: transparent;" type="button"">
+                                            <i class=" view far fa-print"></i>
+                                        </button>
+                                    </li>
+
                                 </ul>
+                            </td>
+
+                            <td class=" btn-update">
+                                <a href="admin/order-detail/<?= "$order_id-$order_code" ?>" class="btn btn-custom">Cập nhập </a>
                             </td>
                         </tr>
 

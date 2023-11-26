@@ -1366,6 +1366,16 @@ body::-webkit-scrollbar-thumb:hover {
   text-transform: capitalize;
   color: var(--color-heading);
 }
+.theme-table .btn-update .btn-custom {
+  padding: 10px 20px;
+}
+
+.theme-table .btn-update .btn-custom::before {
+  background-color: var(--color-linkedin);
+}
+.theme-table .btn-update .btn-custom:hover::before {
+  transform: scale(1.05);
+}
 
 .theme-table th:first-child,
 .theme-table td:first-child {

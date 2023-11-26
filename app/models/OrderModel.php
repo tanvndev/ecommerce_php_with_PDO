@@ -34,7 +34,7 @@ class OrderModel extends BaseModel
         $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
-    function getAllOrderItemByUser($user_id, $order_id)
+    function getAllOrderItemByUser($order_id)
     {
         $sql = "
             SELECT 
@@ -65,13 +65,14 @@ class OrderModel extends BaseModel
             INNER JOIN 
                 product prd ON prd.id = pv.prod_id
             WHERE 
-                o.user_id = $user_id AND o.id = $order_id;
+                 o.id = $order_id;
 
         ";
 
         $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
+
 
     function getAllOrderByUser($user_id)
     {
@@ -86,7 +87,7 @@ class OrderModel extends BaseModel
 
     function getAllOrder()
     {
-        return $this->db->table('orders o')->select('o.id AS order_id, o.user_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id, u.fullname')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('user u', 'o.user_id = u.id')->join('order_status os', 'os.id = o.order_status_id')->get();
+        return $this->db->table('orders o')->select('o.id AS order_id, o.user_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id, u.fullname')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('user u', 'o.user_id = u.id')->join('order_status os', 'os.id = o.order_status_id')->orderBy('o.order_date')->get();
     }
 
     function getAllOrderStatus()
