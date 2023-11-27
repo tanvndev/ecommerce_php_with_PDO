@@ -180,6 +180,8 @@ class DashBoard extends Controller
 
     function renderStoreCustomPage($dataBanner, $dataStoreCustom, $dataCate)
     {
+        $dataStoreCustom = $this->storeCustom->getAllStoreCustom();
+
         $this->view('layoutServer', [
             'title' => 'Tuỳ chỉnh cửa hàng',
             'active' => 'storeCustom',
