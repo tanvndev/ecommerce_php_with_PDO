@@ -223,7 +223,7 @@
             ?>
                 <div class="product-area-two">
                     <div class="thumbnail">
-                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
+                        <a href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
                             <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="<?= $prodNewDateItem['thumb'] ?>" alt="<?= $prodNewDateItem['title'] ?>">
                         </a>
                         <?php
@@ -237,7 +237,7 @@
                     <div class="product-content">
                         <div class="inner">
                             <h5 class="title">
-                                <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>"><?= $prodNewDateItem['title'] ?></a>
+                                <a href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>"><?= $prodNewDateItem['title'] ?></a>
                             </h5>
                             <div class="product-price-variant">
                                 <?php
@@ -250,7 +250,7 @@
                             <div class="product-hover-action">
                                 <ul class="cart-action">
                                     <li class="quickview">
-                                        <a class="btn-action" href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
+                                        <a class="btn-action" href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
                                             <i class="far fa-eye"></i>
                                         </a>
                                     </li>
