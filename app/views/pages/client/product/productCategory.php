@@ -92,7 +92,7 @@ $priceSelect = array(
 
                                                 <li class="select-option">
                                                     <a href="<?= $itemDataProd['quantity'] > 0 ? 'product/' . $itemDataProd['slug'] . '-' . $itemDataProd['id'] : '#' ?>" class="btn-action-lagre <?= $itemDataProd['quantity'] > 0 ? '' : 'disabled' ?>">
-                                                        <?= $itemDataProd['quantity'] > 0 ? 'Lựa chọn phân loại' : 'Sản phẩm hết hàng' ?>
+                                                        <?= $itemDataProd['quantity'] > 0 ? 'Mua sản phẩm' : 'Sản phẩm hết hàng' ?>
                                                     </a>
                                                 </li>
 

@@ -4,7 +4,6 @@ $routes['default_controller'] = 'home';
 // Fake url => Real url
 
 // Client
-
 $routes['thu-nghiem'] = 'TestAll/default';
 $routes['product/(.+)'] = 'product/productDetail/$1';
 $routes['product-category'] = 'product/productCategory';
@@ -38,6 +37,11 @@ $routes['update-order-status'] = 'checkout/updateOrderStatus';
 $routes['coming-soon'] = 'Other/comingSoon';
 // Server
 $routes['admin/dashBoard'] = 'admin/dashBoard/default';
+
+// Role
+$routes['admin/add-role'] = 'admin/role/addRole';
+$routes['admin/update-role/(.+)'] = 'admin/role/updateRole/$1';
+$routes['admin/delete-role'] = 'admin/role/deleteRole';
 
 //Product
 $routes['admin/add-product'] = 'admin/product/addProduct';

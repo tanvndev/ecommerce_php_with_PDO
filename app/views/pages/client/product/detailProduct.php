@@ -367,7 +367,7 @@
                                             <li class="select-option">
                                                 <?php if ($quantity > 0) : ?>
                                                     <a type="button" href="<?= $productLink ?>" class="btn-action-lagre">
-                                                        Lựa chọn phân loại
+                                                        Mua sản phẩm
                                                     </a>
                                                 <?php else : ?>
                                                     <a class="btn-action-lagre disabled" href="#">

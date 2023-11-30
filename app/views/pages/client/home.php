@@ -153,7 +153,7 @@
                                             <li class="select-option">
                                                 <?php if ($quantity > 0) : ?>
                                                     <a href="<?= $productLink ?>" class="btn-action-lagre">
-                                                        Lựa chọn phân loại
+                                                        Mua sản phẩm
                                                     </a>
                                                 <?php else : ?>
                                                     <a class="btn-action-lagre disabled" href="#">
@@ -255,7 +255,7 @@
                                         </a>
                                     </li>
                                     <li class="select-option">
-                                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">Lựa chọn phân loại
+                                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">Mua sản phẩm
                                         </a>
                                     </li>
                                     <li class="wishlist">

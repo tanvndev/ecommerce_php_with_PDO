@@ -120,4 +120,26 @@ class UserModel extends BaseModel
     {
         return $this->db->findIdAndDelete($this->tableName(), $id);
     }
+
+
+    // Role
+    function getAllRole()
+    {
+        return $this->db->table('role')->orderBy('id')->get();
+    }
+
+    function addNewRole($data)
+    {
+        return $this->db->create('role', $data);
+    }
+
+    function getOneRole($id)
+    {
+        return $this->db->findById('role', '*', $id);
+    }
+
+    function updateRole($id, $data)
+    {
+        return $this->db->findByIdAndUpdate('role', $id, $data);
+    }
 }
