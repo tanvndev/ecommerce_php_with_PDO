@@ -55,6 +55,7 @@
             ordering: true,
             info: false,
             responsive: true,
+            order: [[1, 'desc']],
           });
         });
       }

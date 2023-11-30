@@ -4,8 +4,8 @@ try {
       return response.json();
     })
     .then(function (data) {
+      console.log(data);
       if (data.code == 200) {
-        // console.log(data);
         createChartAmount(data.data);
         createChartOrderTotal();
       }
