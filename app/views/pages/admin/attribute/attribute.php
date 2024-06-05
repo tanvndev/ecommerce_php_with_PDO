@@ -1,103 +1,51 @@
-<?php
-
-?>
-
-<section class="product-wrap">
-    <div class="card">
-        <div class="title-header">
-            <h5 class="title">Danh sách thuộc tính</h5>
-            <div class="right-options">
-                <ul>
-                    <li>
-                        <a class="btn btn-custom" href="admin/add-attribute">Thêm thuộc tính</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="table-custom">
-            <table class="theme-table" id="table_id">
-                <thead class="rounded-3 overflow-hidden  ">
-                    <tr>
-                        <th>Tên thuộc tính</th>
-                        <th>Tên hiển thị</th>
-                        <th>Giá trị</th>
-                        <th>Thực thi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($dataAttribute as $attributeItem) {
-                    ?>
-                        <tr>
-
-                            <td class="text-capitalize"><?= $attributeItem['name'] ?></td>
-                            <td class="text-capitalize fw-bold "><?= $attributeItem['display_name'] ?></td>
-                            <td>
-                                <div class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/attribute-value/<?= $attributeItem['id'] ?>">
-                                            <i class="view fas fa-eye"></i>
-                                        </a>
-                                    </li>
-                                </div>
-                            </td>
-
-                            <td>
-                                <ul class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/update-attribute/<?= $attributeItem['id'] ?>">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li>
-
-                                    <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(this)" href="javascript:void(0)" data-id="<?= $attributeItem['id'] ?>" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                    <?php } ?>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<script>
-    function setDataIdToInput(link) {
-        const dataId = link.getAttribute("data-id");
-        document.getElementById("idAttribute").value = dataId;
-    }
-</script>
-
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content py-3">
-            <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
-                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/attributes/deleteAttribute">
-                    <input type="hidden" id="idAttribute" name="id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Danh sách thuộc tính</h3>
+                    <a href="admin/add-attribute" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Thêm thuộc tính</a>
                 </div>
+            </div>
+        </div> <!-- Row end  -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">
+                            <thead>
 
+                                <th>Tên thuộc tính</th>
+                                <th>Tên hiển thị</th>
+                                <th>Giá trị</th>
+                                <th>Thực thi</th>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($dataAttribute as $key => $dataAttributeItem) {
+                                    extract($dataAttributeItem)
+                                ?>
+                                    <tr>
+
+                                        <td class=""><?= $name ?></td>
+                                        <td class=""><?= $display_name ?></td>
+                                        <td>
+                                            <a class="link-info " href="admin/attribute-value/<?= $id ?>">Chi tiết</a>
+                                        </td>
+
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                <a href="admin/update-attribute/<?= $id ?>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                                                <button onclick="handleConfirm('admin/attributes/deleteAttribute/<?= $id ?>')" type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

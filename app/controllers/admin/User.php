@@ -76,6 +76,7 @@ class User extends Controller
         //Set rule
         $this->req->rules([
             'fullname' => 'required',
+            'role_id' => 'required',
             'email' => 'required|email',
             'password' => 'required',
             're_password' => 'match:password',
@@ -84,6 +85,7 @@ class User extends Controller
         // Set message
         $this->req->message([
             'fullname.required' => 'Vui lòng không để trống họ tên.',
+            'role_id.required' => 'Vui chọn quyền người dùng.',
             'email.required' => 'Vui lòng không để trống email.',
             'email.email' => 'Vui lòng nhập đúng định dạng email.',
             'password.required' => 'Vui lòng không để trống mật khẩu.',
@@ -275,20 +277,13 @@ class User extends Controller
         return json_encode([]);
     }
 
-    function deleteUser()
+    function deleteUser($id)
     {
-        if ($this->req->isPost()) {
-            $dataPost = $this->req->getFields();
-
-            if ($dataPost['role_id'] == 1) {
-                return $this->res->setToastSession('error', 'Bạn không có quyền xoá ADMIN.', 'admin/user');;
-            }
-            $success =  $this->userModel->deleteUser($dataPost['id']);
-            if ($success) {
-                Session::set('toastMessage', 'Xoá thành công.');
-                return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/user');;
-            }
-            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/user');;
+        $success =  $this->userModel->deleteUser($id);
+        if ($success) {
+            Session::set('toastMessage', 'Xoá thành công.');
+            return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/user');;
         }
+        return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/user');;
     }
 }

@@ -82,4 +82,25 @@ trait SweetAlert
             Session::unsetSession('toastType');
         }
     }
+    function handleConfirm($url)
+    {
+        echo '
+            <script>
+                Swal.fire({
+                    title: "Bạn có chắc chắn muốn xoá không?",
+                    text: "Nếu bạn thực hiện xoá sẽ không thể khôi phục lại!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Vâng, tôi xoá",
+                    cancelButtonText: "Không, tôi huỷ"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.location.href = "' . $url . '";
+                    }
+                });
+            </script>
+    ';
+    }
 }

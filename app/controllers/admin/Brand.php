@@ -40,9 +40,12 @@ class Brand extends Controller
 
     function Default()
     {
+
         if (!$this->req->isPost()) {
+
             $toastMessage = Session::get('toastMessage');
             $toastType = Session::get('toastType');
+
             $this->ToastSession($toastMessage, $toastType);
         }
 
@@ -63,75 +66,96 @@ class Brand extends Controller
 
     function addBrand()
     {
+        $dataValueOld = [];
         if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
+            return $this->renderAddPage($dataValueOld);
         }
-        $type = 'error';
-
+        //Get data post
         $dataPost = $this->req->getFields();
 
+        $dataValueOld = $dataPost;
+
+
+        //Validate
         if (empty($dataPost['name'])) {
-            return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
+            $this->Toast('error', 'Vui lòng không để trống.');
+            return $this->renderAddPage($dataValueOld);
         }
 
-        // Kiem tra da co thuong hieu nay chua
-
-        $brandExist = $this->brandModel->checkBrandExisted($dataPost['name']);
-        if (!empty($brandExist)) {
-            return $this->res->setToastSession($type, 'Thương hiệu đã tồn tại.', 'admin/brand');
-        }
 
         $dataInsert = [
-            'name' => $dataPost['name']
+            'name' => $dataPost['name'],
+            'status' => $dataPost['status']
         ];
 
-        $success = $this->brandModel->addNewBrand($dataInsert);
-        if (!$success) {
-            return $this->res->setToastSession($type, 'Tạo mới thất bại.', 'admin/brand');
+        $createBrand = $this->brandModel->addNewBrand($dataInsert);
+
+        if ($createBrand) {
+            $this->res->setToastSession('success', 'Thêm mới thành công.', 'admin/brand');
+            return;
+        } else {
+            $this->Toast('error', 'Thêm thất bại vui lòng thử lại.');
+            return $this->renderAddPage($dataValueOld);
         }
-        return $this->res->setToastSession('success', 'Tạo mới thành công.', 'admin/brand');
+    }
+    private function renderAddPage($dataValueOld = [])
+    {
+        $this->view('layoutServer', [
+            'active' => 'brand',
+            'title' => 'Thêm thương hiệu',
+            'pages' => 'brand/addBrand',
+            'dataValueOld' => $dataValueOld ?? [],
+        ]);
     }
 
-    function updateBrand()
+    function updateBrand($id)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
-        }
-        $type = 'error';
+        $dataBrand = $this->brandModel->getOneBrand($id) ?? [];
 
+        if (!$this->req->isPost()) {
+            return $this->renderUpdatePage($dataBrand);
+        }
+        //Get data post
         $dataPost = $this->req->getFields();
 
+
+        //Validate
         if (empty($dataPost['name'])) {
-            return $this->res->setToastSession($type, 'Vui lòng không để trống.', 'admin/brand');
-        }
-
-        // Kiem tra da co thuong hieu nay chua
-
-        $brandExist = $this->brandModel->checkBrandExisted($dataPost['name']);
-        if (!empty($brandExist)) {
-            return $this->res->setToastSession($type, 'Thương hiệu đã tồn tại.', 'admin/brand');
+            $this->Toast('error', 'Vui lòng không để trống.');
+            return $this->renderUpdatePage($dataBrand);
         }
 
         $dataUpdate = [
-            'name' => $dataPost['name']
+            'name' => $dataPost['name'],
+            'status' => $dataPost['status']
         ];
 
-        $success = $this->brandModel->updateBrand($dataPost['id'], $dataUpdate);
-        if (!$success) {
-            return $this->res->setToastSession($type, 'Cập nhập thất bại.', 'admin/brand');
-        }
 
-        return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/brand');
+        $updateBrand = $this->brandModel->updateBrand($id, $dataUpdate);
+
+        if ($updateBrand) {
+            return $this->res->setToastSession('success', 'Cập nhập thành công.', 'admin/brand');;
+        } else {
+            $this->Toast('error', 'Cập nhập thất bại vui lòng thử lại.');
+            return $this->renderUpdatePage($dataBrand);
+        }
     }
 
-    function deleteBrand()
+    private function renderUpdatePage($dataBrand = [])
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/brand');
-        }
-        $dataPost = $this->req->getFields();
+        $this->view('layoutServer', [
+            'active' => 'brand',
+            'title' => 'Cập nhập thương hiệu',
+            'pages' => 'brand/updateBrand',
+            'dataBrand' => $dataBrand
+        ]);
+    }
 
-        $success = $this->brandModel->deleteBrand($dataPost['id']);
+
+    function deleteBrand($id)
+    {
+
+        $success = $this->brandModel->deleteBrand($id);
 
         if (!$success) {
             return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/brand');

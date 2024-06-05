@@ -21,7 +21,8 @@ $('#emailLogin').keyup(function () {
       },
       dataType: 'json',
       success: function (data) {
-        if (data.code === 400) {
+        console.log(data);
+        if (data.code == 200) {
           emailEle.addClass('is-invalid');
         } else {
           emailEle.removeClass('is-invalid');
@@ -48,7 +49,7 @@ $('#passwordLogin').keyup(function () {
       },
       dataType: 'json',
       success: function (data) {
-        if (data.code === 400) {
+        if (data.code == 400) {
           passEle.addClass('is-invalid');
         } else {
           passEle.removeClass('is-invalid');
@@ -133,7 +134,6 @@ const registerUser = async () => {
 };
 
 // Quen mat khau
-
 const forgotPasswordUser = async () => {
   try {
     const spin = $('.spin');
@@ -151,7 +151,6 @@ const forgotPasswordUser = async () => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
       if (data.success) {
         showAlert(data.success, 'success', 2000);
       } else if (data.error) {

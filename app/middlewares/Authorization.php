@@ -28,7 +28,7 @@ class Authorization extends Middlewares
         }
 
         $dataUserCurrent = $accessToken['payload'];
-        if ($dataUserCurrent['role_id'] != 3) {
+        if ($dataUserCurrent['role_id'] != 1) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'admin/dashboard');
         }
     }

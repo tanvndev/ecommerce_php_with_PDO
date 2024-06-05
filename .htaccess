@@ -1,6 +1,6 @@
 RewriteEngine On
 
-RewriteBase /WEB2041_Ecommerce/
+RewriteBase /ecommerce/
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

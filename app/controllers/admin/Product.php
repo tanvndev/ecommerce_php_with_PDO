@@ -126,7 +126,6 @@ class Product extends Controller
             'title' => 'required',
             'cate_id' => 'required',
             'brand_id' => 'required',
-            'quantity' => 'required',
             'price' => 'required',
         ]);
 
@@ -135,9 +134,18 @@ class Product extends Controller
             'title.required' => 'Vui lòng không để trống tên sản phẩm.',
             'cate_id.required' => 'Vui lòng không để trống danh mục.',
             'brand_id.required' => 'Vui lòng không để trống thương hiệu.',
-            'quantity.required' => 'Vui lòng không để trống số lượng.',
             'price.required' => 'Vui lòng không để trống giá.',
         ]);
+        // echo '<pre>';
+        // print_r($dataPost);
+        // echo '</pre>';
+        // echo '<pre>';
+        // print_r($image);
+        // echo '</pre>';
+
+        // echo '<pre>';
+        // print_r($thumb);
+        // echo '</pre>';
 
         //Bat dau validate
         $this->req->validate();
@@ -160,7 +168,6 @@ class Product extends Controller
             'slug' => Format::createSlug($dataPost['title']),
             'cate_id' => $dataPost['cate_id'],
             'brand_id' => $dataPost['brand_id'],
-            'quantity' => $dataPost['quantity'],
             'price' => $dataPost['price'],
             'status' => $dataPost['status'] ?? 0,
             'short_description' => $dataPost['short_description'] ?? '',
@@ -212,7 +219,7 @@ class Product extends Controller
         if (isset($dataPost['attribute']) && !empty($dataPost['attribute'][0])) {
 
             //Check bat buoc phai nhap cac truong 
-            if (empty($dataPost['quantity_variant'][0]) || empty($dataPost['price_variant'][0])) {
+            if (empty($dataPost['price_variant'][0])) {
                 $this->Toast('error', 'Vui lòng không để trống biến thế.');
                 return $this->renderAddPage($cateData, $brandData, $attributeData, $attributeValueData, $dataValueOld);
             }
@@ -236,23 +243,22 @@ class Product extends Controller
             $dataInsertVariants = [];
 
 
-            foreach ($dataPost['quantity_variant'] as $keyVariant => $quantity_variant) {
+            foreach ($dataPost['price_variant'] as $keyVariant => $price_variant) {
                 $dataInsertVariants[] = [
                     'prod_id' => $prod_id,
-                    'quantity' => $quantity_variant,
-                    'price' => $dataPost['price_variant'][$keyVariant],
+                    'price' => $price_variant,
                     'discount' => 0,
                 ];
 
                 // Kiem tra co gia sale hay khong
                 if (!empty($dataPost['sale_price_variant'][$keyVariant])) {
                     // Kiem tra gia sale phai nho hon gia 
-                    if ($dataPost['sale_price_variant'][$keyVariant] >= $dataPost['price_variant'][$keyVariant]) {
+                    if ($dataPost['sale_price_variant'][$keyVariant] >= $price_variant) {
                         $this->Toast('error', 'Giá sale phải nhỏ hơn giá.');
                         return $this->renderAddPage($cateData, $brandData, $attributeData, $attributeValueData, $dataValueOld);
                     }
 
-                    $discountVariant = round((($dataPost['price_variant'][$keyVariant] - $dataPost['sale_price_variant'][$keyVariant]) / $dataPost['price_variant'][$keyVariant]) * 100, 0);
+                    $discountVariant = round((($price_variant - $dataPost['sale_price_variant'][$keyVariant]) / $price_variant) * 100, 0);
 
                     $dataInsertVariants[$keyVariant]['price'] = $dataPost['sale_price_variant'][$keyVariant];
                     $dataInsertVariants[$keyVariant]['discount'] = $discountVariant;
@@ -375,19 +381,7 @@ class Product extends Controller
         ]);
     }
 
-    function getAttribute()
-    {
-        $data = $this->db->query("");
 
-        "SELECT pv.id, p.title, pv.price, pv.quantity, pv.discount, a.display_name, av.value_name AS attribute_value
-        FROM product_variants pv
-        JOIN variants_value vv ON pv.id = vv.product_variant_id
-        JOIN attribute a ON vv.attribute_id = a.id
-        JOIN attribute_value av ON vv.attribute_value_id = av.id
-        JOIN product p ON pv.prod_id = p.id
-        WHERE pv.prod_id = 82 AND pv.id = 4
-        ";
-    }
 
     function updateProduct($id)
     {
@@ -417,7 +411,6 @@ class Product extends Controller
             'title' => 'required',
             'cate_id' => 'required',
             'brand_id' => 'required',
-            'quantity' => 'required',
             'price' => 'required',
         ]);
 
@@ -426,7 +419,6 @@ class Product extends Controller
             'title.required' => 'Vui lòng không để trống tên sản phẩm.',
             'cate_id.required' => 'Vui lòng không để trống danh mục.',
             'brand_id.required' => 'Vui lòng không để trống thương hiệu.',
-            'quantity.required' => 'Vui lòng không để trống số lượng.',
             'price.required' => 'Vui lòng không để trống giá.',
         ]);
 
@@ -445,12 +437,10 @@ class Product extends Controller
             'slug' => Format::createSlug($dataPost['title']),
             'cate_id' => $dataPost['cate_id'],
             'brand_id' => $dataPost['brand_id'],
-            'quantity' => $dataPost['quantity'],
             'price' => $dataPost['price'],
             'status' => $dataPost['status'] ?? 0,
             'short_description' => $dataPost['short_description'] ?? '',
             'description' => $dataPost['description'] ?? '',
-            'isVariant' => $dataPost['isVariant'] ?? 0, //Trang thai co bien the hay khong
         ];
 
 
@@ -585,7 +575,7 @@ class Product extends Controller
         $toastType = Session::get('toastType');
         $this->ToastSession($toastMessage, $toastType);
 
-        $dataProd = $this->db->findById('product', 'id, title', $id);
+        $dataProd = $this->db->findById('product', 'id, title, price, create_at', $id);
         $dataProdVariants = $this->productModel->getAllProdVariants($id);
 
         if (!empty($dataProdVariants)) {
@@ -683,7 +673,7 @@ class Product extends Controller
         $toastType = Session::get('toastType');
         $this->ToastSession($toastMessage, $toastType);
 
-        $dataProd = $this->db->findById('product', 'id, title', $id);
+        $dataProd = $this->db->findById('product', 'id, title, price, create_at', $id);
         $attributeData = $this->attributeModel->getAllAttribute() ?? [];
         $attributeValueData = $this->attributeModel->getAllAttributeValue() ?? [];
 
@@ -699,8 +689,6 @@ class Product extends Controller
         }
 
 
-        $image = $_FILES['images'];
-
         $dataPost = $this->req->getFields();
 
         if (!isset($dataPost['attribute'])) {
@@ -710,7 +698,7 @@ class Product extends Controller
 
 
         //Check bat buoc phai nhap cac truong 
-        if (empty($dataPost['quantity_variant'][0]) || empty($dataPost['price_variant'][0])) {
+        if (empty($dataPost['price_variant'][0])) {
             return $this->res->setToastSession('error', 'Vui lòng không để trống biến thế.', 'admin/add-product-variants/' . $id);
         }
 
@@ -732,22 +720,21 @@ class Product extends Controller
         //dataInsert of product_variants
         $dataInsertVariants = [];
 
-        foreach ($dataPost['quantity_variant'] as $keyVariant => $quantity_variant) {
+        foreach ($dataPost['price_variant'] as $keyVariant => $price_variant) {
             $dataInsertVariants[] = [
                 'prod_id' => $id,
-                'quantity' => $quantity_variant,
-                'price' => $dataPost['price_variant'][$keyVariant],
+                'price' => $price_variant,
                 'discount' => 0,
             ];
 
             // Kiem tra co gia sale hay khong
             if (!empty($dataPost['sale_price_variant'][$keyVariant])) {
                 // Kiem tra gia sale phai nho hon gia 
-                if ($dataPost['sale_price_variant'][$keyVariant] > $dataPost['price_variant'][$keyVariant]) {
+                if ($dataPost['sale_price_variant'][$keyVariant] >= $price_variant) {
                     return $this->res->setToastSession('error', 'Giá sale phải nhỏ hơn giá.', 'admin/add-product-variants/' . $id);
                 }
 
-                $discountVariant = round((($dataPost['price_variant'][$keyVariant] - $dataPost['sale_price_variant'][$keyVariant]) / $dataPost['price_variant'][$keyVariant]) * 100, 0);
+                $discountVariant = round((($price_variant - $dataPost['sale_price_variant'][$keyVariant]) / $price_variant) * 100, 0);
 
                 $dataInsertVariants[$keyVariant]['price'] = $dataPost['sale_price_variant'][$keyVariant];
                 $dataInsertVariants[$keyVariant]['discount'] = $discountVariant;
@@ -806,47 +793,6 @@ class Product extends Controller
         }
 
 
-        if (!empty($image['name'][0])) {
-            //  validate Upload image image
-            $urlUploadImages = [];
-            foreach ($image['tmp_name'] as $key => $name) {
-                $type = $image['type'][$key];
-                $size = $image['size'][$key];
-                $maxFileSize = 5000000;
-                $allowTypes = array('image/jpg', 'image/png', 'image/jpeg', 'image/webp');
-
-                if ($size > $maxFileSize) {
-                    // Kiem tra dung luong file
-                    return $this->res->setToastSession('error', 'Dung lượng file < 5MB.', 'admin/add-product-variants/' . $id);
-                } elseif (!in_array($type, $allowTypes)) {
-                    // Kiem tra loai file
-                    return $this->res->setToastSession('error', 'Hãy chọn file có đuôi image/jpg | image/png | image/jpeg | image/webp', 'admin/add-product-variants/' . $id);
-                } else {
-                    //Upload file len cloud
-                    $urlImage =  Services::uploadImageToCloudinary($name);
-
-                    if (empty($urlImage)) {
-                        return $this->res->setToastSession('error', 'Tải ảnh thất bại.', 'admin/add-product-variants/' . $id);
-                    }
-                    //Gan cac link image vao mang
-                    $urlUploadImages[] = $urlImage;
-                }
-            }
-
-            //bat dau upload anh len database
-            foreach ($urlUploadImages as $urlUploadImage) {
-
-                $uploadImage = $this->db->create('images_product', [
-                    'prod_id' => $id,
-                    'image' => $urlUploadImage,
-                ]);
-
-                if (!$uploadImage) {
-                    return $this->res->setToastSession('error', 'Có lỗi liên quan đến biến thể.', 'admin/add-product-variants/' . $id);
-                }
-            }
-        }
-
         //Cap nhap lai isVariant
         $updateProd = $this->productModel->updateProduct($id, ['isVariant' => 1]);
 
@@ -858,14 +804,10 @@ class Product extends Controller
         return $this->res->setToastSession('success', 'Thêm biến thể thành công.', 'admin/product-variants/' . $id);
     }
 
-    function deleteProductVariant($prodId)
+    function deleteProductVariant($prodId, $prodVariantId)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Xoá biến thể thất bại.', 'admin/product-variants/' . $prodId);
-        }
-        $dataPost = $this->req->getFields();
 
-        $delVariant = $this->productModel->deleteProductVariant($dataPost['id']);
+        $delVariant = $this->productModel->deleteProductVariant($prodVariantId);
 
         if ($delVariant) {
             return $this->res->setToastSession('success', 'Xoá biến thể thành công.', 'admin/product-variants/' . $prodId);
@@ -874,13 +816,9 @@ class Product extends Controller
         return $this->res->setToastSession('error', 'Xoá biến thể thất bại.', 'admin/product-variants/' . $prodId);
     }
 
-    function deleteProduct()
+    function deleteProduct($id)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Xoá sản phẩm thất bại.', 'admin/product');
-        }
-        $dataPost = $this->req->getFields();
-        $delProd = $this->productModel->deleteProduct($dataPost['id']);
+        $delProd = $this->productModel->deleteProduct($id);
 
         if ($delProd) {
             return $this->res->setToastSession('success', 'Xoá sản phẩm thành công.', 'admin/product');
@@ -921,19 +859,17 @@ class Product extends Controller
     }
 
 
-    function rating()
+    function rating($prod_id)
     {
         if (!$this->req->isPost()) {
             $toastMessage = Session::get('toastMessage');
             $toastType = Session::get('toastType');
             $this->ToastSession($toastMessage, $toastType);
         }
-
-        $dataRatings = $this->productModel->getAllRatings() ?? [];
-
+        $dataRatings = $this->productModel->getAllRatings($prod_id) ?? [];
         $this->view('layoutServer', [
             'title' => 'Danh sách đánh giá',
-            'active' => 'ratings',
+            'active' => 'product',
             'pages' => 'product/ratings',
             'dataRatings' => $dataRatings,
         ]);
@@ -941,11 +877,6 @@ class Product extends Controller
 
     function hideComment()
     {
-        if (!$this->req->isPost()) {
-            echo $this->res->dataApi('400', 'Cập nhập thất bại.', []);
-            return;
-        }
-
         $dataUser = $this->userModel->getOneUser($this->user_id);
         if ($dataUser['role_id'] != 1) {
             echo $this->res->dataApi('400', 'Xin lỗi bạn không có quyền. Vui lòng liên hệ quản trị.', []);

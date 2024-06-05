@@ -2,115 +2,103 @@
 const notCartHtml = () => {
   return `<div class="text-center">
             <img class="img-fluid" src="https://www.maytinhtrangbom.vn/client/theme/image/emptycart.webp" alt="Chưa có sản phẩm img">
-            <p class="fs-4">Chưa có sản phẩm.</p>
+            <p >Chưa có sản phẩm.</p>
           </div>`;
 };
 
-const itemCartHtml = (item) => {
-  return `
-        <li class="cart-item">
-            <div class="item-img">
-                <a href="product/${item.slug}-${item.product_id}">
-                  <img src="${item.thumb}" alt="${item.title}">
-                </a>
-                <button onclick="deleteCart(${
-                  item.cart_item_id
-                })" class="close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="item-content">
-              
-                <h3 class="item-title"><a href="product/${item.slug}-${
-    item.product_id
-  }">${item.title}</a></h3>
-
-                <aside class="variants">
-                    
-             
-                  <label>
-                        <span class="title-variant fw-bold ">Phân loại: </span>
-                        <span class="sub-variant">${
-                          item.attribute_values
-                        }</span>
-                  </label>
-                
-                    <div class="sub-variants">
+const itemCartHtml = (item) => `
+  <li class="d-flex align-items-center ">
+                    <a style="background-color: #f7f7f7;" href="product/${
+                      item.slug
+                    }-${item.product_id}" class="sidekka_pro_img  rounded-2  ">
+                        <img style="object-fit: contain; mix-blend-mode: darken;" class="img-responsive rounded-2" src="${
+                          item.thumb
+                        }" alt="product">
+                    </a>
+                    <div class="ec-pro-content">
+                        <a href="product/${item.slug}-${
+  item.product_id
+}" class="cart_pro_title">${item.title}</a>
+                        <label style="font-size: 12px" class="mb-0">
+                            <span class="title-variant fw-bold ">Phân loại: </span>
+                            <span>${item.attribute_values}</span>
+                        </label>
+                        <span class="cart-price mt-0 ">
+                            <span>${formatCurrency(item.price)}</span>
+                            <small>x ${item.quantity}</small>
+                        </span>
+                        <div class="qty-plus-minus">
+                            <div onclick="updateQuantityCart(${
+                              item.cart_item_id
+                            }, 'minus')" class="dec ec_qtybtn">-</div>
+                            <input class="qty-input" type="text" name="ec_qtybtn" value="${
+                              item.quantity
+                            }" />
+                            <div onclick="updateQuantityCart(${
+                              item.cart_item_id
+                            }, 'plus')" class="inc ec_qtybtn">+</div>
+                        </div>
+                        <button type="button" onclick="deleteCart(${
+                          item.cart_item_id
+                        })" class="remove">×</button>
                     </div>
-
-                </aside>
-                <div class="item-price">
-                    ${formatCurrency(item.price)}
-                </div>
-                <div class="pro-qty item-quantity">
-                    <button type="button" onclick="updateQuantityCart(${
-                      item.cart_item_id
-                    }, 'minus')" class="dec qtybtn">-</button>
-                    <input type="text" class="quantity-input" value="${
-                      item.quantity
-                    }">
-                    <button type="button" onclick="updateQuantityCart(${
-                      item.cart_item_id
-                    }, 'plus') "class="inc qtybtn">+</button>
-                </div>
-            </div>
-        </li>
-    `;
-};
+                </li>
+`;
 
 const cartHtmlMain = (item) => {
   return `
-    <tr>
-                                <td class="product-remove">
-                                    <button onclick="deleteCart(${
-                                      item.cart_item_id
-                                    })" class="remove-wishlist"><i class="fal fa-times"></i>
-                                    </button>
-                                </td>
-                                <td class="product-thumbnail">
-                                    <a href="product/${item.slug}-${
-    item.product_id
-  }">
-                                        <img src="${item.thumb}" alt="${
+  <tr>
+                                                    <td data-label="Product" class="ec-cart-pro-name">
+                                                        <a href="product/${
+                                                          item.slug
+                                                        }-${item.product_id}">
+                                                            <img class="ec-cart-pro-img mr-4" src="${
+                                                              item.thumb
+                                                            }" alt="${
     item.title
-  }">
-                                    </a>
-                                </td>
-                                <td class="product-title">
-                                    <a href="product/${item.slug}-${
-    item.product_id
-  }">${item.title}</a>
-                                    <div class="product-variant">
-                                        <span class="title-variant">Phân loại: </span>
-                                        <span class="sub-variant">${
-                                          item.attribute_values
-                                        }</span>
-                                    </div>
-                                </td>
-                                <td class="product-price">
-                                     ${formatCurrency(item.price)}
-                                <td class="product-quantity">
-                                    <div class="pro-qty item-quantity">
-                                        <button onclick="updateQuantityCart(${
-                                          item.cart_item_id
-                                        }, 'minus')" class="dec qtybtn">-</button>
-                                        <input type="text" class="quantity-input" value="${
-                                          item.quantity
-                                        }">
-                                        <button onclick="updateQuantityCart(${
-                                          item.cart_item_id
-                                        }, 'plus')" class="inc qtybtn">+</button>
-                                    </div>
-                                </td>
-                                <td class="product-subtotal">
-                                    ${formatCurrency(
-                                      item.price * item.quantity,
-                                    )}
-                                </td>
-                            </tr>
+  }" />
+                                                            <div>
+                                                                <p class="mb-0  ">${
+                                                                  item.title
+                                                                }</p>
+                                                                <small style="font-size: 12px;" class="text-primary ">(${
+                                                                  item.attribute_values
+                                                                } )</small>
+                                                            </div>
+                                                        </a>
+                                                    </td>
+                                                    <td data-label="Price" class="ec-cart-pro-price"><span class="amount">${formatCurrency(
+                                                      item.price,
+                                                    )}</span></td>
+                                                    <td data-label="Quantity" class="ec-cart-pro-qty" style="text-align: center;">
+                                                        <div class="cart-qty-plus-minus">
+                                                            <input class="cart-plus-minus" type="text" name="cartqtybutton" value="${
+                                                              item.quantity
+                                                            }" />
+                                                            <div class="ec_cart_qtybtn">
+                                                              <div onclick="updateQuantityCart(${
+                                                                item.cart_item_id
+                                                              }, 'plus')" class="inc ec_qtybtn">+</div>
+                                                              <div onclick="updateQuantityCart(${
+                                                                item.cart_item_id
+                                                              }, 'minus')" class="dec ec_qtybtn">-</div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Total" class="ec-cart-pro-subtotal">${formatCurrency(
+                                                      item.price *
+                                                        item.quantity,
+                                                    )}</td>
+                                                    <td data-label="Remove" class="ec-cart-pro-remove">
+                                                        <button onclick="deleteCart(${
+                                                          item.cart_item_id
+                                                        })" type="button"><i class="ecicon eci-trash-o"></i></button>
+                                                    </td>
+                                                </tr>
   `;
 };
-
 // fetch
-const getData = async () => {
+const getCartData = async () => {
   try {
     const response = await fetch('cart/getAllCartApi');
 
@@ -126,9 +114,10 @@ const getData = async () => {
     console.log(error);
   }
 };
-getData();
+getCartData();
 
 const addCart = async () => {
+  console.log(1);
   try {
     let data = [];
     //kiem tra da chon bien the chua
@@ -155,7 +144,7 @@ const addCart = async () => {
     if (data.code == 400) {
       showToast('error', data.message);
     }
-    getData();
+    getCartData();
   } catch (error) {
     console.log(error);
   }
@@ -170,7 +159,7 @@ const updateQuantityCart = async (id, action) => {
       const data = await response.json();
 
       if (data.code == 200) {
-        getData();
+        getCartData();
       }
 
       if (data.code == 400) {
@@ -191,7 +180,7 @@ const deleteCart = async (id) => {
     if (response.ok) {
       const data = await response.json();
       if (data.code == 200) {
-        getData();
+        getCartData();
       }
 
       if (data.code == 400) {
@@ -232,7 +221,11 @@ const updateHtmlCart = (data) => {
   } else {
     cartList.append(notCartHtml());
     $('#subtotal-amount').html(formatCurrency(0));
-    $('#not-cart-main').append(notCartHtml());
+    $('#not-cart-main').append(
+      `<tr>
+        <td>Chưa có sản phẩm nào.</td>
+        </tr>`,
+    );
 
     //Cart main
     $('#order-subtotal').html(formatCurrency(0));

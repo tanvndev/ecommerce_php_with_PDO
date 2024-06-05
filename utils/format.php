@@ -25,12 +25,13 @@ class Format
         }
     }
 
-    static function calculateOriginalPrice($Price, $discount)
+    static function calculateOriginalPrice($price, $discount)
     {
         if ($discount < 0 || $discount > 100) {
             return $originalPrice = 0;
         }
-        $originalPrice = $Price / (1 - ($discount / 100));
+
+        $originalPrice = $price / (1 - ($discount / 100));
         $originalPrice = number_format($originalPrice, 0, '.', '.') . ' ₫';
 
         return $originalPrice;
@@ -43,11 +44,12 @@ class Format
 
         for ($index = 0; $index < 5; $index++) {
             if ($index < $filledStars) {
-                $starArray[] = '<i class="fas fa-star"></i>';
+                $starArray[] = '<i style="color: #ffc73a" class="fas fa-star"></i>';
             } else {
-                $starArray[] = '<i class="far fa-star"></i>';
+                $starArray[] = '<i style="color: #ffc73a" class="far fa-star"></i>';
             }
         }
+
         return implode(' ', $starArray);
     }
 

@@ -39,6 +39,18 @@ class Account extends Controller
         ]);
     }
 
+    function order()
+    {
+        $dataOrder = $this->orderModel->getAllOrderByUser($this->user_id);
+
+        $this->view('layoutClient', [
+            'title' => 'Lịch sử mua hàng',
+            'currentPath' => '',
+            'pages' => 'account/order',
+            'dataOrder' => $dataOrder ?? [],
+        ]);
+    }
+
 
     function orderDetail($order_id)
     {
@@ -53,7 +65,7 @@ class Account extends Controller
         // [1] => zFicq1700390884 // order_code
         $order_id = reset($orderIdArr);
 
-        $dataOrder = $this->orderModel->getAllOrderItemByUser($this->user_id, $order_id);
+        $dataOrder = $this->orderModel->getAllOrderItemByUser($order_id);
         $dataOrderStatus = $this->orderModel->getAllOrderStatus();
 
 
@@ -95,6 +107,7 @@ class Account extends Controller
 
             $dataOrderNew = array_values($dataOrderNew);
         }
+
 
 
         $this->view('layoutClient', [
@@ -222,8 +235,9 @@ class Account extends Controller
     private function renderLoginPage($dataValueOld = [])
     {
 
-        $this->view('layoutLogin', [
+        $this->view('layoutClient', [
             'title' => 'Đăng nhập',
+            'currentPath' => '',
             'pages' => 'account/login',
             'dataValueOld' => $dataValueOld ?? [],
         ]);
@@ -236,9 +250,10 @@ class Account extends Controller
         if ($this->req->isPost()) {
             $dataValueOld = $this->req->getFields();
         }
-        $this->view('layoutLogin', [
+        $this->view('layoutClient', [
             'title' => 'Đăng ký',
             'pages' => 'account/register',
+            'currentPath' => '',
             'dataValueOld' => $dataValueOld ?? [],
         ]);
     }
@@ -285,7 +300,8 @@ class Account extends Controller
         //Tao token
         $token = Format::generateRandomString(64);
         $subject = 'Xác nhận đăng ký.';
-        $body = 'Click vào đây để hoàn thành đăng ký của bạn: <a href="http://localhost/WEB2041_Ecommerce/signup-comfirm/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
+        $tokenUrl = 'http://localhost/ecommerce/signup-comfirm/' . $token;
+        $body = TemplateHtml::emailConfirm($tokenUrl);
 
         // luu tam du lieu vao cookie truoc khi xac nhan
         $tempUser = array(
@@ -360,8 +376,9 @@ class Account extends Controller
     // forgot Password
     function forgotPassword()
     {
-        $this->view('layoutLogin', [
+        $this->view('layoutClient', [
             'title' => 'Quên mật khẩu',
+            'currentPath' => '',
             'pages' => 'account/forgotPassword'
         ]);
     }
@@ -370,6 +387,7 @@ class Account extends Controller
     {
         $type = 'error';
         $dataPost = $this->req->getFields();
+
 
         //Set rule
         $this->req->rules([
@@ -401,7 +419,8 @@ class Account extends Controller
         // Create token
         $token = Format::generateRandomString(64);
         $subject = 'Đặt lại mật khẩu.';
-        $body = 'Click vào đây để xác nhận email của bạn: <a href="http://localhost/WEB2041_Ecommerce/account/finalForgotPassword/' . $token . '">Xác nhận</a> Đường dẫn sẽ hết hạn trong 15 phút.';
+        $tokenUrl = 'http://localhost/ecommerce/account/finalForgotPassword/' . $token;
+        $body = TemplateHtml::resetPasswordConfirm($tokenUrl);
 
 
         //Send mail
@@ -500,9 +519,10 @@ class Account extends Controller
 
     private function renderResetPasswordPage($dataValueOld)
     {
-        $this->view('layoutLogin', [
+        $this->view('layoutClient', [
             'title' => 'Đặt lại mật khẩu',
             'pages' => 'account/resetPassword',
+            'currentPath' => '',
             'dataValueOld' => $dataValueOld ?? [],
         ]);
     }
@@ -511,7 +531,7 @@ class Account extends Controller
     {
         Session::destroy();
         Cookie::unsetCookie('keepLogin');
-        header('location: /WEB2041_Ecommerce/');
+        header('location: /ecommerce/');
     }
 
     function updateUserCurrent()
@@ -519,7 +539,7 @@ class Account extends Controller
         $dataUserUp = $this->userModel->getOneUser($this->user_id) ?? [];
         $type = 'error';
         if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'account');
+            return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'my-account');
         }
         //Get data post
         $dataPost = $this->req->getFields();
@@ -553,7 +573,7 @@ class Account extends Controller
         // Neu co loi validate se hien loi
         if (!empty($dataError)) {
             $this->Toast($type, reset($dataError));
-            return $this->res->setToastSession('error', reset($dataError), 'account');
+            return $this->res->setToastSession('error', reset($dataError), 'my-account');
         }
 
 
@@ -561,18 +581,18 @@ class Account extends Controller
 
         $checkEmail = $this->userModel->checkPhoneExisted($dataPost['email']);
         if ($dataUserUp['email'] != $dataPost['email'] && !empty($checkEmail)) {
-            return $this->res->setToastSession('error', 'Email đẫ tồn tại', 'account');
+            return $this->res->setToastSession('error', 'Email đẫ tồn tại', 'my-account');
         }
 
         $checkPhone = $this->userModel->checkPhoneExisted($dataPost['phone']);
         if ($dataUserUp['phone'] != $dataPost['phone'] && !empty($checkPhone)) {
-            return $this->res->setToastSession('error', 'Số điện thoại đẫ tồn tại', 'account');
+            return $this->res->setToastSession('error', 'Số điện thoại đẫ tồn tại', 'my-account');
         }
 
 
         //Kiem tra lai mat khau
         if (!password_verify($dataPost['old_password'], $dataUserUp['password'])) {
-            return $this->res->setToastSession('error', 'Mật khẩu không chính xác.', 'account');
+            return $this->res->setToastSession('error', 'Mật khẩu không chính xác.', 'my-account');
         }
 
         $hashedPassword = password_hash($dataPost['new_password'], PASSWORD_BCRYPT);
@@ -591,23 +611,22 @@ class Account extends Controller
         if (!empty($avatar['name'])) {
             //  validate Upload image thumb
             if (!Format::validateUploadImage($avatar)) {
-                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'account');
+                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'my-account');
             }
 
             //upload anh len cloud
             $urlAvatar = Services::uploadImageToCloudinary($avatar['tmp_name']);
             if (empty($urlAvatar)) {
-                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'account');
+                return $this->res->setToastSession('error', 'Có lỗi vể ảnh vui lòng kiểm tra lại.', 'my-account');
             }
-
             $dataUpdate['avatar'] = $urlAvatar;
         }
 
         $updateUser = $this->userModel->updateUser($this->user_id, $dataUpdate);
         if ($updateUser) {
-            return $this->res->setToastSession('success', 'Cập nhập tài khoản thành công.', 'account');;
+            return $this->res->setToastSession('success', 'Cập nhập tài khoản thành công.', 'my-account');;
         } else {
-            return $this->res->setToastSession('error', 'Cập nhập tài khoản thất bại.', 'account');;
+            return $this->res->setToastSession('error', 'Cập nhập tài khoản thất bại.', 'my-account');;
         }
     }
 }

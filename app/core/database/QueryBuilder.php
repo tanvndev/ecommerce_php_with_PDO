@@ -109,7 +109,7 @@ trait QueryBuiler
     public function getOne()
     {
         $sqlQuery = "SELECT $this->selectField FROM $this->tableName $this->innerJoin $this->leftJoin $this->where $this->orderBy $this->limit";
-        // var_dump($sqlQuery);
+        // var_dump($sqlQuery);`
 
         $sqlQuery = trim($sqlQuery);
         $query = $this->query($sqlQuery);

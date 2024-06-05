@@ -76,12 +76,19 @@ class OrderModel extends BaseModel
 
     function getAllOrderByUser($user_id)
     {
-        return $this->db->table('orders o')->select('o.id AS order_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('order_status os', 'os.id = o.order_status_id')->where('o.user_id', '=', $user_id)->get();
+        return $this->db->table('orders o')->select('o.id AS order_id, o.order_code, o.total_money, o.order_date, pd.display_name AS payment_method_name, os.name AS order_status_name, o.order_status_id')->join('payment p', 'p.order_id = o.id')->join('payment_method pd', 'pd.id = p.payment_method_id')->join('order_status os', 'os.id = o.order_status_id')->where('o.user_id', '=', $user_id)->orderBy('o.order_date')->get();
     }
 
     function getOneOrder($id)
     {
         return $this->db->findById($this->tableName(), $this->selectField, $id);
+    }
+
+    function countOrder()
+    {
+        $sql = "SELECT COUNT(*) FROM orders";
+        $data = $this->db->query($sql)->fetchColumn();
+        return $data;
     }
 
 

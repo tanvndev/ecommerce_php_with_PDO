@@ -3,121 +3,91 @@
 // print_r($dataStoreCustom);
 // echo '</pre>';
 ?>
-<section class="add-wrap-admin">
-    <div class="container-fluid ">
-        <form method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-sm-12 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Thông tin cửa hàng</h5>
+
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="row align-items-center">
+                <div class="border-0 mb-4">
+                    <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                        <h3 class="fw-bold mb-0">Chỉnh sửa thông tin cửa hàng</h3>
+                        <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Lưu</button>
+                    </div>
+                </div>
+            </div> <!-- Row end  -->
+
+            <div class="row g-3 mb-3">
+
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card mb-3">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold ">Thông tin cửa hàng</h6>
                         </div>
-                        <div class="form-input">
-
-                            <input type="hidden" name="store_id" value="<?= $dataStoreCustom['id'] ?? '' ?>">
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tên của hàng<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="name" class="form-control input-text" value="<?= $dataStoreCustom['name'] ?? '' ?>" type="text" placeholder="Tên của hàng" required>
-                                </div>
-                            </div>
-                            <!--  -->
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Địa chỉ cửa hàng<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control input-text" name="address" cols="1" rows="3"><?= $dataStoreCustom['address'] ?? '' ?></textarea>
-                                </div>
-                            </div>
-                            <!--  -->
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Số điện thoại<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="phone" class="form-control input-text" value="<?= $dataStoreCustom['phone'] ?? '' ?>" type="tel" placeholder="Số điện thoại" required>
-                                </div>
-                            </div>
-                            <!--  -->
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Email cửa hàng<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="email" class="form-control input-text" value="<?= $dataStoreCustom['email'] ?? '' ?>" type="email" placeholder="Email cửa hàng" required>
-                                </div>
-                            </div>
-                            <!--  -->
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Giờ mở cửa<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="open_time" class="form-control input-text" value="<?= $dataStoreCustom['open_time'] ?? '' ?>" type="text" placeholder="Giờ mở cửa" required>
-                                </div>
-                            </div>
-                            <!--  -->
-
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Logo của hàng<span class="text-danger">*</span></label>
-                                <div class="col-sm-6">
-                                    <input name="logo" class="form-control input-file" type="file">
+                        <div class="card-body">
+                            <div class="row g-3 align-items-center">
+                                <input type="hidden" name="store_id" value="<?= $dataStoreCustom['id'] ?? '' ?>">
+                                <div class="col-md-12">
+                                    <label class="form-label">Tên cửa hàng</label>
+                                    <input type="text" value="<?= $dataStoreCustom['name'] ?? '' ?>" name="name" class="form-control">
                                 </div>
 
-                                <div class="col-sm-3">
-                                    <img class="img-review" src="<?= $dataStoreCustom['logo'] ?? '' ?>" alt="<?= 'image ' . $dataStoreCustom['name'] ?? '' ?>">
+                                <div class="col-md-12">
+                                    <label class="form-label">Địa chỉ cửa hàng</label>
+                                    <textarea class="form-control " name="address" cols="30" rows="3"><?= $dataStoreCustom['address'] ?? '' ?></textarea>
                                 </div>
+
+                                <div class="col-md-12">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" value="<?= $dataStoreCustom['phone'] ?? '' ?>" name="phone" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Địa chỉ email</label>
+                                    <input type="text" value="<?= $dataStoreCustom['email'] ?? '' ?>" name="email" class="form-control">
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label">Giờ mở cửa</label>
+                                    <input type="text" value="<?= $dataStoreCustom['open_time'] ?? '' ?>" name="open_time" class="form-control">
+                                </div>
+
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-sm-12 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Thông tin banner</h5>
+                    <div class="card mb-3">
+                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                            <h6 class="mb-0 fw-bold ">Logo</h6>
                         </div>
-                        <div class="form-input">
-                            <input type="hidden" name="banner_id" value="<?= $dataBanner['id'] ?? '' ?>">
-
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tiêu đề banner<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="title" class="form-control input-text" value="<?= $dataBanner['title'] ?? '' ?>" type="text" placeholder="Tiêu đề banner" required>
+                        <div class="card-body">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-md-12">
+                                    <label class="form-label">Tải lên hình logo</label>
+                                    <small class="d-block text-muted mb-2">Chỉ hình ảnh dọc hoặc hình vuông,
+                                        Đúng định dạng file (jpg, png, webp) tối đa 5MB.</small>
+                                    <input type="file" name="logo" id="input-file-to-destroy" class="dropify" data-allowed-formats="portrait square" data-max-file-size="5M" data-max-height="2000">
                                 </div>
-                            </div>
-                            <!--  -->
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Mô tả banner<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input name="description" class="form-control input-text" value="<?= $dataBanner['description'] ?? '' ?>" type="text" placeholder="Mô tả banner" required>
-                                </div>
-                            </div>
-                            <!--  -->
 
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Danh mục <span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <select class="select-custom" name="cate_id" id="select-custom" required>
-                                        <?php
-                                        foreach ($dataCate as $cateItem) {
-                                            $idCategory = $dataBanner['cate_id'] ?? '';
-
-                                            $selectedCate = $cateItem['id'] == $idCategory ?? '' ? 'selected' : '';
-                                        ?>
-                                            <option <?= $selectedCate  ?> value="<?= $cateItem['id'] ?>"><?= $cateItem['name'] ?></option>
-                                        <?php } ?>
-
-                                    </select>
-
-                                </div>
                             </div>
 
+                            <div class="mt-4 gap-3 flex-wrap  d-flex">
+                                <?php
+                                if (empty($dataStoreCustom['logo'])) {
+                                ?>
+                                    <span class="text-center ">Chưa có ảnh..</span>
+                                <?php } else { ?>
+                                    <div class="position-relative">
+                                        <img class="border p-2" style="width: 150px; display: block; object-fit: contain; border-radius: 10px;" src="<?= $dataStoreCustom['logo'] ?? '' ?>" alt="<?= $dataStoreCustom['logo'] ?? '' ?>">
+                                        <!-- <a class="btn btn-outline-light text-light position-absolute text-center bg-danger d-inline-flex align-items-center justify-content-center" style="border-radius: 100%; width: 24px; height: 24px; line-height: 1; right: -7px; top: -9px; " href="">x</a> -->
+                                    </div>
+                                <?php } ?>
 
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
-                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto ">Cập nhập thông tin cửa hàng <span class="spin"><i class="fas fa-spinner"></i></span></button>
-            </div>
-        </form>
+            </div><!-- Row end  -->
+            <form />
     </div>
-
-</section>
+</div>

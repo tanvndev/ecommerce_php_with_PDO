@@ -1,60 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Trang không tồn tại</title>
-    <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <base href="http://localhost/WEB2041_Ecommerce/">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-    <!-- favicon  -->
-    <link rel="apple-touch-icon" sizes="180x180" href="public/images/logo/favicon_io/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="public/images/logo/favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/images/logo/favicon_io/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/images/logo/favicon_io/site.webmanifest">
+    <title>Ekka - Ecommerce HTML Template + Admin Dashboard.</title>
+    <meta name="keywords" content="apparel, catalog, clean, ecommerce, ecommerce HTML, electronics, fashion, html eCommerce, html store, minimal, multipurpose, multipurpose ecommerce, online store, responsive ecommerce template, shops" />
+    <meta name="description" content="Best ecommerce html template for single and multi vendor store.">
+    <meta name="author" content="ashishmaraviya">
 
-    <!-- CSS -->
+    <!-- site Favicon -->
+    <link rel="icon" href="public/client/images/favicon/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="public/client/images/favicon/favicon.png" />
+    <meta name="msapplication-TileImage" content="public/client/images/favicon/favicon.png" />
 
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/base.css">
-    <link rel="stylesheet" type="text/css" href="public/css/style.css">
+    <!-- css Icon Font -->
+    <link rel="stylesheet" href="public/client/css/vendor/ecicons.min.css" />
 
+    <!-- Main Style -->
+    <link rel="stylesheet" href="public/client/css/style.css" />
+    <link rel="stylesheet" href="public/client/css/responsive.css" />
+
+    <!-- Background css -->
+    <link rel="stylesheet" id="bg-switcher-css" href="public/client/css/backgrounds/bg-4.css">
 </head>
 
 <body>
-    <div class="main">
-        <main>
-            <section class="error-page-area">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6">
-                            <div class="content">
-                                <span class="title-highlighter highlighter-secondary">
-                                    <i class="fal fa-exclamation-circle"></i> Oops! Somthing's missing.
-                                </span>
-                                <h1 class="title">Trang không tồn tại</h1>
-                                <p>
-                                    Dường như chúng tôi không tìm thấy điều bạn tìm kiếm. Trang bạn đang tìm không tồn tại, không khả dụng, hoặc đang tải không đúng cách.</p>
-                                <a href="" class="btn btn-custom btn-bg-secondary">Back To Home
-                                    <i class="fal fa-long-arrow-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="thumbnail">
-                                <img src="./public/images/others/404.png" alt="404">
-                            </div>
-                        </div>
+
+    <!-- Start main Section -->
+    <section class="ec-under-maintenance">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="under-maintenance">
+                        <h1>Lỗi 404</h1>
+                        <h4>Không tìm thấy trang này.</h4>
+                        <p>Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ. Lorem Ipsum có
+                            là hình nộm tiêu chuẩn của ngành.</p>
+                        <a href="/ecommerce" class="btn btn-lg btn-primary" tabindex="0">Quay lại trang chủ</a>
                     </div>
                 </div>
-            </section>
-        </main>
+                <div class="col-md-6 disp-768">
+                    <div class="under-maintenance">
+                        <img class="maintenance-img" src="public/client/images/common/404.png" alt="maintenance">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    </div>
+
 </body>
 
 

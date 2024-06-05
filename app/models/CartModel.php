@@ -71,7 +71,7 @@ class CartModel extends BaseModel
     }
     function getOneCartItem($id)
     {
-        $dataCartItem = $this->db->table('cart_item ci')->select('ci.quantity, ci.id, ci.cart_id, pv.price, c.totalPrice')->join('cart c', 'c.id = ci.cart_id')->join('product_variants pv', 'ci.product_variant_id = pv.id')->where('ci.id', '=', $id)->getOne();
+        $dataCartItem = $this->db->table('cart_item ci')->select('ci.quantity, ci.id, ci.cart_id, pv.price, pv.quantity AS product_variant_quantity, c.totalPrice')->join('cart c', 'c.id = ci.cart_id')->join('product_variants pv', 'ci.product_variant_id = pv.id')->where('ci.id', '=', $id)->getOne();
         if (!empty($dataCartItem)) {
             return $dataCartItem;
         }

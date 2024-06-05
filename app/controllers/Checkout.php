@@ -31,11 +31,19 @@ class Checkout extends Controller
             $toastType = Session::get('toastType');
             $this->ToastSession($toatMessage, $toastType);
         }
+        $dataCart = $this->cartModel->getAllCart($this->user_id);
+
+        //Kiem tra da co san pham trong gio hang chua
+        if (empty($dataCart)) {
+            return $this->res->setToastSession('warning', 'Vui lòng thêm sản phẩm vào giỏ hàng.', 'home');
+        }
+
 
         $dataAddress = $this->userModel->getAddress($this->user_id);
         $dataPaymentMethod = $this->paymentModel->getAllPaymentMethod();
-        $dataCart = $this->cartModel->getAllCart($this->user_id);
         $dataCoupon = $this->couponModel->getAllCoupon();
+
+
 
 
         // handle khi co datacart
@@ -51,6 +59,7 @@ class Checkout extends Controller
                         'cart_id' => $item['cart_id'],
                         'totalPrice' => $item['totalPrice'],
                         'title' => $item['title'],
+                        'slug' => $item['slug'],
                         'thumb' => $item['thumb'],
                         'price' => $item['price'],
                         'quantity' => $item['quantity'],
@@ -131,8 +140,6 @@ class Checkout extends Controller
             'phone.phone' => 'Vui lòng nhập đúng số điện thoại.',
             'address.required' => 'Vui lòng không để trống địa chỉ.',
         ]);
-
-
 
         //Bat dau kiem tra da nhap dia chi hay chua
         $this->req->validate();
@@ -343,7 +350,7 @@ class Checkout extends Controller
         Cookie::unsetCookie('dataOrderTemp');
 
         if ($deleteCart && $deleteCartItem) {
-            return $this->res->setToastSession('success', 'Bạn đã đặt hàng thành công.', 'account');
+            return $this->res->setToastSession('success', 'Bạn đã đặt hàng thành công.', 'my-account');
         } else {
             return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'checkout');
         }
@@ -383,20 +390,20 @@ class Checkout extends Controller
 
         // Neu thanh toan that bai 
         Cookie::unsetCookie('dataOrderTemp');
-        return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'account');
+        return $this->res->setToastSession('error', 'Đặt hàng thất bại vui lòng thử lại.', 'my-account');
     }
 
     // Xu ly trang thai don hang
     function updateOrderStatus()
     {
         if (!$this->req->isPost()) {
-            return $this->res->redirect('account');
+            return $this->res->redirect('my-account');
         }
 
         $dataPost = $this->req->getFields();
 
         if (empty($dataPost['order_id']) || empty($dataPost['order_status_id'])) {
-            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');
+            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'my-account');
         }
 
         $updateStatus = $this->orderModel->updateOrder($dataPost['order_id'], [
@@ -404,7 +411,7 @@ class Checkout extends Controller
         ]);
 
         if (!$updateStatus) {
-            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'account');
+            return $this->res->setToastSession('error', 'Có lỗi xảy ra vui lòng thử lại', 'my-account');
         }
 
         if ($dataPost['order_status_id'] == 4) {
@@ -427,6 +434,6 @@ class Checkout extends Controller
             }
         }
 
-        return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'account');
+        return $this->res->setToastSession('success', 'Bạn đã cập nhập đơn hàng thành công.', 'my-account');
     }
 }

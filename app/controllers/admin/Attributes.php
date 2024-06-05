@@ -30,6 +30,7 @@ class Attributes extends Controller
         }
 
         $dataUserCurrent = $accessToken['payload'];
+
         if ($dataUserCurrent['role_id'] == 3) {
             return $this->res->setToastSession('error', 'Vui lòng đăng nhập tài khoản quản trị.', 'home');
         }
@@ -48,7 +49,7 @@ class Attributes extends Controller
 
         $this->view('layoutServer', [
             'title' => 'Danh sách thuộc tính',
-            'active' => 'product',
+            'active' => 'attributes',
             'pages' => 'attribute/attribute',
             'dataAttribute' => $dataAttribute,
         ]);
@@ -117,7 +118,7 @@ class Attributes extends Controller
     private function renderAddPage($dataValueOld = [])
     {
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'attributes',
             'title' => 'Thêm thuộc tính',
             'pages' => 'attribute/addAttribute',
             'dataValueOld' => $dataValueOld
@@ -162,16 +163,16 @@ class Attributes extends Controller
     private function renderUpdatePage($dataAttribute)
     {
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'attributes',
             'pages' => 'attribute/updateAttribute',
             'title' => 'Cập nhập thuộc tính',
             'dataAttribute' => $dataAttribute
         ]);
     }
 
-    function deleteAttribute()
+    function deleteAttribute($id)
     {
-        $id = $_POST['id'];
+
         $deleteAttribute = $this->attributeModel->deleteNameAttribute($id);
         if ($deleteAttribute) {
             return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/attributes');
@@ -190,7 +191,7 @@ class Attributes extends Controller
 
         $dataAttributeValue = $this->attributeModel->getAttributeValue($id) ?? [];
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'attributes',
             'pages' => 'attribute/attributeValue',
             'title' => 'Cập nhập thuộc tính',
             'dataAttributeValue' => $dataAttributeValue,
@@ -214,9 +215,8 @@ class Attributes extends Controller
             return $this->res->setToastSession('error', 'Có lỗi vui lòng thử lại.', 'admin/attributes');
         }
 
-
-
         $dataPost = $this->req->getFields();
+
 
         if (empty($dataPost['value_name'])) {
             return $this->res->setToastSession('error', 'Vui lòng không để trống.', 'admin/attribute-value/' . $dataPost['attribute_id']);
@@ -263,16 +263,15 @@ class Attributes extends Controller
         return $this->res->setToastSession('success', 'Thêm thành công.', 'admin/attribute-value/' . $dataPost['attribute_id']);
     }
 
-    function deleteAttributeValue()
+    function deleteAttributeValue($id, $attributeId)
     {
-        $dataPost = $this->req->getFields();
 
-        $deleteAttribute = $this->attributeModel->deleteAttributeValue($dataPost['id']);
+        $deleteAttribute = $this->attributeModel->deleteAttributeValue($id);
 
         if ($deleteAttribute) {
-            return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/attribute-value/' . $dataPost['attribute_id']);
+            return $this->res->setToastSession('success', 'Xoá thành công.', 'admin/attribute-value/' . $attributeId);
         } else {
-            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/attribute-value/' . $dataPost['attribute_id']);
+            return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/attribute-value/' . $attributeId);
         }
     }
 }

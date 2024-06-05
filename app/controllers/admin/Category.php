@@ -50,7 +50,7 @@ class Category extends Controller
         $dataCate = $this->categoryModel->getAllCategory();
 
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'category',
             'title' => 'Danh sách danh mục',
             'pages' => 'category/category',
             'dataCate' => $dataCate ?? [],
@@ -77,17 +77,28 @@ class Category extends Controller
             return $this->renderAddPage($dataValueOld);
         }
 
-        //Get name after uploads image
-        $imageName = Format::uploadSingleImage($image, 'category');
-        if ($imageName['error']) {
-            $this->Toast('error', $imageName['error']);
+
+
+        // Data Insert
+        $dataInsert = [
+            'name' => $dataPost['name'],
+            'status' => $dataPost['status'],
+        ];
+
+        //  validate Upload image thumb
+        if (!Format::validateUploadImage($image)) {
+            $this->Toast('error', 'Kiểm tra lại file upload.');
             return $this->renderAddPage($dataValueOld);
         }
 
-        $dataInsert = [
-            'name' => $dataPost['name'],
-            'image' => $imageName['success']
-        ];
+        //upload anh len cloud
+        $urlThumb = Services::uploadImageToCloudinary($image['tmp_name']);
+        if (empty($urlThumb)) {
+            $this->Toast('error', 'Upload ảnh thất bại.');
+            return $this->renderAddPage($dataValueOld);
+        }
+        $dataInsert['image'] = $urlThumb;
+
 
         $createCategory = $this->categoryModel->addNewCategory($dataInsert);
 
@@ -102,7 +113,7 @@ class Category extends Controller
     private function renderAddPage($dataValueOld = [])
     {
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'category',
             'title' => 'Thêm danh mục',
             'pages' => 'category/addCategory',
             'dataValueOld' => $dataValueOld ?? [],
@@ -130,16 +141,23 @@ class Category extends Controller
 
         $dataUpdate = [
             'name' => $dataPost['name'],
+            'status' => $dataPost['status'],
         ];
 
         if (!empty($image['name'])) {
-            //Get name after uploads image
-            $imageName = Format::uploadSingleImage($image, 'category');
-            if ($imageName['error']) {
-                $this->Toast('error', $imageName['error']);
-                return $this->renderUpdatePage($dataCate);
+            //  validate Upload image thumb
+            if (!Format::validateUploadImage($image)) {
+                $this->Toast('error', 'Kiểm tra lại file upload.');
+                return $this->renderAddPage($dataCate);
             }
-            $dataUpdate['image'] = $imageName['success'];
+
+            //upload anh len cloud
+            $urlThumb = Services::uploadImageToCloudinary($image['tmp_name']);
+            if (empty($urlThumb)) {
+                $this->Toast('error', 'Upload ảnh thất bại.');
+                return $this->renderAddPage($dataCate);
+            }
+            $dataUpdate['image'] = $urlThumb;
         }
 
         $updateCategory = $this->categoryModel->updateCategory($id, $dataUpdate);
@@ -155,7 +173,7 @@ class Category extends Controller
     private function renderUpdatePage($dataCate = [])
     {
         $this->view('layoutServer', [
-            'active' => 'product',
+            'active' => 'category',
             'title' => 'Cập nhập danh mục',
             'pages' => 'category/updateCategory',
             'dataCate' => $dataCate
@@ -164,18 +182,12 @@ class Category extends Controller
 
 
 
-    function deleteCategory()
+    function deleteCategory($id)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('success', 'Có lõi xảy ra vui lòng thử lại.', 'admin/news');;
-        }
 
-        $dataPost = $this->req->getFields();
-
-        $success = $this->categoryModel->deleteCategory($dataPost['id']);
+        $success = $this->categoryModel->deleteCategory($id);
 
         if (!$success) {
-
             return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/category');;
         }
 

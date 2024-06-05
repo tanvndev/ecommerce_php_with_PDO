@@ -21,14 +21,12 @@ class ProductModel extends BaseModel
 
     function getProdRecently()
     {
-        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('view')->limit(12)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('view')->limit(8)->get();
     }
 
-    function getProdByCate()
+    function getProdByCate($cate_id)
     {
-        $sql = "SELECT p.id, p.title, p.slug, p.thumb, p.price FROM banner b JOIN product p ON p.cate_id = b.cate_id WHERE p.status = 1 ORDER BY p.id DESC ";
-        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings')->where('status', '=', 1)->orderBy('view')->where('cate_id', '=', $cate_id)->limit(8)->get();
     }
 
     function getProdMostSold()
@@ -38,7 +36,7 @@ class ProductModel extends BaseModel
 
     function getProdNewDate()
     {
-        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('create_at')->limit(20)->get();
+        return $this->db->table($this->tableName())->select('id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings ')->where('status', '=', 1)->orderBy('create_at')->limit(4)->get();
     }
 
     function getOneProd($id)
@@ -106,7 +104,7 @@ class ProductModel extends BaseModel
 
     function getAllProductOrderBySold()
     {
-        $data = $this->db->table($this->tableName())->select('thumb, title, create_At, price, sold, quantity')->orderBy('sold')->limit(4)->get();
+        $data = $this->db->table($this->tableName())->select('id, slug, thumb, title, create_At, price, sold, quantity')->orderBy('sold')->limit(4)->get();
         return $data;
     }
 
@@ -148,6 +146,20 @@ class ProductModel extends BaseModel
         JOIN attribute_value av ON vv.attribute_value_id = av.id
         JOIN product p ON pv.prod_id = p.id
         WHERE pv.prod_id = $id ORDER BY pv.id ASC
+        ";
+        $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    function getAllVariants()
+    {
+        $sql = "SELECT pv.id, pv.price, pv.quantity, pv.discount, p.title, a.id AS attribute_id, a.display_name, av.value_name AS attribute_value
+        FROM product_variants pv
+        JOIN variants_value vv ON pv.id = vv.product_variant_id
+        JOIN attribute a ON vv.attribute_id = a.id
+        JOIN attribute_value av ON vv.attribute_value_id = av.id
+        JOIN product p ON pv.prod_id = p.id
+        ORDER BY pv.id ASC
         ";
         $data = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -197,9 +209,9 @@ class ProductModel extends BaseModel
 
 
 
-    function getAllRatings()
+    function getAllRatings($prod_id)
     {
-        return $this->db->table('ratings r')->select('r.id, r.create_at, p.title, r.status , r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->join('product p', 'p.id = r.prod_id')->get();
+        return $this->db->table('ratings r')->select('r.id, r.create_at, p.title, r.status , r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->join('product p', 'p.id = r.prod_id')->where('r.prod_id', '=', $prod_id)->get();
     }
     function getAllRatingDashboard()
     {
@@ -210,8 +222,6 @@ class ProductModel extends BaseModel
     {
         return $this->db->table('ratings r')->select('r.id, r.create_at, r.star, r.comment, u.fullname, u.avatar ')->join('user u', 'r.user_id = u.id')->where('r.prod_id', '=', $prod_id)->where('r.status', '=', 1)->get();
     }
-
-
 
 
     function getOneRating($id)

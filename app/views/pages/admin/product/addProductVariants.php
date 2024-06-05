@@ -1,188 +1,214 @@
-<?php
-// echo '<pre>';
-// print_r($dataProdVariants);
-// echo '</pre>';
-?>
-<section class="add-wrap-admin">
-    <div class="container-fluid ">
-        <form method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Thông tin sản phẩm</h5>
-                        </div>
-                        <div class="form-input">
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tên sản phẩm<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataProd['title'] ?? '' ?>" type="text" placeholder="Tên sản phẩm" disabled>
-                                </div>
-                            </div>
+		<!-- Body: Body -->
+		<div class="body d-flex py-3">
+		    <div class="container-xxl">
+		        <form method="post" enctype="multipart/form-data">
 
-                        </div>
-                    </div>
-                </div>
+		            <div class="row align-items-center">
+		                <div class="border-0 mb-4">
+		                    <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+		                        <h3 class="fw-bold mb-0">Thêm sản phẩm</h3>
+		                        <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Lưu</button>
+		                    </div>
+		                </div>
+		            </div> <!-- Row end  -->
 
-                <!-- Attribute -->
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Thuộc tính sản phẩm</h5>
-                        </div>
-                        <div class="form-input">
-                            <?php
-                            foreach ($attributeData as $attributeItem) {
-                            ?>
-                                <div class="mb-5 row">
-                                    <label class="form-label-title col-sm-2 mb-0"> <?= $attributeItem['name'] . ' (' . $attributeItem['display_name'] . ')' ?></label>
-                                    <div class="col-sm-10">
-                                        <div class="d-flex flex-wrap gap-4">
-                                            <?php foreach ($attributeValueData as $attributeValueItem) {
-                                                if ($attributeItem['id'] == $attributeValueItem['attribute_id']) {
-                                            ?>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" name="attribute_id_<?= $attributeItem['name'] ?>" type="radio" value="<?= $attributeItem['id'] . '-' . $attributeValueItem['id'] . ' (' . $attributeValueItem['value_name'] . ') ' ?>" id="<?= $attributeValueItem['id'] ?>">
+		            <div class="row g-3 mb-3">
 
-                                                        <label class="form-check-label text-uppercase " for="<?= $attributeValueItem['id'] ?>">
-                                                            <?= $attributeValueItem['value_name'] ?>
-                                                        </label>
-                                                    </div>
-                                            <?php }
-                                            } ?>
+		                <div class="card mb-3">
+		                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+		                        <h6 class="m-0 fw-bold">Thông tin sản phẩm</h6>
 
-                                        </div>
+		                    </div>
+		                    <div class="card-body">
+		                        <div class="row g-3 align-items-center">
+		                            <div class="col-md-12">
+		                                <label class="form-label">Tên sản phẩm </label>
+		                                <input type="text" readonly value="<?= $dataProd['title'] ?? '' ?>" class="form-control">
+		                            </div>
 
-                                    </div>
-                                </div>
-                            <?php } ?>
+		                            <div class="col-md-6">
+		                                <label class="form-label">Đơn giá </label>
+		                                <input type="number" readonly value="<?= $dataProd['price'] ?? '' ?>" class="form-control">
+		                            </div>
+		                            <div class="col-md-6">
+		                                <label class="form-label">Ngày đăng </label>
+		                                <input type="text" readonly value="<?= $dataProd['create_at'] ?? '' ?>" class="form-control">
+		                            </div>
+		                            <!-- <div class="col-md-6">
+		                            <label class="form-label">Tên sản phẩm </label>
+		                            <input type="number" readonly value="<?= $dataProd['price'] ?? '' ?>" class="form-control">
+		                        </div> -->
 
-                            <div class="btn-variant">
-                                <button id="add-variant" type="button"> <i class="fa fa-plus"></i> Tạo ra biến thể </button>
-                            </div>
-                        </div>
+		                        </div>
+		                    </div>
+		                </div>
 
-                    </div>
-                </div>
+		                <div class="card mb-3">
+		                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+		                        <h6 class="mb-0 fw-bold ">Thuộc tính</h6>
+		                    </div>
+		                    <div class="d-flex ">
+		                        <?php
+                                foreach ($attributeData as $attributeItem) {
+                                ?>
+		                            <div class="card-body product-variant">
+		                                <label class="form-label w-100"><?= $attributeItem['name'] . ' (' . $attributeItem['display_name'] . ')' ?></label>
+		                                <?php foreach ($attributeValueData as $attributeValueItem) {
+                                            if ($attributeItem['id'] == $attributeValueItem['attribute_id']) {
+                                        ?>
+		                                        <div class="form-check">
+		                                            <input class="form-check-input" name="attribute_id_<?= $attributeItem['name'] ?>" type="radio" value="<?= $attributeItem['id'] . '-' . $attributeValueItem['id'] . ' (' . $attributeValueItem['value_name'] . ') ' ?>" id="<?= $attributeValueItem['id'] ?>">
+		                                            <label class="form-check-label" for="<?= $attributeValueItem['id'] ?>">
+		                                                <?= $attributeValueItem['value_name'] ?>
+		                                            </label>
+		                                        </div>
 
+		                                <?php }
+                                        } ?>
 
-                <!-- Variant -->
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Biến thể sản phẩm</h5>
-                        </div>
-                        <div class="form-input">
-                            <div id="form-variant">
-                                <span id="no-variant" class="text-center d-block ">Chưa có biến thể..</span>
-                            </div>
-                        </div>
-                        <!--  -->
+		                            </div>
+		                        <?php } ?>
 
-                    </div>
-                </div>
-
-                <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto">Thêm biến thể <span class="spin"><i class="fas fa-spinner"></i></span></button>
-            </div>
+		                    </div>
+		                    <div class="m-3 d-flex justify-content-end">
+		                        <button id="add-variant" class="btn btn-secondary" type="button"> <i class="fa fa-plus"></i> Tạo ra biến thể </button>
+		                    </div>
+		                </div>
 
 
-        </form>
-    </div>
-</section>
+
+		                <!-- Biến thể -->
+		                <div class="card mb-3">
+		                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+		                        <h6 class="mb-0 fw-bold ">Biến thể</h6>
+		                    </div>
+		                    <div class="card-body">
+		                        <div class="row g-3 align-items-center">
+		                            <div class="col-md-12">
+		                                <div class="product-cart">
+		                                    <div class="checkout-table table-responsive">
+		                                        <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
+		                                            <thead>
+		                                                <tr>
+		                                                    <th class="product">Kết hợp</th>
+		                                                    <th class="product">Giá</th>
+		                                                    <th class="product">Giá khuyễn mãi</th>
+		                                                    <th class="quantity">Thực thi</th>
+		                                                </tr>
+		                                            </thead>
+		                                            <tbody id="form-variant">
+		                                                <tr>
+		                                                    <td id="no-variant" colspan="4" class="text-center border-0 ">Chưa có biến thể..</td>
+		                                                </tr>
+		                                                <!-- <tr id="form-input-item-${itemCounter}">
+																<td>
+																	<input type="hidden" name="attribute[]" value="${attributeValue}">
+																	<input type="text" readonly class="form-control" value="${nameValueAttribute}" placeholder="Tên kết hợp">
+																</td>
+																<td>
+
+																	<input type="number" class="form-control" name="price_variant[]">
+																</td>
+																<td>
+
+																	<input type="number" class="form-control" name="sale_price_variant[]">
+																</td>
+
+																<td>
+																	<div class="btn-group" role="group" aria-label="Basic outlined example">
+																		<button type="button" onclick="delItemVariant('form-input-item-${itemCounter}')" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+																	</div>
+																</td>
+															</tr> -->
+
+		                                            </tbody>
+		                                        </table>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
 
 
-<script>
-    let itemCounter = 1;
-    $('#add-variant').click(() => {
-        $('#no-variant').remove()
-        let selectedAttributes = $('input[type="radio"]:checked');
-        let attributeData = generateCombinations(selectedAttributes);
 
-        //Lay ra id cua attribute and value attribute
-        let attributeValue = attributeData.match(/\d+-\d+/g).join(', ');
-        //Ten value attribute
-        let nameValueAttribute = attributeData.match(/\(\s*([^)]+?)\s*\)/g).join(', ');
+		            </div><!-- Row end  -->
+		        </form>
+		    </div>
+		</div>
 
 
-        const newVariant = `
-        <div id="form-input-item-${itemCounter}" class="form-input-item">
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Ảnh</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control input-file" name="images[]" type="file" multiple>
-                                        </div>
-                                    </div>
+		<!-- Xử lý tạo ra biến thể -->
+		<script>
+		    let itemCounter = 1;
+		    $('#add-variant').click(() => {
+		        $('#no-variant').remove()
+		        let selectedAttributes = $('.product-variant input[type="radio"]:checked');
+		        let attributeData = generateCombinations(selectedAttributes);
 
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Kết hợp</label>
-                                        <div class="col-sm-9">
-                                            <input type="hidden" name="attribute[]" value="${attributeValue}">
-                                            <input class="form-control input-text" value="${nameValueAttribute}" type="text" placeholder="Kết hợp" disabled readonly>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Số lượng <span class="text-danger">*</span></label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control input-text" name="quantity_variant[]" type="number" placeholder="Số lượng" required>
-                                        </div>
-                                    </div>
+		        //Lay ra id cua attribute and value attribute
+		        let attributeValue = attributeData.match(/\d+-\d+/g).join(', ');
+		        //Ten value attribute
+		        let nameValueAttribute = attributeData.match(/\(\s*([^)]+?)\s*\)/g).join(', ');
 
 
-                                    <!--  -->
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Giá <span class="text-danger">*</span></label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control input-text" name="price_variant[]" type="number" placeholder="Giá sản phẩm" required>
-                                        </div>
-                                    </div>
-                                    <!--  -->
-                                    <div class="mb-5 row align-items-center">
-                                        <label class="form-label-title col-sm-3 mb-0">Giá sale</label>
-                                        <div class="col-sm-9">
-                                            <input class="form-control input-text" name="sale_price_variant[]" type="number" placeholder="Giá sale">
-                                        </div>
-                                    </div>
-                                    <div class="del-variant">
-                                        <button onclick="delItemVariant('form-input-item-${itemCounter}')" type="button" class="btn btn-custom">Xoá biến thể</button>
-                                    </div>
-                                </div>
+		        const newVariant = `
+       									<tr id="form-input-item-${itemCounter}">
+																<td>
+																	<input type="hidden" name="attribute[]" value="${attributeValue}">
+																	<input type="text" readonly class="form-control" value="${nameValueAttribute}" placeholder="Tên kết hợp">
+																</td>
+																<td>
+
+																	<input type="number" class="form-control" name="price_variant[]">
+																</td>
+																<td>
+
+																	<input type="number" class="form-control" name="sale_price_variant[]">
+																</td>
+
+																<td>
+																	<div class="btn-group" role="group" aria-label="Basic outlined example">
+																		<button type="button" onclick="delItemVariant('form-input-item-${itemCounter}')" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+																	</div>
+																</td>
+															</tr>
               `
-        itemCounter++
+		        itemCounter++
 
 
-        $('#form-variant').append(newVariant)
-    })
+		        $('#form-variant').append(newVariant)
+		    })
 
 
-    function generateCombinations(attributes) {
-        var combinations = [
-            []
-        ];
+		    function generateCombinations(attributes) {
+		        var combinations = [
+		            []
+		        ];
 
-        attributes.each(function() {
-            var attributeValues = $(this).val().split(' ');
-            var firstValue = attributeValues.shift();
+		        attributes.each(function() {
+		            var attributeValues = $(this).val().split(' ');
+		            var firstValue = attributeValues.shift();
 
-            if (attributeValues.length > 0) {
-                firstValue = [firstValue, attributeValues.join(' ')].join(' ');
-            }
+		            if (attributeValues.length > 0) {
+		                firstValue = [firstValue, attributeValues.join(' ')].join(' ');
+		            }
 
-            var currentCombinations = [];
+		            var currentCombinations = [];
 
-            combinations.forEach(function(combination) {
-                currentCombinations.push(combination.concat(firstValue));
-            });
+		            combinations.forEach(function(combination) {
+		                currentCombinations.push(combination.concat(firstValue));
+		            });
 
-            combinations = currentCombinations;
-        });
+		            combinations = currentCombinations;
+		        });
 
-        return combinations.join(' , ');
-    }
+		        return combinations.join(' , ');
+		    }
 
 
-    const delItemVariant = (idName) => {
-        const itemEle = $(`#${idName}`)
-        itemEle.remove();
-    }
-</script>
+		    const delItemVariant = (idName) => {
+		        const itemEle = $(`#${idName}`)
+		        itemEle.remove();
+		    }
+		</script>

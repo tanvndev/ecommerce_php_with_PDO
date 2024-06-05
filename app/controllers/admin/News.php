@@ -191,14 +191,9 @@ class News extends Controller
     }
 
 
-    function deleteNews()
+    function deleteNews($id)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lõi xảy ra vui lòng thử lại.', 'admin/news');;
-        }
-        $dataPost = $this->req->getFields();
-
-        $deleteNews = $this->newsModel->deleteNews($dataPost['id']);
+        $deleteNews = $this->newsModel->deleteNews($id);
 
         if (!$deleteNews) {
             return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/news');;

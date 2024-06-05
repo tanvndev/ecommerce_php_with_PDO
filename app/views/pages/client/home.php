@@ -1,454 +1,851 @@
-<?php
-// echo '<pre>';
-// print_r($dataBannerTitle);
-// echo '</pre>';
-?>
-
-<section class="banner">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-xl-6 pr--80">
-                <div>
-                    <span class="title-highlighter highlighter-secondary"> <i class="fas fa-fire"></i><?= $dataBannerTitle['title'] ?></span>
-
-                    <h1 class="title"><?= $dataBannerTitle['description'] ?></h1>
-
-                    <div class="shop-btn">
-                        <a href="product/category/31" class="btn btn-bg-white right-icon">Khám phá <i class="fal fa-long-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-xl-6 ">
-                <div class="slide-banner-thumb">
-                    <?php foreach ($dataBanner as $itemdDataBanner) {
-
-                    ?>
-                        <div class="mian-banner-thumb">
-                            <div class="banner-product">
-                                <div class="thumb">
-                                    <a href="product/<?= "{$itemdDataBanner['slug']}-{$itemdDataBanner['id']}" ?>"><img src="<?= $itemdDataBanner['thumb'] ?>" alt="<?= $itemdDataBanner['title'] ?>"></a>
-                                </div>
-
-                                <div class="content">
-                                    <h5 class="title"><a href="product/<?= "{$itemdDataBanner['slug']}-{$itemdDataBanner['id']}" ?>"><?= $itemdDataBanner['title'] ?></a></h5>
-                                    <div class="product-price-variant">
-                                        <span class="price"><?= Format::formatCurrency($itemdDataBanner['price']) ?></span>
-                                    </div>
-                                    <ul class="cart-action">
-                                        <li class="select-option">
-                                            <a href="product/<?= "{$itemdDataBanner['slug']}-{$itemdDataBanner['id']}" ?>" class="btn-custom">Mua sản phẩm</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+    <!-- Category Sidebar start -->
+    <div class="ec-side-cat-overlay"></div>
+    <div class="col-lg-3 category-sidebar" data-animation="fadeIn">
+        <div class="cat-sidebar">
+            <div class="cat-sidebar-box">
+                <div class="ec-sidebar-wrap">
+                    <!-- Sidebar Category Block -->
+                    <div class="ec-sidebar-block">
+                        <div class="ec-sb-title">
+                            <h3 class="ec-sidebar-title">Danh mục<button class="ec-close">×</button></h3>
                         </div>
-                    <?php } ?>
-
-                    <!--  -->
-
-                </div>
-            </div>
-
-
-        </div>
-    </div>
-</section>
-
-<section class="home-category">
-    <div class="container">
-        <div class="title">
-            <span class="title-highlighter highlighter-secondary"> <i class="far fa-tags"></i> Danh mục</span>
-            <h2 class="title">Tìm kiếm theo danh mục</h2>
-        </div>
-
-        <div class="category">
-            <?php
-            foreach ($dataCate as $cateItem) {
-            ?>
-                <a class="category-item" href="product-category?category=<?= $cateItem['id'] ?>">
-                    <div class="categrie-product" data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500">
-                        <div class="categorie-link">
-                            <img class="img-fluid" src="public/images/category/<?= $cateItem['image'] ?>" alt="<?= $cateItem['name'] ?>">
-                            <h6 class="cate-title "><?= $cateItem['name'] ?></h6>
-                        </div>
-                    </div>
-                </a>
-            <?php } ?>
-        </div>
-    </div>
-</section>
-
-<section class="home-poster">
-    <div class="container">
-        <div class="poster-wrap">
-            <div class="row align-items-center ">
-                <div class="col-xl-5 col-lg-6">
-                    <div class="content">
-                        <div class="title">
-                            <span class="title-highlighter highlighter-secondary"> <i class="fal fa-headphones-alt"></i> Không Nên Bỏ Lỡ!!</span>
-
-                            <h2 class="title">Nâng cao Trải nghiệm Âm nhạc Của Bạn</h2>
-                        </div>
-
-                        <a href="product-category?category=4" class="btn-custom btn-bg-primary">Kiểm tra ngay!</a>
-                    </div>
-
-                </div>
-
-                <div class="col-xl-7 col-lg-6">
-                    <div class="thumb">
-                        <img src="public/images/others/poster-03.png" alt="Poster Product">
-
-                        <div class="music-singnal">
-                            <div class="item-circle circle-1"></div>
-                            <div class="item-circle circle-2"></div>
-                            <div class="item-circle circle-3"></div>
-                            <div class="item-circle circle-4"></div>
-                            <div class="item-circle circle-5"></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-
-<section class="product-area">
-    <div class="container">
-        <div class="title">
-            <span class="title-highlighter highlighter-secondary"> <i class="far fa-shopping-basket"></i>Các mục đã xem gần đây</span>
-            <h2 class="title">Sản phẩm từng xem</h2>
-        </div>
-
-        <div class="main-product">
-            <div class="row">
-                <?php foreach ($dataProdRecent as $itemDataProdRecent) : ?>
-                    <?php
-                    $productLink = "product/{$itemDataProdRecent['slug']}-{$itemDataProdRecent['id']}";
-                    $thumbSrc = "{$itemDataProdRecent['thumb']}";
-                    $quantity = $itemDataProdRecent['quantity'];
-                    $discount = $itemDataProdRecent['discount'];
-                    $price = $itemDataProdRecent['price'];
-                    $totalRatings = $itemDataProdRecent['totalRatings'];
-                    $prodTitle = $itemDataProdRecent['title'];
-                    $prodTotalUserRatings = $itemDataProdRecent['totalUserRatings'];
-                    ?>
-
-                    <div class="col-xl-3 mb-5 col-lg-4 col-sm-6 col-12">
-                        <div class="product-item px-3">
-                            <div class="thumb">
-                                <div class="thumb-img">
-                                    <a class="thumb-link" href="<?= $productLink ?>">
-                                        <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="800" loading="lazy" src="<?= $thumbSrc ?>" alt="<?= $itemDataProdRecent['title'] ?>">
-                                    </a>
-
-                                    <div class="actions-hover">
-                                        <ul class="action-list mb-0 ">
-                                            <li class="quickview">
-                                                <a class="btn-action" href="<?= $productLink ?>"><i class="far fa-eye"></i></a>
-                                            </li>
-
-                                            <li class="select-option">
-                                                <?php if ($quantity > 0) : ?>
-                                                    <a href="<?= $productLink ?>" class="btn-action-lagre">
-                                                        Mua sản phẩm
-                                                    </a>
-                                                <?php else : ?>
-                                                    <a class="btn-action-lagre disabled" href="#">
-                                                        Sản phẩm hết hàng
-                                                    </a>
-                                                <?php endif; ?>
-                                            </li>
-
-                                            <li class="wishlist">
-                                                <button class="btn-action">
-                                                    <i class="far fa-heart"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="lable-sale">
-                                    <?php if ($discount != 0) { ?>
-                                        <div class="product-badget">Giảm <?= $discount . ' %' ?> </div>
-                                    <?php } ?>
-                                </div>
-                            </div>
-                            <div class="content">
-                                <div class="inner">
-                                    <div class="product-rating">
-                                        <span class="icon">
-                                            <?= Format::renderStars($totalRatings) ?>
-                                        </span>
-                                        <span class="rating-number">(<?= $prodTotalUserRatings ?>)</span>
-                                    </div>
-                                    <h5 class="title">
-                                        <a href="<?= $productLink ?>"><?= $itemDataProdRecent['title']  ?></a>
-                                    </h5>
-                                    <div class="product-price-variant">
-                                        <span class="price current-price"><?= Format::formatCurrency($price) ?></span>
-                                        <?php if ($discount) : ?>
-                                            <span class="price old-price"><?= Format::calculateOriginalPrice($price, $discount) ?></span>
-                                        <?php endif; ?>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-
-                <div class="col-lg-12 text-center mt--20 mt_sm--0">
-                    <a href="product/" class="btn-custom btn-bg-lighter">Xem tất cả</a>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</section>
-
-<section class="new-arrivals-product-area pb--0">
-    <div class="container">
-        <div class="title">
-            <span class="title-highlighter highlighter-secondary"> <i class="far fa-shopping-basket"></i> Tuần này</span>
-            <h2 class="title">Sản phẩm mới</h2>
-        </div>
-        <div class="new-arrivals-product">
-            <?php
-            foreach ($dataProdNewDate as $prodNewDateItem) :
-            ?>
-                <div class="product-area-two">
-                    <div class="thumbnail">
-                        <a href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
-                            <img data-sal="zoom-out" data-sal-delay="200" data-sal-duration="500" src="<?= $prodNewDateItem['thumb'] ?>" alt="<?= $prodNewDateItem['title'] ?>">
-                        </a>
                         <?php
-                        if ($prodNewDateItem['discount'] != 0) :
+                        foreach ($dataCate as $cate) {
+
                         ?>
-                            <div class="label-block">
-                                <div class="product-badget">Giảm <?= $prodNewDateItem['discount'] ?> %</div>
-                            </div>
-                        <?php endif ?>
-                    </div>
-                    <div class="product-content">
-                        <div class="inner">
-                            <h5 class="title">
-                                <a href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>"><?= $prodNewDateItem['title'] ?></a>
-                            </h5>
-                            <div class="product-price-variant">
-                                <?php
-                                if ($prodNewDateItem['discount'] != 0) :
-                                ?>
-                                    <span class="price old-price"><?= Format::calculateOriginalPrice($prodNewDateItem['price'], $prodNewDateItem['discount']) ?></span>
-                                <?php endif ?>
-                                <span class="price current-price"><?= Format::formatCurrency($prodNewDateItem['price']) ?></span>
-                            </div>
-                            <div class="product-hover-action">
-                                <ul class="cart-action">
-                                    <li class="quickview">
-                                        <a class="btn-action" href="product/<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">
-                                            <i class="far fa-eye"></i>
-                                        </a>
-                                    </li>
-                                    <li class="select-option">
-                                        <a href="<?= $prodNewDateItem['slug'] ?>-<?= $prodNewDateItem['id'] ?>">Mua sản phẩm
-                                        </a>
-                                    </li>
-                                    <li class="wishlist">
-                                        <button class="btn-action"><i class="far fa-heart"></i>
-                                        </button>
+                            <div class="ec-sb-block-content">
+                                <ul>
+                                    <li>
+                                        <a href="product-category?category=<?= $cate['id'] ?>" class="ms-0 ec-sidebar-block-item"><img src="<?= $cate['image'] ?>" class="svg_img " style="object-fit: contain; alt=" drink" /><?= $cate['name'] ?></a>
+
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        <?php } ?>
+
                     </div>
+                    <!-- Sidebar Category Block -->
                 </div>
-
-            <?php endforeach ?>
-        </div>
-    </div>
-</section>
-
-
-<section class="most-sold-product">
-    <div class="container">
-        <div class="most-sold-product-wrap">
-            <div class="section-title-wrapper text-center ">
-                <span class="title-highlighter highlighter-primary"><i class="fas fa-star"></i> Bán chạy nhất</span>
-                <h2 class="title">Sản phẩm bán chạy trong cửa hàng</h2>
             </div>
-
-            <div class="content">
-                <div class="row row-cols-xl-2 row-cols-1">
+            <div class="ec-sidebar-slider-cat">
+                <div class="ec-sb-slider-title">Sản phẩm bán chạy nhất</div>
+                <div class="ec-sb-pro-sl">
                     <?php
-                    foreach ($dataProdMostSold as $itemDataProdMostSold) {
+                    foreach ($dataProdMostSold as $prodSold) {
+                        $urlLink = "product/{$prodSold['slug']}-{$prodSold['id']}";
                     ?>
-                        <?php
-                        $productLink = "product/{$itemDataProdMostSold['slug']}-{$itemDataProdMostSold['id']}";
-                        $thumbSrc = "{$itemDataProdMostSold['thumb']}";
-                        $quantity = $itemDataProdMostSold['quantity'];
-                        $discount = $itemDataProdMostSold['discount'];
-                        $price = $itemDataProdMostSold['price'];
-                        $totalRatings = $itemDataProdMostSold['totalRatings'];
-                        $prodTitle = $itemDataProdMostSold['title'];
-                        $prodTotalUserRatings = $itemDataProdMostSold['totalUserRatings'];
-                        ?>
-                        <div class="col">
-                            <div class="product-list">
-                                <div class="thumbnail">
-                                    <a href="<?= $productLink  ?>">
-                                        <img data-sal="zoom-in" data-sal-delay="100" data-sal-duration="1500" src="<?= $thumbSrc ?>" alt="<?= $prodTitle ?>">
-                                    </a>
-                                </div>
-                                <div class="product-content">
-                                    <div class="product-rating">
-                                        <span class="rating-icon">
-                                            <?= Format::renderStars($totalRatings) ?>
-                                        </span>
-                                        <span class="rating-number">
-                                            <span><?= $prodTotalUserRatings ?></span> Đánh giá
-                                        </span>
+                        <div>
+                            <div class="ec-sb-pro-sl-item">
+                                <a href="<?= $urlLink ?>" style="width: 80px; height: 80px; background-color: #f7f7f7;" class="sidekka_pro_img d-flex rounded-2 "><img style="mix-blend-mode: darken; object-fit: contain; padding: 5px;" src="<?= $prodSold['thumb'] ?>" alt="product" /></a>
+                                <div class="ec-pro-content">
+                                    <h5 class="ec-pro-title"><a href="<?= $urlLink ?>"><?= $prodSold['title'] ?></a></h5>
+                                    <div class="ec-pro-rating">
+                                        <?= Format::renderStars($prodSold['totalRatings']) ?>
                                     </div>
-                                    <h6 class="product-title text-truncate ">
-                                        <a href="<?= $productLink ?>"><?= $prodTitle  ?> </a>
-                                    </h6>
-                                    <div class="product-price-variant">
-                                        <span class="price current-price"><?= Format::formatCurrency($price) ?></span>
-                                        <?php if ($discount != 0) : ?>
-                                            <span class="price old-price"><?= Format::calculateOriginalPrice($price, $discount) ?></span>
-                                        <?php endif; ?>
-                                    </div>
-                                    <div class="product-cart">
-                                        <a href="<?= $productLink ?>" class="cart-btn">
-                                            <i class="fal fa-shopping-cart"></i>
-                                        </a>
-                                        <button class="cart-btn">
-                                            <i class="fal fa-heart"></i>
-                                        </button>
-                                    </div>
+                                    <span class="ec-price">
+                                        <?php if ($prodSold['discount'] != 0) : ?>
+                                            <span class="old-price"><?= Format::calculateOriginalPrice($prodSold['price'], $prodSold['discount']) ?></span>
+                                        <?php endif ?>
+                                        <span class="new-price"><?= Format::formatCurrency($prodSold['price']) ?></span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     <?php } ?>
-                </div>
-            </div>
 
-
-        </div>
-    </div>
-</section>
-
-
-<!-- Start Why Choose Area  -->
-<section class="why-choose-area pb--50 ">
-    <div class="container">
-        <div class="section-title-wrapper text-center ">
-            <span class="title-highlighter justify-content-center  highlighter-secondary"><i class="fal fa-thumbs-up"></i>Tại sao chọn chúng tôi</span>
-            <h2 class="title">Tại sao bạn chọn chúng tôi</h2>
-        </div>
-        <div class="row row-cols-xl-5 row-cols-lg-4 row-cols-md-3 row-cols-sm-2 row-cols-1 row--20">
-            <div class="col">
-                <div class="service-box">
-                    <div class="icon">
-                        <img src="public/images/icons/service6.png" alt="Service">
-                    </div>
-                    <h6 class="title">Giao hàng nhanh tróng &amp; an toàn</h6>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box">
-                    <div class="icon">
-                        <img src="public/images/icons/service7.png" alt="Service">
-                    </div>
-                    <h6 class="title">Đảm bảo 100% về sản phẩm</h6>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box">
-                    <div class="icon">
-                        <img src="public/images/icons/service8.png" alt="Service">
-                    </div>
-                    <h6 class="title">Hàng ngàn mã ưu đãi hập dẫn</h6>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box">
-                    <div class="icon">
-                        <img src="public/images/icons/service9.png" alt="Service">
-                    </div>
-                    <h6 class="title">Chính sách hoàn trả 24 giờ</h6>
-                </div>
-            </div>
-            <div class="col">
-                <div class="service-box">
-                    <div class="icon">
-                        <img src="public/images/icons/service10.png" alt="Service">
-                    </div>
-                    <h6 class="title">Chất lượng chuyên nghiệp</h6>
                 </div>
             </div>
         </div>
     </div>
-</section>
-<!-- End Why Choose Area  -->
 
-
-<!-- Start Product Poster Area  -->
-<section class="poster-home">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mb--30">
-                <div class="single-poster">
-                    <a href="product-category?category=4">
-                        <img src="public/images/others/poster-01.png" alt="eTrade promotion poster">
-                        <div class="poster-content">
-                            <div class="inner">
-                                <h3 class="title">Âm thanh
-                                    <br>phong phú.
-                                </h3>
-                                <span class="sub-title">Bộ sưu tập <i class="fal fa-long-arrow-right"></i></span>
+    <!-- Main Slider Start -->
+    <div class="sticky-header-next-sec ec-main-slider section section-space-pb">
+        <div class="ec-slider swiper-container main-slider-nav main-slider-dot">
+            <!-- Main slider -->
+            <div class="swiper-wrapper">
+                <?php
+                foreach ($dataBanner as $dataBannerItem) {
+                ?>
+                    <div style="background-image: url('<?= $dataBannerItem['thumb'] ?>')" class="ec-slide-item swiper-slide d-flex ec-slide">
+                        <div class="container align-self-center">
+                            <div class="row">
+                                <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
+                                    <div class="ec-slide-content slider-animation">
+                                        <h1 class="ec-slide-title"><?= $dataBannerItem['title'] ?></h1>
+                                        <h2 class="ec-slide-stitle"><?= $dataBannerItem['name'] ?></h2>
+                                        <p><?= $dataBannerItem['description'] ?></p>
+                                        <a href="product-category" class="btn btn-lg btn-secondary">Xem ngay</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </a>
-                </div>
+                    </div>
+                <?php } ?>
+
             </div>
-            <div class="col-lg-6 mb--30">
-                <div class="single-poster">
-                    <a href="product-category?category=9">
-                        <img src="public/images/others/poster-02.png" alt="eTrade promotion poster">
-                        <div class="poster-content content-left">
-                            <div class="inner">
-                                <span class="sub-title  ">Ưu đãi 50% vào mùa đông</span>
-                                <h3 class="title mt-2 ">Nhận kính <br> VR</h3>
+            <div class="swiper-pagination swiper-pagination-white"></div>
+            <div class="swiper-buttons">
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Slider End -->
+
+    <!-- Product tab Area Start -->
+    <section class="section ec-product-tab section-space-p" id="collection">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Bộ sưu tập hàng đầu của chúng tôi</h2>
+                        <h2 class="ec-title">Bộ sưu tập hàng đầu của chúng tôi</h2>
+                        <p class="sub-title">Duyệt qua Bộ sưu tập các sản phẩm hàng đầu</p>
+                    </div>
+                </div>
+
+                <!-- Tab Start -->
+                <div class="col-md-12 text-center">
+                    <ul class="ec-pro-tab-nav nav justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab-pro-for-all">Tất cả</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-pro-for-men">Quần áo</a></li>
+                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-pro-for-women">Giày dép</a></li>
+                        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#tab-pro-for-child">Mũ nón</a></li>
+                    </ul>
+                </div>
+                <!-- Tab End -->
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="tab-content">
+                        <!-- 1st Product tab start -->
+                        <div class="tab-pane fade show active" id="tab-pro-for-all">
+                            <div class="row">
+                                <!-- New Product Content -->
+                                <?php
+                                foreach ($dataProdMostView as $dataProdMostViewItem) {
+                                    $linkProduct = 'product/' . $dataProdMostViewItem['slug'] . '-' . $dataProdMostViewItem['id'];
+                                ?>
+                                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content" data-animation="flipInY">
+                                        <div class="ec-product-inner">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image">
+                                                    <a href="<?= $linkProduct ?>" class="image">
+                                                        <img class="main-image" src="<?= $dataProdMostViewItem['thumb'] ?>" title="<?= $dataProdMostViewItem['title'] ?>" alt="<?= $dataProdMostViewItem['title'] ?>" />
+
+                                                    </a>
+                                                    <span class="flags">
+                                                        <?php
+                                                        if ($dataProdMostViewItem['discount'] != 0) :
+                                                        ?>
+                                                            <span class="sale">Sale</span>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                    <a href="<?= $linkProduct ?>" class="quickview">
+                                                        <i class="fi-rr-eye"></i>
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        <!-- <a href="coming-soon" class="ec-btn-group compare" title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a> -->
+                                                        <a href="<?= $linkProduct ?>" title="Add To Cart" class="add-to-cart"><i class="fi-rr-shopping-basket"></i></a>
+                                                        <a href="<?= $linkProduct ?>" class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content">
+                                                <h5 class="ec-pro-title">
+                                                    <a href="<?= $linkProduct ?>"><?= $dataProdMostViewItem['title'] ?>
+                                                    </a>
+                                                </h5>
+                                                <div class="ec-pro-rating">
+                                                    <?= Format::renderStars($dataProdMostViewItem['totalRatings']) ?>
+
+                                                </div>
+                                                <span class="ec-price">
+
+                                                    <?php
+                                                    if ($dataProdMostViewItem['discount'] != 0) :
+                                                    ?>
+                                                        <span class="old-price"><?= Format::calculateOriginalPrice($dataProdMostViewItem['price'], $dataProdMostViewItem['discount']) ?></span>
+                                                    <?php endif; ?>
+                                                    <span class="new-price"><?= Format::formatCurrency($dataProdMostViewItem['price']) ?></span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                                <div class="col-sm-12 shop-all-btn"><a href="product-category">Xem tất cả</a></div>
                             </div>
                         </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End Product Poster Area  -->
+                        <!-- ec 1st Product tab end -->
+                        <!-- ec 2nd Product tab start -->
+                        <div class="tab-pane fade" id="tab-pro-for-men">
+                            <div class="row">
+                                <!-- New Product Content -->
+                                <?php
+                                foreach ($dataProdClothes as $dataProdClothesItem) {
+                                    $linkProduct = 'product/' . $dataProdClothesItem['slug'] . '-' . $dataProdClothesItem['id'];
+                                ?>
+                                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content" data-animation="flipInY">
+                                        <div class="ec-product-inner">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image">
+                                                    <a href="<?= $linkProduct ?>" class="image">
+                                                        <img class="main-image" src="<?= $dataProdClothesItem['thumb'] ?>" title="<?= $dataProdClothesItem['title'] ?>" alt="<?= $dataProdClothesItem['title'] ?>" />
 
-<!-- Start Newsletter Area  -->
-<!-- <div class="newsletter-area pt--0">
-    <div class="container">
-        <div class="etrade-newsletter-wrapper bg_image bg_image--5">
-            <div class="newsletter-content">
-                <span class="title-highlighter highlighter-primary2"><i class="fas fa-envelope-open"></i>Newsletter</span>
-                <h2 class="title mb--40 mb_sm--30">Get weekly update</h2>
-                <div class="input-group newsletter-form">
-                    <div class="position-relative newsletter-inner mb--15">
-                        <input placeholder="example@gmail.com" type="text">
+                                                    </a>
+                                                    <span class="flags">
+                                                        <?php
+                                                        if ($dataProdClothesItem['discount'] != 0) :
+                                                        ?>
+                                                            <span class="sale">Sale</span>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                    <a href="<?= $linkProduct ?>" class="quickview">
+                                                        <i class="fi-rr-eye"></i>
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        <a href="coming-soon" class="ec-btn-group compare" title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                        <a href="<?= $linkProduct ?>" title="Add To Cart" class="add-to-cart"><i class="fi-rr-shopping-basket"></i></a>
+                                                        <a href="<?= $linkProduct ?>" class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content">
+                                                <h5 class="ec-pro-title">
+                                                    <a href="<?= $linkProduct ?>"><?= $dataProdClothesItem['title'] ?>
+                                                    </a>
+                                                </h5>
+                                                <div class="ec-pro-rating">
+                                                    <?= Format::renderStars($dataProdClothesItem['totalRatings']) ?>
+
+                                                </div>
+                                                <span class="ec-price">
+
+                                                    <?php
+                                                    if ($dataProdClothesItem['discount'] != 0) :
+                                                    ?>
+                                                        <span class="old-price"><?= Format::calculateOriginalPrice($dataProdClothesItem['price'], $dataProdClothesItem['discount']) ?></span>
+                                                    <?php endif; ?>
+                                                    <span class="new-price"><?= Format::formatCurrency($dataProdClothesItem['price']) ?></span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+                        <!-- ec 2nd Product tab end -->
+                        <!-- ec 3rd Product tab start -->
+                        <div class="tab-pane fade" id="tab-pro-for-women">
+                            <div class="row">
+                                <!-- New Product Content -->
+                                <?php
+                                foreach ($dataProdShoe as $dataProdShoeItem) {
+                                    $linkProduct = 'product/' . $dataProdShoeItem['slug'] . '-' . $dataProdShoeItem['id'];
+                                ?>
+                                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content" data-animation="flipInY">
+                                        <div class="ec-product-inner">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image">
+                                                    <a href="<?= $linkProduct ?>" class="image">
+                                                        <img class="main-image" src="<?= $dataProdShoeItem['thumb'] ?>" title="<?= $dataProdShoeItem['title'] ?>" alt="<?= $dataProdShoeItem['title'] ?>" />
+
+                                                    </a>
+                                                    <span class="flags">
+                                                        <?php
+                                                        if ($dataProdShoeItem['discount'] != 0) :
+                                                        ?>
+                                                            <span class="sale">Sale</span>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                    <a href="<?= $linkProduct ?>" class="quickview">
+                                                        <i class="fi-rr-eye"></i>
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        <a href="coming-soon" class="ec-btn-group compare" title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                        <a href="<?= $linkProduct ?>" title="Add To Cart" class="add-to-cart"><i class="fi-rr-shopping-basket"></i></a>
+                                                        <a href="<?= $linkProduct ?>" class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content">
+                                                <h5 class="ec-pro-title">
+                                                    <a href="<?= $linkProduct ?>"><?= $dataProdShoeItem['title'] ?>
+                                                    </a>
+                                                </h5>
+                                                <div class="ec-pro-rating">
+                                                    <?= Format::renderStars($dataProdShoeItem['totalRatings']) ?>
+
+                                                </div>
+                                                <span class="ec-price">
+
+                                                    <?php
+                                                    if ($dataProdShoeItem['discount'] != 0) :
+                                                    ?>
+                                                        <span class="old-price"><?= Format::calculateOriginalPrice($dataProdShoeItem['price'], $dataProdShoeItem['discount']) ?></span>
+                                                    <?php endif; ?>
+                                                    <span class="new-price"><?= Format::formatCurrency($dataProdShoeItem['price']) ?></span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+                        <!-- ec 3rd Product tab end -->
+                        <!-- ec 4th Product tab start -->
+                        <div class="tab-pane fade" id="tab-pro-for-child">
+                            <div class="row">
+                                <!-- New Product Content -->
+                                <?php
+                                foreach ($dataProdHat as $dataProdHatItem) {
+                                    $linkProduct = 'product/' . $dataProdHatItem['slug'] . '-' . $dataProdHatItem['id'];
+                                ?>
+                                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content" data-animation="flipInY">
+                                        <div class="ec-product-inner">
+                                            <div class="ec-pro-image-outer">
+                                                <div class="ec-pro-image">
+                                                    <a href="<?= $linkProduct ?>" class="image">
+                                                        <img class="main-image" src="<?= $dataProdHatItem['thumb'] ?>" title="<?= $dataProdHatItem['title'] ?>" alt="<?= $dataProdHatItem['title'] ?>" />
+
+                                                    </a>
+                                                    <span class="flags">
+                                                        <?php
+                                                        if ($dataProdHatItem['discount'] != 0) :
+                                                        ?>
+                                                            <span class="sale">Sale</span>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                    <a href="<?= $linkProduct ?>" class="quickview">
+                                                        <i class="fi-rr-eye"></i>
+                                                    </a>
+                                                    <div class="ec-pro-actions">
+                                                        <a href="coming-soon" class="ec-btn-group compare" title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                                        <a href="<?= $linkProduct ?>" title="Add To Cart" class="add-to-cart"><i class="fi-rr-shopping-basket"></i></a>
+                                                        <a href="<?= $linkProduct ?>" class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ec-pro-content">
+                                                <h5 class="ec-pro-title">
+                                                    <a href="<?= $linkProduct ?>"><?= $dataProdHatItem['title'] ?>
+                                                    </a>
+                                                </h5>
+                                                <div class="ec-pro-rating">
+                                                    <?= Format::renderStars($dataProdHatItem['totalRatings']) ?>
+
+                                                </div>
+                                                <span class="ec-price">
+
+                                                    <?php
+                                                    if ($dataProdHatItem['discount'] != 0) :
+                                                    ?>
+                                                        <span class="old-price"><?= Format::calculateOriginalPrice($dataProdHatItem['price'], $dataProdHatItem['discount']) ?></span>
+                                                    <?php endif; ?>
+                                                    <span class="new-price"><?= Format::formatCurrency($dataProdHatItem['price']) ?></span>
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                            </div>
+                        </div>
+                        <!-- ec 4th Product tab end -->
                     </div>
-                    <button type="submit" class="btn mb--15">Subscribe</button>
                 </div>
             </div>
         </div>
-    </div>
-</div> -->
-<!-- End Newsletter Area  -->
+    </section>
+    <!-- ec Product tab Area End -->
+
+    <!-- ec Banner Section Start -->
+    <section class="ec-banner section section-space-p">
+        <h2 class="d-none">Banner</h2>
+        <div class="container">
+            <!-- ec Banners Start -->
+            <div class="ec-banner-inner">
+                <!--ec Banner Start -->
+                <div class="ec-banner-block ec-banner-block-2">
+                    <div class="row">
+                        <div class="banner-block col-lg-6 col-md-12 margin-b-30" data-animation="slideInRight">
+                            <div class="bnr-overlay">
+                                <img src="public/client/images/banner/2.jpg" alt="" />
+                                <div class="banner-text">
+                                    <span class="ec-banner-stitle">Hàng mới đến</span>
+                                    <span class="ec-banner-title">nam<br> Giày thể thao</span>
+                                    <span class="ec-banner-discount">Giảm giá 30%</span>
+                                </div>
+                                <div class="banner-content">
+                                    <span class="ec-banner-btn"><a href="product-category">Xem ngay</a></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="banner-block col-lg-6 col-md-12" data-animation="slideInLeft">
+                            <div class="bnr-overlay">
+                                <img src="public/client/images/banner/3.jpg" alt="" />
+                                <div class="banner-text">
+                                    <span class="ec-banner-stitle">Xu hướng mới</span>
+                                    <span class="ec-banner-title">Đồng hồ thông minh<br></span>
+                                    <span class="ec-banner-discount">Mua 3 mặt hàng bất kỳ và được <br>Giảm giá 20%</span>
+                                </div>
+                                <div class="banner-content">
+                                    <span class="ec-banner-btn"><a href="product-category">Xem ngay</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ec Banner End -->
+                </div>
+                <!-- ec Banners End -->
+            </div>
+        </div>
+    </section>
+    <!-- ec Banner Section End -->
+
+    <!--  Category Section Start -->
+    <section class="section ec-category-section section-space-p" id="categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Bộ sưu tập hàng đầu của chúng tôi</h2>
+                        <h2 class="ec-title">Danh mục hàng đầu</h2>
+                        <p class="sub-title">Duyệt qua Bộ sưu tập các danh mục hàng đầu</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <?php
+                foreach ($dataCateCount as $dataCateCountItem) {
+                ?>
+                    <div class="col-lg-3 mb-3 ">
+                        <div class="ec-cat-tab-nav nav">
+                            <li class="cat-item">
+                                <a class="cat-link" href="product-category?category=<?= $dataCateCountItem['id'] ?>">
+                                    <div class="cat-icons">
+                                        <img class="cat-icon" style="width: 50px; object-fit: contain; mix-blend-mode: darken;" src="<?= $dataCateCountItem['image'] ?>" alt="<?= $dataCateCountItem['name'] ?>">
+                                    </div>
+                                    <div class="cat-desc"><span><?= $dataCateCountItem['name'] ?></span><span><?= $dataCateCountItem['product_count'] ?> Sản phẩm</span></div>
+                                </a>
+                            </li>
+                        </div>
+                    </div>
+                <?php } ?>
+
+
+                <!-- <div class="col-lg-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-cat-1">
+                            <div class="row">
+                                <img src="public/client/images/cat-banner/1.jpg" alt="" />
+                            </div>
+                            <span class="panel-overlay">
+                                <a href="shop-left-sidebar-col-3.html" class="btn btn-primary">Xem tất cả</a>
+                            </span>
+                        </div>
+                        <div class="tab-pane fade" id="tab-cat-2">
+                            <div class="row">
+                                <img src="public/client/images/cat-banner/2.jpg" alt="" />
+                            </div>
+                            <span class="panel-overlay">
+                                <a href="shop-left-sidebar-col-3.html" class="btn btn-primary">Xem tất cả</a>
+                            </span>
+                        </div>
+
+                        <div class="tab-pane fade" id="tab-cat-3">
+                            <div class="row">
+                                <img src="public/client/images/cat-banner/3.jpg" alt="" />
+                            </div>
+                            <span class="panel-overlay">
+                                <a href="shop-left-sidebar-col-3.html" class="btn btn-primary">Xem tất cả</a>
+                            </span>
+                        </div>
+
+                        <div class="tab-pane fade" id="tab-cat-4">
+                            <div class="row">
+                                <img src="public/client/images/cat-banner/4.jpg" alt="" />
+                            </div>
+                            <span class="panel-overlay">
+                                <a href="shop-left-sidebar-col-3.html" class="btn btn-primary">Xem tất cả</a>
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+    <!-- Category Section End -->
+
+    <!--  services Section Start -->
+    <section class="section ec-services-section section-space-p" id="services">
+        <h2 class="d-none">Dịch vụ</h2>
+        <div class="container">
+            <div class="row">
+                <div class="ec_ser_content ec_ser_content_1 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                    <div class="ec_ser_inner">
+                        <div class="ec-service-image">
+                            <i class="fi fi-ts-truck-moving"></i>
+                        </div>
+                        <div class="ec-service-desc">
+                            <h2>Giao hàng miễn phí</h2>
+                            <p>Miễn phí vận chuyển cho tất cả đơn hàng tại Hoa Kỳ hoặc đơn hàng trên 200 USD</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ec_ser_content ec_ser_content_2 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                    <div class="ec_ser_inner">
+                        <div class="ec-service-image">
+                            <i class="fi fi-ts-hand-holding-seeding"></i>
+                        </div>
+                        <div class="ec-service-desc">
+                            <h2>Hỗ trợ 24X7</h2>
+                            <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ec_ser_content ec_ser_content_3 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                    <div class="ec_ser_inner">
+                        <div class="ec-service-image">
+                            <i class="fi fi-ts-badge-percent"></i>
+                        </div>
+                        <div class="ec-service-desc">
+                            <h2>Trả lại 30 ngày</h2>
+                            <p>Chỉ cần trả lại trong vòng 30 ngày để đổi hàng</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ec_ser_content ec_ser_content_4 col-sm-12 col-md-6 col-lg-3" data-animation="zoomIn">
+                    <div class="ec_ser_inner">
+                        <div class="ec-service-image">
+                            <i class="fi fi-ts-donate"></i>
+                        </div>
+                        <div class="ec-service-desc">
+                            <h2>Thanh toán an toàn</h2>
+                            <p>Liên hệ với chúng tôi 24 giờ một ngày, 7 ngày một tuần</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--services Section End -->
+
+    <!--  offer Section Start -->
+    <section class="section ec-offer-section section-space-p section-space-m">
+        <h2 class="d-none">Ưu đãi</h2>
+        <div class="container">
+            <div class="row justify-content-end">
+                <div class="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center ec-offer-content">
+                    <h2 class="ec-offer-title">Kính râm</h2>
+                    <h3 class="ec-offer-stitle" data-animation="slideInDown">Siêu ưu đãi</h3>
+                    <span class="ec-offer-img" data-animation="zoomIn"><img src="public/client/images/offer-image/1.png" alt="offer image" /></span>
+                    <span class="ec-offer-desc">Kính râm gọng Acetate</span>
+                    <span class="ec-offer-price">Chỉ $40,00</span>
+                    <a class="btn btn-primary" href="product-category" data-animation="zoomIn">Mua ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- offer Section End -->
+
+    <!-- New Product Start -->
+    <section class="section ec-new-product section-space-p" id="arrivals">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Hàng mới đến</h2>
+                        <h2 class="ec-title">Hàng mới đến</h2>
+                        <p class="sub-title">Duyệt qua Bộ sưu tập các sản phẩm hàng đầu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- New Product Content -->
+                <?php
+                foreach ($dataProdNewDate as $dataProdNewDateItem) {
+                    $linkProduct = 'product/' . $dataProdNewDateItem['slug'] . '-' . $dataProdNewDateItem['id'];
+                ?>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6  ec-product-content" data-animation="flipInY">
+                        <div class="ec-product-inner">
+                            <div class="ec-pro-image-outer">
+                                <div class="ec-pro-image">
+                                    <a href="<?= $linkProduct ?>" class="image">
+                                        <img class="main-image" src="<?= $dataProdNewDateItem['thumb'] ?>" title="<?= $dataProdNewDateItem['title'] ?>" alt="<?= $dataProdNewDateItem['title'] ?>" />
+
+                                    </a>
+                                    <span class="flags">
+                                        <?php
+                                        if ($dataProdNewDateItem['discount'] != 0) :
+                                        ?>
+                                            <span class="sale">Sale</span>
+                                        <?php endif; ?>
+                                    </span>
+                                    <a href="<?= $linkProduct ?>" class="quickview">
+                                        <i class="fi-rr-eye"></i>
+                                    </a>
+                                    <div class="ec-pro-actions">
+                                        <a href="coming-soon" class="ec-btn-group compare" title="Compare"><i class="fi fi-rr-arrows-repeat"></i></a>
+                                        <a href="<?= $linkProduct ?>" title="Add To Cart" class="add-to-cart"><i class="fi-rr-shopping-basket"></i></a>
+                                        <a href="<?= $linkProduct ?>" class="ec-btn-group wishlist" title="Wishlist"><i class="fi-rr-heart"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ec-pro-content">
+                                <h5 class="ec-pro-title">
+                                    <a href="<?= $linkProduct ?>"><?= $dataProdNewDateItem['title'] ?>
+                                    </a>
+                                </h5>
+                                <div class="ec-pro-rating">
+                                    <?= Format::renderStars($dataProdNewDateItem['totalRatings']) ?>
+
+                                </div>
+                                <span class="ec-price">
+
+                                    <?php
+                                    if ($dataProdNewDateItem['discount'] != 0) :
+                                    ?>
+                                        <span class="old-price"><?= Format::calculateOriginalPrice($dataProdNewDateItem['price'], $dataProdNewDateItem['discount']) ?></span>
+                                    <?php endif; ?>
+                                    <span class="new-price"><?= Format::formatCurrency($dataProdNewDateItem['price']) ?></span>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+
+            </div>
+        </div>
+    </section>
+    <!-- New Product end -->
+
+
+
+    <!-- Ec Brand Section Start -->
+    <section class="section ec-brand-area section-space-p">
+        <h2 class="d-none">Thương hiệu</h2>
+        <div class="container">
+            <div class="row">
+                <div class="ec-brand-outer">
+                    <ul id="ec-brand-slider">
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/1.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/2.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/3.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/4.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/5.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/6.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/7.png" /></a></div>
+                        </li>
+                        <li class="ec-brand-item" data-animation="zoomIn">
+                            <div class="ec-brand-img"><a href="#"><img alt="brand" title="brand" src="public/client/images/brand-image/8.png" /></a></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Ec Brand Section End -->
+
+    <!-- Ec Instagram Start -->
+    <section class="section ec-instagram-section module section-space-p" id="insta">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title">
+                        <h2 class="ec-bg-title">Nguồn cấp dữ liệu Instagram</h2>
+                        <h2 class="ec-title">Nguồn cấp dữ liệu Instagram</h2>
+                        <p class="sub-title">Chia sẻ cửa hàng của bạn với chúng tôi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ec-insta-wrapper">
+            <div class="ec-insta-outer">
+                <div class="container" data-animation="fadeIn">
+                    <div class="insta-auto">
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/1.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/2.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/3.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/4.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/5.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/6.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                        <!-- instagram item -->
+                        <div class="ec-insta-item">
+                            <div class="ec-insta-inner">
+                                <a href="#" target="_blank"><img src="public/client/images/instragram-image/7.jpg" alt="insta"></a>
+                            </div>
+                        </div>
+                        <!-- instagram item -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Ec Instagram End -->
+
+
+
+    <!-- Modal -->
+    <!-- <div class="modal fade" id="ec_quickview_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close qty_close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-5 col-sm-12 col-xs-12">
+                            <div class="qty-product-cover">
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_1.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_2.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_3.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_4.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_5.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="qty-nav-thumb">
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_1.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_2.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_3.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_4.jpg" alt="">
+                                </div>
+                                <div class="qty-slide">
+                                    <img class="img-responsive" src="public/client/images/product-image/3_5.jpg" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-sm-12 col-xs-12">
+                            <div class="quickview-pro-content">
+                                <h5 class="ec-quick-title"><a href="product-left-sidebar.html">Handbag leather purse for
+                                        women</a>
+                                </h5>
+                                <div class="ec-quickview-rating">
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star fill"></i>
+                                    <i class="ecicon eci-star"></i>
+                                </div>
+
+                                <div class="ec-quickview-desc">Lorem Ipsum is simply dummy text of the printing and
+                                    typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                                    since the 1500s,</div>
+                                <div class="ec-quickview-price">
+                                    <span class="old-price">$100.00</span>
+                                    <span class="new-price">$80.00</span>
+                                </div>
+
+                                <div class="ec-pro-variation">
+                                    <div class="ec-pro-variation-inner ec-pro-variation-color">
+                                        <span>Color</span>
+                                        <div class="ec-pro-color">
+                                            <ul class="ec-opt-swatch">
+                                                <li><span style="background-color:#ebbf60;"></span></li>
+                                                <li><span style="background-color:#75e3ff;"></span></li>
+                                                <li><span style="background-color:#11f7d8;"></span></li>
+                                                <li><span style="background-color:#acff7c;"></span></li>
+                                                <li><span style="background-color:#e996fa;"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="ec-pro-variation-inner ec-pro-variation-size ec-pro-size">
+                                        <span>Size</span>
+                                        <div class="ec-pro-variation-content">
+                                            <ul class="ec-opt-size">
+                                                <li class="active"><a href="#" class="ec-opt-sz" data-tooltip="Small">S</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-tooltip="Medium">M</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-tooltip="Large">X</a></li>
+                                                <li><a href="#" class="ec-opt-sz" data-tooltip="Extra Large">XL</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ec-quickview-qty">
+                                    <div class="qty-plus-minus">
+                                        <input class="qty-input" type="text" name="ec_qtybtn" value="1" />
+                                    </div>
+                                    <div class="ec-quickview-cart ">
+                                        <button class="btn btn-primary"><i class="fi-rr-shopping-basket"></i> Add To Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Modal end -->

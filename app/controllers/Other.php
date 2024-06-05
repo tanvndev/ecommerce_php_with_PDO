@@ -2,10 +2,10 @@
 
 class Other extends Controller
 {
-    private $storeCustom;
+    private $storeCustomModel;
     function __construct()
     {
-        $this->storeCustom = $this->model('StoreCustom');;
+        $this->storeCustomModel = $this->model('StoreCustomModel');;
     }
     function Default()
     {
@@ -16,9 +16,9 @@ class Other extends Controller
     }
     function comingSoon()
     {
-        $dataStoreCustom = $this->storeCustom->getAllStoreCustom();
+        $dataStoreCustom = $this->storeCustomModel->getAllStoreCustom();
 
-        $this->view('layoutLogin', [
+        $this->view('layoutComingSoon', [
             'title' => 'Coming Soon',
             'pages' => 'others/comingSoon',
             'dataStoreCustom' => $dataStoreCustom,

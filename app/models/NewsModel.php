@@ -18,7 +18,7 @@ class NewsModel extends BaseModel
 
     function getAllNews()
     {
-        return $this->db->table($this->tableName())->select('user.fullname, news.id, news.slug, news.title, news.content, news.thumb, news.create_at, news.view, news.status')->join('user', 'news.user_id = user.id')->where('news.status', '=', '0')->orderBy('news.create_at')->get();
+        return $this->db->table($this->tableName())->select('user.fullname, news.id, news.slug, news.title, news.content, news.thumb, news.create_at, news.view, news.status')->join('user', 'news.user_id = user.id')->where('news.status', '=', '1')->orderBy('news.create_at')->get();
     }
 
     function getNewsUser($id)

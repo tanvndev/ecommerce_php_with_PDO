@@ -1,139 +1,125 @@
-<?php
-// echo '<pre>';
-// print_r($dataProdVariants);
-// echo '</pre>';
-?>
-<section class="add-wrap-admin">
-    <div class="container-fluid ">
-        <form method="POST">
-            <div class="row">
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <h5>Thông tin sản phẩm</h5>
-                        </div>
-                        <div class="form-input">
-                            <div class="mb-5 row align-items-center">
-                                <label class="form-label-title col-sm-3 mb-0">Tên sản phẩm<span class="text-danger">*</span></label>
-                                <div class="col-sm-9">
-                                    <input class="form-control input-text" value="<?= $dataProd['title'] ?? '' ?>" type="text" placeholder="Tên sản phẩm" disabled>
-                                </div>
-                            </div>
+		<?php
 
-                        </div>
-                    </div>
-                </div>
+        ?>
+		<!-- Body: Body -->
+		<div class="body d-flex py-3">
+		    <div class="container-xxl">
+		        <form method="post" enctype="multipart/form-data">
 
 
-                <!-- Variant -->
-                <div class="col-sm-8 m-auto ">
-                    <div class="card">
-                        <div class="card-title-top">
-                            <div class="d-flex align-items-start  justify-content-between ">
-                                <h5>Biến thể sản phẩm</h5>
-                                <a class="btn btn-custom variant" href="admin/add-product-variants/<?= $dataProd['id'] ?>">Thêm biến thể mới</a>
-                            </div>
-                        </div>
-                        <div class="form-input">
-                            <?php
-                            if (empty($dataProdVariants)) {
-                            ?>
-                                <span class="text-center d-block ">Chưa có biến thể..</span>
-                                <?php
-                            } else {
-                                foreach ($dataProdVariants as $item) :
-                                ?>
-                                    <div class="form-input-item">
-                                        <input type="hidden" name="product_variants_id[]" value="<?= $item['id'] ?>">
-                                        <input type="hidden" name="discount[]" value="<?= $item['discount'] ?>">
 
-                                        <div class="mb-5 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Kết hợp</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control input-text" value="<?= $item['attribute_values'] ?>" type="text" placeholder="Kết hợp" disabled readonly>
-                                            </div>
-                                        </div>
+		            <div class="row align-items-center">
+		                <div class="border-0 mb-4">
+		                    <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+		                        <h3 class="fw-bold mb-0">Danh sách biến thể sản phẩm</h3>
 
-                                        <div class="mb-5 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Số lượng <span class="text-danger">*</span></label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control input-text" name="quantity_variant[]" type="number" value="<?= $item['quantity'] ?>" placeholder="Số lượng" required>
-                                            </div>
-                                        </div>
+		                        <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Lưu</button>
+
+		                    </div>
+		                </div>
+		            </div> <!-- Row end  -->
 
 
-                                        <!--  -->
-                                        <div class="mb-5 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Giá <span class="text-danger">*</span></label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control input-text" name="price_variant[]" type="number" value="<?= $item['price'] ?>" placeholder="Giá sản phẩm" required>
-                                            </div>
-                                        </div>
-                                        <!--  -->
-                                        <div class="mb-5 row align-items-center">
-                                            <label class="form-label-title col-sm-3 mb-0">Giá sale</label>
-                                            <div class="col-sm-9">
-                                                <input class="form-control input-text" name="sale_price_variant[]" type="number" placeholder="Giá sale">
-                                            </div>
-                                        </div>
-                                        <div class="del-variant">
-                                            <button type="button" onclick="deleteProduct(<?= $item['id'] ?>)" class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#deleteConfirm">Xoá biến thể</button>
+
+		            <div class="card mb-3">
+		                <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+		                    <h6 class="m-0 fw-bold">Thông tin sản phẩm</h6>
+		                    <a href="admin/add-product-variants/<?= $dataProd['id'] ?>" class="btn btn-success text-white  btn-set-task w-sm-100 py-2 px-5 text-uppercase">Thêm biến thể</a>
+		                </div>
+		                <div class="card-body">
+		                    <div class="row g-3 align-items-center">
+		                        <div class="col-md-12">
+		                            <label class="form-label">Tên sản phẩm </label>
+		                            <input type="text" readonly value="<?= $dataProd['title'] ?? '' ?>" class="form-control">
+		                        </div>
+
+		                        <div class="col-md-6">
+		                            <label class="form-label">Đơn giá </label>
+		                            <input type="number" readonly value="<?= $dataProd['price'] ?? '' ?>" class="form-control">
+		                        </div>
+		                        <div class="col-md-6">
+		                            <label class="form-label">Ngày đăng </label>
+		                            <input type="text" readonly value="<?= $dataProd['create_at'] ?? '' ?>" class="form-control">
+		                        </div>
+		                        <!-- <div class="col-md-6">
+		                            <label class="form-label">Tên sản phẩm </label>
+		                            <input type="number" readonly value="<?= $dataProd['price'] ?? '' ?>" class="form-control">
+		                        </div> -->
+
+		                    </div>
+		                </div>
+		            </div>
+
+		            <!-- Biến thể -->
+		            <div class="card mb-3">
+		                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+		                    <h6 class="mb-0 fw-bold ">Biến thể</h6>
+		                </div>
+		                <div class="card-body">
+		                    <div class="row g-3 align-items-center">
+		                        <div class="col-md-12">
+		                            <div class="product-cart">
+		                                <div class="checkout-table table-responsive">
+		                                    <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
+		                                        <thead>
+		                                            <tr>
+		                                                <th class="product">Kết hợp</th>
+		                                                <th class="product">Giá</th>
+		                                                <th class="product">Giá khuyễn mãi</th>
+		                                                <th class="quantity">Giảm giá (%)</th>
+		                                                <th class="quantity">Thực thi</th>
+		                                            </tr>
+		                                        </thead>
+		                                        <tbody id="form-variant">
+		                                            <?php
+                                                    if (empty($dataProdVariants)) :
+                                                    ?>
+		                                                <tr>
+		                                                    <td id="no-variant" colspan="4" class="text-center border-0 ">Chưa có biến thể..</td>
+		                                                </tr>
+		                                                <?php else :
+                                                        foreach ($dataProdVariants as $dataProdVariantsItem) :
+                                                            extract($dataProdVariantsItem);
+                                                        ?>
+		                                                    <tr id="form-input-item-${itemCounter}">
+		                                                        <td>
+		                                                            <input type="hidden" name="attribute[]" value="">
+		                                                            <input type="text" readonly class="form-control" value="<?= $attribute_values ?>" placeholder="Tên kết hợp">
+		                                                        </td>
+		                                                        <td>
+
+		                                                            <input type="number" class="form-control" value="<?= $price ?>" name="price_variant[]">
+		                                                        </td>
+		                                                        <td>
+
+		                                                            <input type="number" class="form-control" name="sale_price_variant[]">
+		                                                        </td>
+
+		                                                        <td>
+		                                                            <input type="number" readonly class="form-control" value="<?= $discount ?>">
+		                                                        </td>
+
+		                                                        <td>
+		                                                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+		                                                                <button type="button" onclick="handleConfirm('admin/delete-product-variant/<?= $dataProd['id'] ?>/<?= $id ?>')" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+		                                                            </div>
+		                                                        </td>
+		                                                    </tr>
+		                                            <?php endforeach;
+                                                    endif; ?>
+
+		                                        </tbody>
+		                                    </table>
+		                                </div>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
 
 
-                                        </div>
-                                    </div>
-                            <?php endforeach;
-                            } ?>
 
-                        </div>
-                        <!--  -->
+		        </form>
 
-                    </div>
-                </div>
-
-                <?php
-                if (!empty($dataProdVariants)) {
-                ?>
-                    <button id="btn_ele" class="btn btn-custom col-sm-8 m-auto">Cập nhập biến thể <span class="spin"><i class="fas fa-spinner"></i></span></button>
-                <?php } else { ?>
-                    <button class="btn disabled btn-custom col-sm-8 m-auto">Vui lòng thêm biến thể<span class="spin"><i class="fas fa-spinner"></i></span></button>
-                <?php
-                } ?>
-            </div>
-
-
-        </form>
-    </div>
-</section>
-
-<script>
-    function deleteProduct(id) {
-        $('#idDel').val(id);
-    }
-</script>
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content py-3">
-            <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
-                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form action="admin/delete-product-variant/<?= $dataProd['id'] ?>" method="post">
-                    <input id="idDel" name="id" type="hidden">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+		    </div>
+		</div><!-- Row end  -->

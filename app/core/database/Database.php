@@ -152,7 +152,7 @@ class Database
                 return false;
             }
         } catch (PDOException $e) {
-            $this->conn->rollBack();
+
             $mess = $e->getMessage();
             $line = $e->getFile();
             $file = $e->getLine();

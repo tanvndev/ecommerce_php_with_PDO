@@ -5,24 +5,23 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title><?php echo $title  ?? 'Error' ?></title>
-    <meta name="robots" content="noindex, follow" />
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <base href="http://localhost/WEB2041_Ecommerce/">
+    <meta name="keywords" content="apparel, catalog, clean, ecommerce, ecommerce HTML, electronics, fashion, html eCommerce, html store, minimal, multipurpose, multipurpose ecommerce, online store, responsive ecommerce template, shops" />
+    <meta name="description" content="Best ecommerce html template for single and multi vendor store.">
+    <meta name="author" content="ashishmaraviya">
+    <base href="http://localhost/ecommerce/">
 
-    <!-- favicon  -->
-    <link rel="apple-touch-icon" sizes="180x180" href="public/images/logo/favicon_io/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="public/images/logo/favicon_io/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/images/logo/favicon_io/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="public/images/logo/favicon_io/site.webmanifest">
+    <!-- site Favicon -->
+    <link rel="icon" href="public/client/images/favicon/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="public/client/images/favicon/favicon.png" />
+    <meta name="msapplication-TileImage" content="public/client/images/favicon/favicon.png" />
+
     <!-- CSS -->
 
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="public/css/vendor/base.css">
-    <link rel="stylesheet" type="text/css" href="public/css/style.css">
-    <script src="public/js/vendor/jquery.js"></script>
-    <script src="public/js/vendor/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="public/client/css/plugins/bootstrap.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="public/client/css/base-custom.css">
+    <link rel="stylesheet" type="text/css" href="public/client/css/style-custom.css">
+
 </head>
 
 <body>
@@ -33,14 +32,6 @@
         </main>
 
     </div>
-
-
-    <!-- Main JS -->
-    <!-- <script src="public/js/main.js"></script> -->
-
-    <!-- Api JS -->
-    <script src="services/base.js"></script>
-    <script src="services/userService.js"></script>
 
 </body>
 

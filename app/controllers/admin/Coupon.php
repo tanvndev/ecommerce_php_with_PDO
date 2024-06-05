@@ -48,7 +48,7 @@ class Coupon extends Controller
         $dataCoupon = $this->couponModel->getAllCoupon();
         $this->view('layoutServer', [
             'title' => 'Mã giảm giá',
-            'active' => 'product',
+            'active' => 'coupon',
             'pages' => 'coupon/coupon',
             'dataCoupon' => $dataCoupon,
         ]);
@@ -241,14 +241,10 @@ class Coupon extends Controller
     }
 
 
-    function deleteCoupon()
+    function deleteCoupon($id)
     {
-        if (!$this->req->isPost()) {
-            return $this->res->setToastSession('error', 'Có lõi xảy ra vui lòng thử lại.', 'admin/coupon');;
-        }
-        $dataPost = $this->req->getFields();
 
-        $deleteCoupon = $this->couponModel->deleteCoupon($dataPost['id']);
+        $deleteCoupon = $this->couponModel->deleteCoupon($id);
 
         if (!$deleteCoupon) {
             return $this->res->setToastSession('error', 'Xoá thất bại.', 'admin/coupon');;

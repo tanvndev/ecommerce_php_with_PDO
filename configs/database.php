@@ -1,7 +1,7 @@
 <?php
 $config['database'] = [
     'host' => 'localhost',
-    'user' => 'root',
-    'password' => '',
-    'db' => 'ecommerce_php',
+    'user' => 'tanvn',
+    'password' => '123456',
+    'db' => 'ecommerce_php_2',
 ];

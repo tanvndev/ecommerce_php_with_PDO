@@ -1,107 +1,69 @@
-<?php
-// echo '<pre>';
-// print_r($dataNews);
-// echo '</pre>';
-?>
-
-<section class="product-wrap">
-    <div class="card">
-        <div class="title-header">
-            <h5 class="title">Danh sách bài viết</h5>
-            <div class="right-options">
-                <ul>
-                    <li>
-                        <a class="btn btn-custom" href="admin/add-news"> Thêm bài viết</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="table-custom">
-            <table class="theme-table" id="table_id">
-                <thead class="rounded-3 overflow-hidden  ">
-                    <tr>
-                        <th>Ảnh</th>
-                        <th>Tiêu đề</th>
-                        <th>Người đăng</th>
-                        <th>Lượt xem</th>
-                        <th>Ngày đăng</th>
-                        <th>Thực thi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($dataNews as $dataNewsItem) {
-                        extract($dataNewsItem);
-                    ?>
-                        <tr>
-                            <td>
-                                <div class="table-image">
-                                    <img src="<?= $thumb ?>" class="img-fluid" alt="<?= $title ?>">
-                                </div>
-                            </td>
-
-                            <td>
-                                <div style="max-width: 500px;" class="text-truncate"><?php echo $title ?></div>
-                            </td>
-                            <td><?= $fullname ?></td>
-                            <td><?= $view ?></td>
-                            <td><?= $create_at ?></td>
-
-                            <td>
-                                <ul class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/update-news/<?= $id ?>">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li>
-
-                                    <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(<?= $id ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                    <?php } ?>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<script>
-    function setDataIdToInput(id) {
-        $('#idDel').val(id)
-    }
-</script>
-
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content py-3">
-            <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
-                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/news/deleteNews">
-                    <input type="hidden" id="idDel" name="id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Danh sách tin tức</h3>
+                    <a href="admin/add-news" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Thêm tin tức</a>
                 </div>
+            </div>
+        </div> <!-- Row end  -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <?php
+                        // echo '<pre>';
+                        // print_r($dataNews);
+                        // echo '</pre>';
+                        ?>
+                        <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">
+                            <thead>
 
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Người đăng</th>
+                                    <th>Lượt xem</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thực thi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($dataNews as $key => $dataNewsItem) {
+                                    extract($dataNewsItem)
+                                ?>
+                                    <tr>
+
+                                        <td>
+                                            <div class="d-inline-flex align-items-center ">
+                                                <img style="width: 50px;" class="rounded-2 me-3  object-fit-contain  " src="<?= $thumb ?>" alt="<?= $title ?>">
+                                                <p class="mb-0 text-truncate " style="max-width: 250px"><?= $title ?></p>
+                                            </div>
+
+                                        </td>
+                                        <td><?= date('Y-m-d', strtotime($create_at)) ?></td>
+                                        <td><?= $fullname ?></td>
+                                        <td><?= $view ?></td>
+                                        <td>
+                                            <span class="badge <?= $status == 0 ? 'bg-danger' : 'bg-success' ?>"><?= $status == 0 ? 'Chưa công bố' : 'Công bố' ?></span>
+                                        </td>
+
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                <a href="admin/update-news/<?= $id ?>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                                                <button onclick="handleConfirm('admin/delete-news/<?= $id ?>')" type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

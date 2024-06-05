@@ -133,9 +133,12 @@ class Product extends Controller
             $whereClause = " WHERE " . implode(' AND ', $conditions);
         }
 
-        $sql = "SELECT id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings FROM product" . $whereClause . $orderBy . ' LIMIT ' . $limit;
+        $sql = "SELECT id, title, slug , thumb, price, totalRatings, quantity, discount, totalUserRatings, short_description FROM product" . $whereClause . $orderBy . ' LIMIT ' . $limit;
         $dataProd = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
+        // echo '<pre>';
+        // print_r($dataProd);
+        // echo '</pre>';
 
         $this->view('layoutClient', [
             'title' => 'Danh mục sản phẩm',
@@ -155,10 +158,11 @@ class Product extends Controller
 
         $dataProd = $this->productModel->getOneProd($id) ?? [];
         $dataImageProd = $this->productModel->getImageProd($id) ?? [];
-        $dataProdRecent = $this->productModel->getProdRecently() ?? [];
+        $dataProdCategory = $this->productModel->getProdByCate($dataProd['cate_id']) ?? [];
         $dataVariant = $this->productModel->getAllProdVariants($id);
         $dataCoupon = $this->couponModel->getAllCoupon();
         $productPrice = $this->productModel->getProductPrice($id);
+
 
         // Lấy ra giá nhỏ và lớn nhất của sản phẩm
         if (!empty($productPrice)) {
@@ -224,7 +228,7 @@ class Product extends Controller
             'dataProd' => $dataProd,
             'dataImageProd' => $dataImageProd,
             'dataVariant' => $dataProdVariantsNew ?? [],
-            'dataProdRecent' => $dataProdRecent,
+            'dataProdCategory' => $dataProdCategory,
             'dataCoupon' => $dataCoupon,
             'productPrice' => $productPriceNew ?? [],
         ]);

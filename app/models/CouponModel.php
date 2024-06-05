@@ -26,7 +26,7 @@ class CouponModel extends BaseModel
 
     function getOneCouponCode($couponCode)
     {
-        return $this->db->table($this->tableName())->select('id, code, value, min_amount, expired, quantity, status')->where('code', '=', $couponCode)->getOne();
+        return $this->db->table($this->tableName())->select('id, code, value, min_amount, expired, quantity, status, create_at')->where('code', '=', $couponCode)->getOne();
     }
 
     function addNewCoupon($data)

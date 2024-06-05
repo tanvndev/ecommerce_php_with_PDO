@@ -1,5 +1,5 @@
 {
-  "name": "tan_admin/web2041_ecommerce",
+  "name": "tan_admin/ecommerce",
   "description": "Du an web ban hang",
   "autoload": {
     "psr-4": {

@@ -4,7 +4,6 @@ try {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
       if (data.code == 200) {
         createChartAmount(data.data);
         createChartOrderTotal();
@@ -91,7 +90,7 @@ function createChartAmount(dataQW) {
     }
   });
   data.map((item) => {
-    dataAmount.push(item.total_amount);
+    dataAmount.push(parseInt(item.total_amount, 10));
     dataTotalOrder.push(item.total_orders);
   });
 
@@ -408,135 +407,35 @@ function createChartProductCate(data) {
   });
 
   let options = {
-    series,
-    labels,
     chart: {
-      width: '100%',
-      height: 325,
+      height: 400,
       type: 'donut',
     },
-
-    legend: {
-      fontSize: '14px',
-      position: 'bottom',
-      offsetX: 1,
-      offsetY: -1,
-
-      markers: {
-        width: 10,
-        height: 10,
-      },
-
-      itemMargin: {
-        vertical: 2,
-      },
-    },
-
-    plotOptions: {
-      pie: {
-        startAngle: -90,
-        endAngle: 320,
-      },
-    },
-
     dataLabels: {
-      enabled: true,
+      enabled: false,
     },
-
+    legend: {
+      position: 'top',
+      horizontalAlign: 'center',
+      show: true,
+    },
+    colors: [
+      'var(--chart-color1)',
+      'var(--chart-color2)',
+      'var(--chart-color3)',
+      'var(--chart-color4)',
+    ],
+    series,
+    labels,
     responsive: [
       {
-        breakpoint: 1835,
+        breakpoint: 480,
         options: {
           chart: {
-            height: 320,
+            width: 200,
           },
-
-          legend: {
-            position: 'right',
-
-            itemMargin: {
-              horizontal: 5,
-              vertical: 1,
-            },
-          },
-        },
-      },
-
-      {
-        breakpoint: 1388,
-        options: {
-          chart: {
-            height: 330,
-          },
-
           legend: {
             position: 'bottom',
-          },
-        },
-      },
-
-      {
-        breakpoint: 1275,
-        options: {
-          chart: {
-            height: 300,
-          },
-
-          legend: {
-            position: 'bottom',
-          },
-        },
-      },
-
-      {
-        breakpoint: 1158,
-        options: {
-          chart: {
-            height: 280,
-          },
-
-          legend: {
-            fontSize: '10px',
-            position: 'bottom',
-            offsetY: 10,
-          },
-        },
-      },
-
-      {
-        theme: {
-          mode: 'dark',
-          palette: 'palette1',
-          monochrome: {
-            enabled: true,
-            color: '#255aee',
-            shadeTo: 'dark',
-            shadeIntensity: 0.65,
-          },
-        },
-      },
-
-      {
-        breakpoint: 598,
-        options: {
-          chart: {
-            height: 280,
-          },
-
-          legend: {
-            fontSize: '12px',
-            position: 'bottom',
-            offsetX: 5,
-            offsetY: -5,
-
-            markers: {
-              width: 10,
-              height: 10,
-            },
-
-            itemMargin: {
-              vertical: 1,
-            },
           },
         },
       },
@@ -549,3 +448,132 @@ function createChartProductCate(data) {
     chart3.render();
   }
 }
+
+$(document).ready(function () {
+  var options = {
+    chart: {
+      height: 380,
+      type: 'radar',
+    },
+    series: [
+      {
+        name: 'Series 1',
+        data: [20, 100, 40, 30, 50, 80, 33],
+      },
+    ],
+    labels: [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ],
+    plotOptions: {
+      radar: {
+        size: 140,
+        polygons: {
+          strokeColor: '#e9e9e9',
+          fill: {
+            colors: ['#f8f8f8', '#fff'],
+          },
+        },
+      },
+    },
+    colors: ['#f7c56b'],
+    markers: {
+      size: 4,
+      colors: ['#fff'],
+      strokeColor: '#f7c56b',
+      strokeWidth: 2,
+    },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val;
+        },
+      },
+    },
+    yaxis: {
+      tickAmount: 7,
+      labels: {
+        formatter: function (val, i) {
+          if (i % 2 === 0) {
+            return val;
+          } else {
+            return '';
+          }
+        },
+      },
+    },
+  };
+
+  const chart6 = document.querySelector('#apex-radar-polygon-fill');
+
+  if (chart6) {
+    var chart3 = new ApexCharts(chart6, options);
+    chart3.render();
+  }
+});
+
+// Basic Bar
+$(document).ready(function () {
+  var options = {
+    chart: {
+      height: 350,
+      type: 'bar',
+      toolbar: {
+        show: false,
+      },
+    },
+    colors: ['var(--chart-color2)'],
+    grid: {
+      yaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      padding: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    series: [
+      {
+        data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380],
+      },
+    ],
+    xaxis: {
+      categories: [
+        'South Korea',
+        'Canada',
+        'United Kingdom',
+        'Netherlands',
+        'Italy',
+        'France',
+        'Japan',
+        'United States',
+        'China',
+        'Germany',
+      ],
+    },
+  };
+
+  var chart = new ApexCharts(
+    document.querySelector('#apex-basic-bar'),
+    options,
+  );
+
+  chart.render();
+});

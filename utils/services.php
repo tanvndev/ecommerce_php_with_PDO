@@ -10,7 +10,6 @@ use Cloudinary\Api\Upload\UploadApi;
 
 class Services
 {
-
     // Gửi mã xác nhận qua email
     static function sendCode($email, $subject, $body)
     {
@@ -76,7 +75,7 @@ class Services
                 'public_id' => '',
                 'use_filename' => true,
                 'overwrite' => true,
-                'folder' => 'uploads_WEB2041_Ecommerce',
+                'folder' => $configCloudinary['forders'],
                 'transformation' => [
                     ['format' => 'webp'],
                 ],
@@ -100,7 +99,7 @@ class Services
 
         //Config
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = "http://localhost/WEB2041_Ecommerce/payment-final";
+        $vnp_Returnurl = "http://localhost/ecommerce/payment-final";
         $vnp_TmnCode = $configVnpay['vnp_TmnCode'];
         $vnp_HashSecret = $configVnpay['vnp_HashSecret'];
 
@@ -189,7 +188,7 @@ class Services
         $orderInfo = "momo_payment";
         $amount = $orderData['amount'] . "";
         $orderId = $orderData['order_code'] . "";
-        $returnUrl = "http://localhost/WEB2041_Ecommerce/payment-final";
+        $returnUrl = "http://localhost/ecommerce/payment-final";
         $notifyurl = "http://localhost:8000/atm/ipn_momo.php";
         // Lưu ý: link notifyUrl không phải là dạng localhost
         $bankCode = "SML";

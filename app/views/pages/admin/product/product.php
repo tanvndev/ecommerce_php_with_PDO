@@ -1,152 +1,91 @@
-<?php
-// echo '<pre>';
-// print_r($productStock);
-// echo '</pre>';
-?>
-<section class="product-wrap">
-    <div class="card">
-        <div class="title-header">
-            <h5 class="title">Danh sách sản phẩm</h5>
-            <div class="right-options">
-                <ul>
-                    <li>
-                        <a class="btn btn-custom" href="admin/add-product"> Thêm sản phẩm</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+	<!-- Body: Body -->
+	<div class="body d-flex py-3">
+		<div class="container-xxl">
+			<div class="row align-items-center">
+				<div class="border-0 mb-4">
+					<div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+						<h3 class="fw-bold mb-0">Danh sách sản phẩm</h3>
+						<a href="admin/add-product" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Thêm sản phẩm</a>
+					</div>
+				</div>
+			</div> <!-- Row end  -->
+			<div class="row g-3 mb-3">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-body">
+							<table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">
+								<thead>
+									<tr>
+										<th>Tên sản phẩm</th>
+										<th>Ngày nhập</th>
+										<th>Danh mục</th>
+										<th>Tồn kho </th>
+										<th>Đơn giá </th>
+										<th>Trạng thái</th>
+										<th>Biến thể</th>
+										<th>Đánh giá</th>
+										<th>Thực thi</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									foreach ($prodData as $prodDataItem) {
 
-        <div class="table-custom">
-            <table class="theme-table table-responsive" id="table_id">
-                <thead class="rounded-3 overflow-hidden  ">
-                    <tr>
-                        <th>Tên sản phẩm</th>
-                        <th>Danh mục</th>
-                        <th>Thương hiệu</th>
-                        <th>Tồn kho</th>
-                        <th>Giá</th>
-                        <th>Trạng thái</th>
-                        <th>Hiển thị</th>
-                        <th>Biến thể</th>
-                        <th>Thực thi</th>
-                    </tr>
-                </thead>
+									?>
+										<tr>
+											<td>
+												<div class="d-flex align-items-center ">
+													<img style="width: 50px;" class="rounded-2 me-3  object-fit-contain  " src="<?= $prodDataItem['thumb'] ?>" alt="<?= $prodDataItem['title'] ?>">
+													<p class="mb-0 text-truncate " style="max-width: 200px"><?= $prodDataItem['title'] ?></p>
+												</div>
 
-                <tbody>
-
-                    <?php foreach ($prodData as $product) {
-                    ?>
-                        <tr>
-                            <td>
-                                <div class="product-title-name">
-                                    <div class="table-image table-image--product">
-                                        <img src="<?= $product['thumb'] ?>" class="img-fluid" alt="<?= $product['title'] ?>">
-                                    </div>
-                                    <div class="text-truncate text-title"><?= $product['title'] ?></div>
-                                </div>
-                            </td>
-
-                            <?php
-                            foreach ($cateData as $cateItem) {
-                                if ($cateItem['id'] === $product['cate_id']) {
-                            ?>
-                                    <td class="td-category"><?= $cateItem['name'] ?></td>
-                            <?php }
-                            } ?>
-
-                            <?php
-                            foreach ($brandData as $brandItem) {
-                                if ($brandItem['id'] === $product['brand_id']) {
-                            ?>
-                                    <td class="td-category"><?= $brandItem['name'] ?></td>
-                            <?php }
-                            } ?>
-
-                            <?php
-                            foreach ($productVariant as $productVariantItem) {
-                                if ($productVariantItem['prod_id'] == $product['id']) {
-                            ?>
-                                    <td><?= $productVariantItem['quantity'] ?></td>
-                                    <td class="td-price"><?= Format::formatCurrency($productVariantItem['min_price']) ?> - <?= Format::formatCurrency($productVariantItem['max_price']) ?> </td>
-                            <?php }
-                            } ?>
-
+											</td>
+											<td><?= date('Y-m-d', strtotime($prodDataItem['create_at'])) ?></td>
+											<td>
+												<div class="d-flex align-items-start flex-column text-success ">
+													<?php
+													foreach ($cateData as $cateDataItem) {
+														if ($cateDataItem['id'] == $prodDataItem['cate_id']) {
+													?>
+															<span class="fw-bold ">- <?= $cateDataItem['name'] ?? '' ?></span>
+														<?php }
+													}
+													foreach ($brandData as $brandDataItem) {
+														if ($brandDataItem['id'] == $prodDataItem['brand_id']) {
+														?>
+															<span class="fw-bold ">- <?= $brandDataItem['name'] ?? '' ?></span>
+													<?php }
+													} ?>
+												</div>
+											</td>
+											<?php
+											foreach ($productVariant as $prodVariantItem) {
+												if ($prodVariantItem['prod_id'] == $prodDataItem['id']) {
+											?>
+													<td><?= $prodVariantItem['quantity'] ?></td>
+													<td class=""><?= Format::formatCurrency($prodVariantItem['min_price']) . ' - ' . Format::formatCurrency($prodVariantItem['max_price']) ?></td>
+													<td>
+														<span class="badge <?= $prodDataItem['status'] == 0 || $prodVariantItem['quantity'] == 0 ? 'bg-danger' : 'bg-success' ?>"><?= $prodDataItem['status'] == 0 || $prodVariantItem['quantity'] == 0 ? 'Chưa công bố' : 'Công bố' ?></span>
+													</td>
+											<?php }
+											} ?>
 
 
-                            <td class=" <?= $product['quantity'] >= 1 && $product['status'] == 1 ? 'status-success' : 'status-danger' ?>">
-                                <span class="fw-medium"><?= $product['quantity'] >= 1 && $product['status'] == 1 ? 'Đang bán' : 'Dừng bán' ?></span>
-                            </td>
-                            <td>
-                                <label class="switch">
-                                    <input onchange="toggleStatusProd(<?= $product['id'] ?>)" name="status" <?= $product['status'] == 1 ? 'checked' : ''  ?> type="checkbox">
-                                    <span class="slider"></span>
-                                </label>
-                            </td>
+											<td><a class="link-dark  text-decoration-underline" href="admin/product-variants/<?= $prodDataItem['id'] ?>">Chi tiết</a></td>
+											<td><a class="link-dark  text-decoration-underline" href="admin/rating-product/<?= $prodDataItem['id'] ?>">Chi tiết</a></td>
+											<td>
+												<div class="btn-group" role="group" aria-label="Basic outlined example">
+													<a href="admin/update-product/<?= $prodDataItem['id'] ?>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+													<button onclick="handleConfirm('admin/delete-product/<?= $prodDataItem['id'] ?>')" type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+												</div>
+											</td>
 
-                            <td>
-                                <div class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/product-variants/<?= $product['id'] ?>">
-                                            <i class="view fas fa-eye"></i>
-                                        </a>
-                                    </li>
-                                </div>
-                            </td>
-
-                            <td>
-                                <ul class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/update-product/<?= $product['id'] ?>">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li>
-
-                                    <li class="m-0 ">
-                                        <a onclick="deleteProduct(<?= $product['id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-
-                    <?php } ?>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<script>
-    function deleteProduct(id) {
-        $('#productDel').val(id);
-    }
-</script>
-
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content py-3">
-            <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
-                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form action="admin/delete-product" method="post">
-                    <input id="productDel" name="id" type="hidden">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
+										<?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

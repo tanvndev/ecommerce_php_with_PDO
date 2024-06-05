@@ -1,125 +1,69 @@
 <?php
-
 // echo '<pre>';
-// print_r($dataUser);
+// print_r($dataUserAd);
 // echo '</pre>';
 ?>
-
-<section class="product-wrap">
-    <div class="card">
-        <div class="title-header">
-            <h5 class="title">Danh sách người dùng</h5>
-            <div class="right-options">
-                <ul>
-                    <li>
-                        <a class="btn btn-custom" href="admin/add-user">Thêm người dùng</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="table-custom">
-            <table class="theme-table" id="table_id">
-                <thead class="rounded-3 overflow-hidden  ">
-                    <tr>
-
-                        <th>Ảnh</th>
-                        <th>Họ và tên</th>
-                        <th>Số điện thoại</th>
-                        <th>Email</th>
-                        <th>Quyền</th>
-                        <th>Chặn</th>
-                        <th>Ngày tham gia</th>
-                        <th>Thực thi</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($dataUserAd as $userItem) {
-                    ?>
-                        <tr>
-                            <td>
-                                <div class="table-image">
-                                    <img style="width: 70px; height: 70px; object-fit: contain; border-radius: 50%;" src="<?= $userItem['avatar'] ?>" class="img-fluid" alt="<?= $userItem['fullname'] ?>">
-                                </div>
-                            </td>
-                            <td class="fw-bold "><?= $userItem['fullname'] ?></td>
-                            <td><?= $userItem['phone'] ?></td>
-                            <td><?= $userItem['email'] ?></td>
-                            <?php
-                            foreach ($dataRole as $dataRoleItem) {
-                                if ($dataRoleItem['id'] == $userItem['role_id']) {
-
-                            ?>
-                                    <td class="text-capitalize fw-bold "><?= $dataRoleItem['description'] ?></td>
-                            <?php }
-                            } ?>
-                            <td>
-                                <div>
-                                    <label class="switch">
-                                        <input id="isBlock" onchange="changeIsBlock(<?= $userItem['id'] ?>)" <?= $userItem['isBlock'] == 1 ? 'checked' : '' ?> value="1" type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </td>
-
-                            <td><?= date('F j, Y, g:i a', strtotime($userItem['create_At'])) ?></td>
-
-                            <td>
-                                <ul class="options">
-                                    <li class="m-0 ">
-                                        <a href="admin/update-user/<?= $userItem['id'] ?>">
-                                            <i class="edit fas fa-edit"></i>
-                                        </a>
-                                    </li>
-
-                                    <li class="m-0 ">
-                                        <a onclick="setDataIdToInput(<?= $userItem['id'] ?>, <?= $userItem['role_id'] ?>)" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#deleteConfirm">
-                                            <i class="delete fas fa-trash-alt"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                    <?php } ?>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-</section>
-
-<script>
-    function setDataIdToInput(id, role_id) {
-        $("#idUser").val(id);
-        $("#role_id").val(role_id)
-    }
-</script>
-
-
-<div class="modal fade theme-modal" id="deleteConfirm" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content py-3">
-            <div class="modal-header border-0  d-block text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel22">Bạn đã chắc chắn chưa?</h5>
-                <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0 text-center">Nếu thực hiện 'đồng ý' xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá.</p>
-            </div>
-            <div class="modal-footer border-0 ">
-                <form method="POST" action="admin/delete-user">
-                    <input type="hidden" id="idUser" name="id">
-                    <input type="hidden" id="role_id" name="role_id">
-                    <button type="submit" class="btn btn-custom btn-yes fw-bold">Đồng ý</button>
-                </form>
-                <div class="ms-3 ">
-                    <button type="button" class="btn btn-custom btn-no fw-bold" data-bs-dismiss="modal">Huỷ</button>
+<!-- Body: Body -->
+<div class="body d-flex py-3">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="border-0 mb-4">
+                <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+                    <h3 class="fw-bold mb-0">Danh sách người dùng</h3>
+                    <a href="admin/add-user" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Thêm người dùng</a>
                 </div>
+            </div>
+        </div> <!-- Row end  -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">
+                            <thead>
 
+                                <tr>
+                                    <th>Họ và tên</th>
+                                    <th>Ngày tham gia</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thực thi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($dataUserAd as $key => $dataUserAdItem) {
+                                    extract($dataUserAdItem)
+                                ?>
+                                    <tr>
+
+                                        <td>
+                                            <div class="d-flex align-items-center ">
+                                                <img style="width: 50px;" class="rounded-2 me-3  object-fit-contain  " src="<?= $avatar ?>" alt="<?= $fullname ?>">
+                                                <p class="mb-0 text-truncate " style="max-width: 200px"><?= $fullname ?></p>
+                                            </div>
+
+                                        </td>
+                                        <td><?= date('Y-m-d', strtotime($create_At)) ?></td>
+                                        <td><?= $email ?></td>
+                                        <td><?= $phone ?></td>
+                                        <td>
+                                            <span class="badge <?= $isBlock == 1 ? 'bg-danger' : 'bg-success' ?>"><?= $isBlock == 1 ? 'Chưa công bố' : 'Công bố' ?></span>
+                                        </td>
+
+                                        <td>
+                                            <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                <a href="admin/update-user/<?= $id ?>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                                                <button onclick="handleConfirm('admin/user/deleteUser/<?= $id ?>')" type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

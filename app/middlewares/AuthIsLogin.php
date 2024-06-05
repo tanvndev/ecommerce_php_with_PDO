@@ -16,6 +16,7 @@ class AuthIsLogin extends Middlewares
     {
 
         $accessToken = null;
+
         //Check accessToken
         if (!empty(Session::get('userLogin'))) {
             $accessToken = JWT::verifyJWT(Session::get('userLogin')) ?? '';
@@ -31,7 +32,7 @@ class AuthIsLogin extends Middlewares
 
         $dataUserCurrent = $accessToken['payload'];
         if ($dataUserCurrent['isBlock'] == 1) {
-            return $this->res->setToastSession('error', 'Vui lòng đăng nhập.', 'home');
+            return $this->res->setToastSession('error', 'Tài khoản đã bị khoá vui lòng thử lại.', 'home');
         }
     }
 }

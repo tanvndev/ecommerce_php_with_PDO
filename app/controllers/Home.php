@@ -2,16 +2,18 @@
 
 class Home extends Controller
 {
-    private $productModel;
-    private $categoryModel;
     use SweetAlert;
+    private $productModel;
+    private $storeCustomModel;
+    private $categoryModel;
     private $req = null;
 
     public function __construct()
     {
-        $this->productModel = $this->model('ProductModel');
-        $this->categoryModel = $this->model('CategoryModel');
         $this->req = new Request;
+        $this->productModel = $this->model('ProductModel');
+        $this->storeCustomModel = $this->model('StoreCustomModel');
+        $this->categoryModel = $this->model('CategoryModel');
     }
 
     function Default()
@@ -23,23 +25,30 @@ class Home extends Controller
         }
 
         $dataCate = $this->categoryModel->getAllCategory() ?? [];
-        $dataBannerTitle = $this->db->table('banner')->getOne();
-        $dataBanner = $this->productModel->getProdByCate() ?? [];
-        $dataProdRecent = $this->productModel->getProdRecently() ?? [];
+        $dataCateCount = $this->categoryModel->countAllProdCate() ?? [];
+        $dataBanner = $this->storeCustomModel->getAllBanner() ?? [];
+        $dataProdMostView = $this->productModel->getProdRecently() ?? [];
         $dataProdMostSold = $this->productModel->getProdMostSold() ?? [];
         $dataProdNewDate = $this->productModel->getProdNewDate() ?? [];
+        $dataProdClothes = $this->productModel->getProdByCate(1) ?? [];
+        $dataProdShoe = $this->productModel->getProdByCate(38) ?? [];
+        $dataProdHat = $this->productModel->getProdByCate(39) ?? [];
+
 
 
         $this->view('layoutClient', [
             'title' => 'Trang chủ',
             'currentPath' => 'home',
             'pages' => 'home',
-            'dataCate' => $dataCate,
-            'dataBanner' => $dataBanner,
-            'dataBannerTitle' => $dataBannerTitle,
-            'dataProdRecent' => $dataProdRecent,
-            'dataProdMostSold' => $dataProdMostSold,
-            'dataProdNewDate' => $dataProdNewDate,
+            'dataBanner' => $dataBanner ?? [],
+            'dataCate' => $dataCate ?? [],
+            'dataProdMostView' => $dataProdMostView ?? [],
+            'dataProdMostSold' => $dataProdMostSold ?? [],
+            'dataProdNewDate' => $dataProdNewDate ?? [],
+            'dataProdClothes' => $dataProdClothes ?? [],
+            'dataProdShoe' => $dataProdShoe ?? [],
+            'dataProdHat' => $dataProdHat ?? [],
+            'dataCateCount' => $dataCateCount ?? [],
         ]);
     }
 }

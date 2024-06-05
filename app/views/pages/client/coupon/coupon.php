@@ -22,7 +22,7 @@
                                             <?= date('d-m-Y', strtotime($expired)) ?>
                                         </span>
                                     </div>
-                                    <h4 class="title">
+                                    <h4 class="title-coupon">
                                         <?= $title ?>
                                     </h4>
 
@@ -44,7 +44,7 @@
                                     </div>
                                 <?php } ?>
 
-                                <button type="button" class="code code-coupon">
+                                <button type="button" class="code code-coupon w-100 ">
                                     <?= $code ?>
                                 </button>
                                 <p class="condition">

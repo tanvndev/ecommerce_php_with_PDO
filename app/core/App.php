@@ -1,7 +1,7 @@
 <?php
 class App
 {
-    // http://localhost/WEB2041_Ecommerce/Home/Default/1/2/3
+    // http://localhost/ecommerce/Home/Default/1/2/3
     protected $controller = 'Home';
     protected $action = 'Default';
     protected $params = [];
@@ -23,18 +23,20 @@ class App
 
             //Get url
             $url = $this->handleUrl();
+            // var_dump($url);
 
             //Handle route
             $this->__routes = new Route();
             $url = $this->__routes->handleRoute($url);
 
             //App middlewares
-            $this->handleGlobalMiddleware($this->__DBShare);  //check full app
             $this->handleRouteMiddleware($this->__routes->getKeyRoute(), $this->__DBShare);        //Gan key cua route va xu ly
+            $this->handleGlobalMiddleware($this->__DBShare);  //check full app
 
             //App service provider
             $this->handleAppServiceProvider($this->__DBShare);
 
+            // var_dump($url);
             //Handle có file không
             $urlCheck = '';
             if (!empty($url)) {

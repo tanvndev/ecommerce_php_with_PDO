@@ -36,6 +36,23 @@ const showAlert = (title, type, timer = 3000) => {
   });
 };
 
+function handleConfirm(url) {
+  Swal.fire({
+    title: 'Bạn có chắc chắn muốn xoá không?',
+    text: 'Nếu thực hiện xoá bạn sẽ bị xoá vĩnh viễn không thể khôi phục lại hãy suy nghĩ thật kĩ trước khi xoá!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Vâng, tôi xoá',
+    cancelButtonText: 'Không, tôi huỷ',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = url;
+    }
+  });
+}
+
 const formatCurrency = (amount) => {
   var formattedAmount = new Intl.NumberFormat('vi-VN', {
     style: 'currency',
@@ -61,9 +78,9 @@ const renderStars = (number) => {
 
   for (let index = 0; index < 5; index++) {
     if (index < filledStars) {
-      starArray.push('<i class="fas fa-star"></i>');
+      starArray.push('<i style="color: #ffc73a" class="fas fa-star"></i>');
     } else {
-      starArray.push('<i class="far fa-star"></i>');
+      starArray.push('<i style="color: #ffc73a" class="far fa-star"></i>');
     }
   }
   return starArray.join(' ');

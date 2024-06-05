@@ -24,6 +24,15 @@ class CategoryModel extends BaseModel
         return $stmt;
     }
 
+    function countAllProdCate()
+    {
+        $sql = "SELECT c.id, c.name, COUNT(p.id) AS product_count, c.image
+                FROM category c
+                LEFT JOIN product p ON c.id = p.cate_id
+                GROUP BY c.id, c.name, c.image ORDER BY product_count DESC LIMIT 8";
+        $stmt = $this->db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt;
+    }
 
     function getAllCategory()
     {

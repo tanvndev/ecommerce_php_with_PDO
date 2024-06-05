@@ -45,6 +45,6 @@ class Session
     public static function destroy()
     {
         session_destroy();
-        // header("Location: /WEB2041_Ecommerce/admin/login");
+        // header("Location: /ecommerce/admin/login");
     }
 }

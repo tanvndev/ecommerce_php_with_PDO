@@ -1,32 +1,30 @@
 // ratings
+
 const itemCommentHtml = (item) => {
   return `
-    <li class="comment-item">
-        <div class="comment-body">
-            <div class="product-comment">
-                <div class="comment-img">
-                    <img src="${
-                      item.avatar ? item.avatar : 'userDefault.webp'
-                    }" alt="${item.fullname} + image">
-                </div>
-                <div class="comment-inner">
-                    <div class="commenter">
-                        <div class="title">
-                            ${item.fullname}
-                            <span class="comment-date">${item.create_at}</span>
-                        </div>
-                        <span class="commenter-rating">
-                            ${renderStars(item.star)}
-                        </span>
-                    </div>
-                    <div class="comment-text">
-                        <span class="mb-0">“${item.comment}”</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-    `;
+   <div class="ec-t-review-item">
+                                               <div class="ec-t-review-avtar">
+                                                   <img src="${
+                                                     item.avatar
+                                                   }" alt="${item.fullname}" />
+                                               </div>
+                                               <div class="ec-t-review-content">
+                                                   <div class="ec-t-review-top">
+                                                       <div class="ec-t-review-name">${
+                                                         item.fullname
+                                                       }</div>
+                                                       <div class="ec-t-review-rating">
+                                                          ${renderStars(
+                                                            item.star,
+                                                          )}
+                                                       </div>
+                                                   </div>
+                                                   <div class="ec-t-review-bottom">
+                                                       <p>“${item.comment}”</p>
+                                                   </div>
+                                               </div>
+                                           </div>
+  `;
 };
 
 const addRatingProd = async () => {
@@ -83,7 +81,6 @@ getDataRatingProd();
 
 const notCommentHtml = () =>
   `<div class="not-comment">
-      <img src="public/images/others/notComment.webp" alt="imageDefault">
           <small>Chưa có đánh giá.</small>
    </div>`;
 

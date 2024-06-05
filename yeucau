@@ -1,0 +1,34 @@
+
+1. (4 đ) Dựa vào tài nguyên đã được giao sinh viên hãy thực hiện chức năng sau:
+- Thực hiện chuyển các đoạn code trong tài nguyên đã cho sang lập trình hướng đối tượng,
+ có sử dụng tính kế thừa.
+- Đặt namespace cho các file có class.
+- Khởi tạo composer và cài đặt PSR-4 autoload cho bài thi.
+- Sử dụng Route để điều hướng website
+- Hiển thị danh sách Sách (đã được tạo trong tài nguyên)
+
+
+2. (2 đ) Thực hiện tính năng thêm mới Sách
+
+3. (1.5 đ) Thực hiện tính năng chỉnh sửa Sách
+
+4. (0.5 đ) Thực hiện chức năng xóa Sách (yêu cầu có confirm)
+
+5. (1 đ) Validate cho chức năng thêm Sách và chỉnh sửa Sách
+- Validate tất cả các input nhập vào không được để trống
+- Check được kiểu dữ liệu nhập vào input số lượng phải là kiểu số
+
+6. (1 đ) Áp dụng được interface trong bài thi (Có vấn đáp)
+
+Chú ý:
+-	Sinh viên sử dụng 1 tài nguyên ngoài khác với tài nguyên giảng viên đã cung cấp hoặc không chuyển được sang hướng đối tượng bài thi sẽ không được tính điểm
+-	Sinh viên không được tham khảo tài liệu 
+-	Giám thị coi thi không giải thích gì thêm 
+
+Ghi chú : Nếu tài nguyên lỗi liên quan đến route / bladeone như hình dưới được sử dụng mạng để chạy 3 lệnh này:
+ 
+ 
+composer require illuminate/events
+composer require eftec/bladeone
+composer require phroute/phroute
+

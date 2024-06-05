@@ -1,21 +1,23 @@
-<section class="breadcrumb-area">
+<!-- Ec breadcrumb start -->
+<div class="sticky-header-next-sec  ec-breadcrumb section-space-mb">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-md-8">
-                <div class="inner">
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="">Home</a></li>
-                        <li class="separator"></li>
-                        <li class="breadcrumb-item active" aria-current="page"><?php echo $title ?></li>
-                    </ul>
-                    <h1 class="title"><?php echo $title ?></h1>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-4">
-                <div class="bradcrumb-thumb">
-                    <img src="public/images/others/product-45.png" alt="<?php echo $title ?>">
+        <div class="row">
+            <div class="col-12">
+                <div class="row ec_breadcrumb_inner">
+                    <div class="col-md-6 col-sm-12">
+                        <h2 class="ec-breadcrumb-title"><?= $title ?></h2>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <!-- ec-breadcrumb-list start -->
+                        <ul class="ec-breadcrumb-list">
+                            <li class="ec-breadcrumb-item"><a href="home">Home</a></li>
+                            <li class="ec-breadcrumb-item active"><?= $title ?></li>
+                        </ul>
+                        <!-- ec-breadcrumb-list end -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</div>
+<!-- Ec breadcrumb end -->
